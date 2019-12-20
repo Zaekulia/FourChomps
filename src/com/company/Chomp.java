@@ -3,6 +3,7 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Chomp extends Spiel implements Protokollierbar {
+    boolean a;
     private boolean win=false;
     boolean x=true;
     public Chomp(Spieler alpha, Spieler beta, ChompFeld cf){
