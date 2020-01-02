@@ -39,14 +39,11 @@ public class ClientConnection extends Thread{
             @Override
             public void keyPressed(KeyEvent e) {
 
-
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                int key = e.getKeyCode();
-                System.out.println(key);
-                if (key == KeyEvent.VK_ENTER){
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     sendStringToServer(chatField.getText());
                     chatField.setText("");
                 }
