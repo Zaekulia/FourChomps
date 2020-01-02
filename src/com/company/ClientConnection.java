@@ -90,7 +90,9 @@ public class ClientConnection extends Thread{
                     }
                     String reply=din.readUTF();
                     if (reply.matches("(.*?) hat sich gerade angemeldet")) {
-                        aktiveNutzer.add(reply.replaceFirst(" hat sich gerade angemeldet",""));
+                        if (!aktiveNutzer.contains(reply.replaceFirst(" hat sich gerade angemeldet", ""))){
+                            aktiveNutzer.add(reply.replaceFirst(" hat sich gerade angemeldet", ""));
+                        }
                         showAktiveNutzer();
                     }
                     if (reply.matches("(.*?) hat den Server verlassen")) {
