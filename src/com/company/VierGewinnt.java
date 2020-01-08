@@ -168,8 +168,8 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
         int steine=0;
         boolean luecke=true;
         while ((y<=5)&&((this.getAbyss().getFeldgroesse()[y][x]==spieler))){
-            steine++;
-            y++;
+                steine++;
+                y++;
         }
         if (steine>=3)return spalte+1;
         luecke=true;victoryl=0;steine=-1;y=zeile;x=spalte;

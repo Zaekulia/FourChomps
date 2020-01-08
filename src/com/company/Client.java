@@ -1,6 +1,5 @@
+
 package com.company;
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -38,6 +37,7 @@ public class Client {
             if(input.toLowerCase().equals("quit")){
                 try {
                     dout.writeUTF("Aight, imma head out");
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

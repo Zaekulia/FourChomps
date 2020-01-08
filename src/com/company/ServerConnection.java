@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Iterator;
 
 public class ServerConnection extends Thread{
     Socket socket;
@@ -33,12 +32,14 @@ public class ServerConnection extends Thread{
         }
     }
     public void run(){
+        boolean uStpd=false;
+        boolean gefunden=false;
+        boolean angemeldet=false;
+        int nutzerposition=0;
         try{
             din=new DataInputStream(socket.getInputStream());
             dout=new DataOutputStream(socket.getOutputStream());
-            boolean uStpd=false;
-            boolean gefunden=false;
-            boolean angemeldet=false;
+
             dout.writeUTF("Bist du schon registriert?");
             String line=din.readUTF();
             if (line.equals("ja") || line.equals("Ja")) {
@@ -51,9 +52,13 @@ public class ServerConnection extends Thread{
                             line=din.readUTF();
                             if (line.equals(server.getNutzerliste()[j].getPasswort())){
                                 dout.writeUTF("Anmeldung erfolgreich");
+                                nutzerposition=j;
+                                server.getNutzerliste()[j].setActive(true);
                                 try {
                                     for (int i = 0; i < 100; i++) {
-                                        dout.writeUTF(server.getNutzerliste()[i].getUsername()+" hat sich gerade angemeldet");
+                                        if (server.getNutzerliste()[i].isActive()) {
+                                            dout.writeUTF(server.getNutzerliste()[i].getUsername() + " hat sich gerade angemeldet");
+                                        }
                                     }
                                 } catch (NullPointerException npe) {
                                 }
@@ -69,7 +74,7 @@ public class ServerConnection extends Thread{
                         }
                     }
                 } catch (NullPointerException npe) {
-                    //Bis hier Anmeldung
+                //Bis hier Anmeldung
                 }
                 if (angemeldet) {//Später über Buttons regeln
 
@@ -87,14 +92,13 @@ public class ServerConnection extends Thread{
             while (!angemeldet){
                 dout.writeUTF("Gib einen Nutzernamen ein.");
                 line=din.readUTF();
-                int freeSpace=0;
                 try {
                     for (int k = 0; k < 100; k++) {
                         if (server.getNutzerliste()[k].getUsername().equals(line)) {
                             gefunden=true;
                             break;
                         }
-                        freeSpace++;
+                        nutzerposition=k;
                     }
                 } catch (NullPointerException npe) {
 
@@ -113,18 +117,20 @@ public class ServerConnection extends Thread{
                     line=din.readUTF();
                     try {
                         try {
-                            for (int i = 0; i < 100; i++) {
+                        for (int i = 0; i < 100; i++) {
+                            if (server.getNutzerliste()[i].isActive()) {
                                 dout.writeUTF(server.getNutzerliste()[i].getUsername()+" hat sich gerade angemeldet");
                             }
-                        } catch (NullPointerException npe) {
                         }
-                        server.getNutzerliste()[freeSpace]=new Spieler(un,true);
-                        server.getNutzerliste()[freeSpace].setPasswort(line);
+                    } catch (NullPointerException npe) {
+                    }
+                        server.getNutzerliste()[nutzerposition]=new Spieler(un,true);
+                        server.getNutzerliste()[nutzerposition].setPasswort(line);
                         dout.writeUTF("Anmeldung erfolgreich");
 
                         nutzername=un;
                         sendStringToAllClients(un+" hat sich gerade angemeldet");
-                        angemeldet=true;
+                            angemeldet=true;
                     } catch (ArrayIndexOutOfBoundsException aoe) {
                         dout.writeUTF("Zu viele Nutzer! Komm später wieder");
                     }
@@ -139,6 +145,7 @@ public class ServerConnection extends Thread{
             socket.close();
         }catch(IOException e){
             sendStringToAllClients(nutzername+" hat den Server verlassen");
+            server.getNutzerliste()[nutzerposition].setActive(false);
         }
     }
 }

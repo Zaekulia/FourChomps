@@ -5,6 +5,16 @@ public class Spieler {
     private String passwort;
     private boolean mensch;
     private boolean cat=false;
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    private boolean active = true;
     public void setCat(boolean cat) {
         this.cat = cat;
     }
@@ -33,7 +43,7 @@ public class Spieler {
         return mensch;
     }
 
-    public String getPasswort() {
+   public String getPasswort() {
         return passwort;
     }
 

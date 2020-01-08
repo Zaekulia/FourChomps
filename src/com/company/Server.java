@@ -10,7 +10,7 @@ public class Server {
     ServerSocket ss;
     Scanner scanner=new Scanner(System.in);
     private boolean shouldRun=true;
-    private Spieler[] nutzerliste=new Spieler[100];
+	private Spieler[] nutzerliste=new Spieler[100];
     ArrayList<ServerConnection> connections =new ArrayList<ServerConnection>();
     public Spieler[] getNutzerliste() {
         return nutzerliste;
@@ -27,7 +27,7 @@ public class Server {
                 connections.add(sc);
             }
         }catch (IOException e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
     public static void main(String[] args) {
