@@ -89,6 +89,8 @@
         <properties>
           <background color="-5711112"/>
           <editable value="false"/>
+          <enabled value="false"/>
+          <opaque value="true"/>
         </properties>
       </component>
     </children>
