@@ -36,46 +36,56 @@ public class ServerConnection extends Thread{
         boolean gefunden=false;
         boolean angemeldet=false;
         int nutzerposition=0;
-        try{
-            din=new DataInputStream(socket.getInputStream());
-            dout=new DataOutputStream(socket.getOutputStream());
-            String line=din.readUTF();
-            nutzername=din.readUTF();
-            String password=din.readUTF();
-            if(line.equals("Registrieren")){
+        try { //REGISTER
+            din = new DataInputStream(socket.getInputStream());
+            dout = new DataOutputStream(socket.getOutputStream());
+            String line = din.readUTF();
+            nutzername = din.readUTF();
+            String password = din.readUTF();
+            if (line.equals("Registrieren")) {
                 try {
                     for (int k = 0; k < 100; k++) {
-                        if (server.getNutzerliste()[k].getUsername().equals(line)) {
-                            gefunden=true;
+                        if (server.getNutzerliste()[k].getUsername().equals(nutzername)) {
+                            gefunden = true;
                             dout.writeUTF("Nope");
                             break;
                         }
-                        nutzerposition=k;
+                        nutzerposition = k+1;
                     }
                 } catch (NullPointerException npe) {
                     dout.writeUTF("Anmeldung erfolgreich!");
                     try {
-                        try {
-                            for (int i = 0; i < 100; i++) {
-                                if (server.getNutzerliste()[i].isActive()) {
-                                    dout.writeUTF(server.getNutzerliste()[i].getUsername() + " hat sich gerade angemeldet");
-                                }
+                        for (int i = 0; i < 100; i++) {
+                            if (server.getNutzerliste()[i].isActive()) {
+                                dout.writeUTF(server.getNutzerliste()[i].getUsername() + " hat sich gerade angemeldet");
                             }
-                        } catch (NullPointerException np) {
                         }
-                        server.getNutzerliste()[nutzerposition] = new Spieler(nutzername, true);
-                        server.getNutzerliste()[nutzerposition].setPasswort(line);
-                        dout.writeUTF("Anmeldung erfolgreich");
-                        sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
-                        angemeldet = true;
-                    } catch (ArrayIndexOutOfBoundsException aoe) {
-                        dout.writeUTF("Zu viele Nutzer! Komm später wieder");
+                    } catch (NullPointerException np) {
                     }
-                } //WIR SIND HIER (REGISTRIERUNG; KEINE ANMELDUNG)
-            }
-            else{
-
-            }
+                    server.getNutzerliste()[nutzerposition] = new Spieler(nutzername, true);
+                    server.getNutzerliste()[nutzerposition].setPasswort(password);
+                    dout.writeUTF("Anmeldung erfolgreich");
+                    sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
+                    angemeldet = true;
+                } catch (ArrayIndexOutOfBoundsException aoe) {
+                    dout.writeUTF("Zu viele Nutzer! Komm später wieder");
+                }
+            } else { //SIGN IN
+                try {
+                    for (int k = 0; k < 100; k++) {
+                        if (server.getNutzerliste()[k].getUsername().equals(nutzername) && server.getNutzerliste()[k].getPasswort().equals(password)) {
+                            gefunden = true;
+                            dout.writeUTF("Anmeldung erfolgreich!");
+                            break;
+                        }
+                        nutzerposition = k+1;
+                    }
+                }catch (NullPointerException ne){
+                    dout.writeUTF("Nope");
+                }
+                server.getNutzerliste()[nutzerposition].setActive(true);
+                sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
+        }
             /*dout.writeUTF("Bist du schon registriert?");
             String line=din.readUTF();
             if (line.equals("ja") || line.equals("Ja")) {

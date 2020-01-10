@@ -14,28 +14,27 @@ public class Client {
     DataOutputStream dout;
     DataInputStream din;
     Socket s;
-    private JButton signInButton;
-    private JTextField username;
-    private JButton registerButton;
-    private JTextField password;
-    private JPanel rootPanel;
-    private JLabel Label1;
-    private JFrame frame;
-    private boolean angemeldet =false;
-
+    protected JButton signInButton;
+    protected JTextField username;
+    protected JButton registerButton;
+    protected JTextField password;
+    protected JPanel rootPanel;
+    protected JLabel Label1;
+    protected JFrame AnmeldungFrame;
+    protected Client me;
 
     public Client(){
         try{
             s=new Socket("localhost", 4999);
             din = new DataInputStream(s.getInputStream());
             dout=new DataOutputStream(s.getOutputStream());
-            cc=new ClientConnection(s, this);
-
-            frame = new JFrame("Anmeldung"); //
-            frame.setContentPane(this.rootPanel); //
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //
-            frame.pack(); //
-            frame.setVisible(true); //
+            me=this;
+            cc=new ClientConnection(s, me);
+            AnmeldungFrame = new JFrame("Anmeldung"); //
+            AnmeldungFrame.setContentPane(this.rootPanel); //
+            AnmeldungFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //
+            AnmeldungFrame.pack(); //
+            AnmeldungFrame.setVisible(true); //
         }catch (UnknownHostException e){
             e.printStackTrace();
         }catch (IOException e){
@@ -46,6 +45,26 @@ public class Client {
             public void actionPerformed(ActionEvent e) {
                 if(username.getText().isEmpty()||password.getText().isEmpty()){
                     Label1.setText("Gib einen gültigen Benutzernamen und ein gültiges Passwort ein. Noob.");
+                }
+                else {
+                    try {
+                        dout.writeUTF("Anmelden");
+                        dout.writeUTF(username.getText());
+                        dout.writeUTF(password.getText());
+                        String line=din.readUTF();
+                        if(line.equals("Anmeldung erfolgreich!")){
+                            AnmeldungFrame.setVisible(false);
+                            //AnmeldungFrame.dispose();
+                            //cc=new ClientConnection(s, me);
+                            cc.start();
+                            listenForInput();
+                        }
+                        else{
+                            Label1.setText("Das stimmt nicht. Twit.");
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
@@ -62,7 +81,9 @@ public class Client {
                         dout.writeUTF(password.getText());
                         String line=din.readUTF();
                         if(line.equals("Anmeldung erfolgreich!")){
-                            frame.dispose();
+                            AnmeldungFrame.setVisible(false);
+                            //AnmeldungFrame.dispose();
+                            //cc=new ClientConnection(s, me);
                             cc.start();
                             listenForInput();
                         }
