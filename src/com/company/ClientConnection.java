@@ -25,6 +25,27 @@ public class ClientConnection extends Thread{
     boolean shouldRun=true;
     public ClientConnection(Socket socket, Client client){
         s=socket;
+
+    }
+    public void sendStringToServer(String text){
+        try{
+            dout.writeUTF(text);
+            dout.flush();
+        }catch (IOException e){
+            e.printStackTrace();
+            close();
+        }
+    }
+    public void close(){
+        try{
+            din.close();
+            dout.close();
+            s.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    public void run(){
         JFrame frame = new JFrame("Four Chomps");
         frame.setContentPane(this.rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,26 +77,6 @@ public class ClientConnection extends Thread{
                 chatField.setText("");
             }
         });
-    }
-    public void sendStringToServer(String text){
-        try{
-            dout.writeUTF(text);
-            dout.flush();
-        }catch (IOException e){
-            e.printStackTrace();
-            close();
-        }
-    }
-    public void close(){
-        try{
-            din.close();
-            dout.close();
-            s.close();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-    public void run(){
         try {
             din=new DataInputStream(s.getInputStream());
             dout=new DataOutputStream(s.getOutputStream());
