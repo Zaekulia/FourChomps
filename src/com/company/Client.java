@@ -29,7 +29,6 @@ public class Client {
             din = new DataInputStream(s.getInputStream());
             dout=new DataOutputStream(s.getOutputStream());
             me=this;
-            cc=new ClientConnection(s, me);
             AnmeldungFrame = new JFrame("Anmeldung"); //
             AnmeldungFrame.setContentPane(this.rootPanel); //
             AnmeldungFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //
@@ -56,8 +55,8 @@ public class Client {
                             AnmeldungFrame.setVisible(false);
                             //AnmeldungFrame.dispose();
                             //cc=new ClientConnection(s, me);
+                            cc=new ClientConnection(s, me);
                             cc.start();
-                            listenForInput();
                         }
                         else{
                             Label1.setText("Das stimmt nicht. Twit.");
@@ -84,8 +83,8 @@ public class Client {
                             AnmeldungFrame.setVisible(false);
                             //AnmeldungFrame.dispose();
                             //cc=new ClientConnection(s, me);
+                            cc=new ClientConnection(s, me);
                             cc.start();
-                            listenForInput();
                         }
                         else{
                             Label1.setText("Der Name ist schon vergeben. Be more original. Dimwit.");

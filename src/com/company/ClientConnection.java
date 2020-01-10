@@ -78,44 +78,11 @@ public class ClientConnection extends Thread{
         }
     }
     public void run(){
-        /*chatField.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    sendStringToServer(chatField.getText());
-                    chatField.setText("");
-                }
-            }
-        });
-        sendButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                sendStringToServer(chatField.getText());
-                chatField.setText("");
-            }
-        });*/
         try {
             din=new DataInputStream(s.getInputStream());
             dout=new DataOutputStream(s.getOutputStream());
             while(shouldRun){
                 try{
-                    /*while(din.available()==0){
-                        try{
-                            Thread.sleep(1);
-                        }catch(InterruptedException e){
-                            e.printStackTrace();
-                        }
-                    }*/
                     String reply=din.readUTF();
                     if (reply.matches("(.*?) hat sich gerade angemeldet")) {
                         if (!aktiveNutzer.contains(reply.replaceFirst(" hat sich gerade angemeldet", ""))){

@@ -1,4 +1,5 @@
 package com.company;
+import javax.swing.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,6 +8,10 @@ import java.util.Scanner;
 import java.lang.*;
 
 public class Server {
+    protected JTextArea ActiveNutzer;
+    protected JPanel rootPanel;
+    protected JTextArea ServerStatus;
+    protected JFrame serverFrame;
     ServerSocket ss;
     Scanner scanner=new Scanner(System.in);
     private boolean shouldRun=true;
@@ -16,6 +21,11 @@ public class Server {
         return nutzerliste;
     }
     public Server(){
+        serverFrame = new JFrame("ServerStatus");
+        serverFrame.setContentPane(this.rootPanel);
+        serverFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        serverFrame.pack();
+        serverFrame.setVisible(true);
         try{
             Killer killer=new Killer(this);
             killer.start();
