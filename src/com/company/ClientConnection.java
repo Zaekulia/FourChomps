@@ -12,44 +12,26 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientConnection extends Thread{
-    private JTextArea userListArea;
-    private JTextArea chatArea;
-    private JTextField chatField;
-    private JButton sendButton;
-    private JPanel rootPanel;
+    protected JTextArea userListArea;
+    protected JTextArea chatArea;
+    protected JTextField chatField;
+    protected JButton sendButton;
+    protected JPanel rootPanel;
+    protected JFrame chatFrame;
     ArrayList<String> aktiveNutzer=new ArrayList<>();
     Socket s;
     DataInputStream din;
     DataOutputStream dout;
     DataInputStream dinput;
     boolean shouldRun=true;
+    boolean angemeldet;
     public ClientConnection(Socket socket, Client client){
         s=socket;
-    }
-    public void sendStringToServer(String text){
-        try{
-            dout.writeUTF(text);
-            dout.flush();
-        }catch (IOException e){
-            e.printStackTrace();
-            close();
-        }
-    }
-    public void close(){
-        try{
-            din.close();
-            dout.close();
-            s.close();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-    public void run(){
-        JFrame frame = new JFrame("Four Chomps");
-        frame.setContentPane(this.rootPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+        chatFrame = new JFrame("Four Chomps");
+        chatFrame.setContentPane(this.rootPanel);
+        chatFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        chatFrame.pack();
+        chatFrame.setVisible(true);
         chatField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -76,18 +58,64 @@ public class ClientConnection extends Thread{
                 chatField.setText("");
             }
         });
+    }
+    public void sendStringToServer(String text){
+        try{
+            dout.writeUTF(text);
+            dout.flush();
+        }catch (IOException e){
+            e.printStackTrace();
+            close();
+        }
+    }
+    public void close(){
+        try{
+            din.close();
+            dout.close();
+            s.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    public void run(){
+        /*chatField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    sendStringToServer(chatField.getText());
+                    chatField.setText("");
+                }
+            }
+        });
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                sendStringToServer(chatField.getText());
+                chatField.setText("");
+            }
+        });*/
         try {
             din=new DataInputStream(s.getInputStream());
             dout=new DataOutputStream(s.getOutputStream());
             while(shouldRun){
                 try{
-                    while(din.available()==0){
+                    /*while(din.available()==0){
                         try{
                             Thread.sleep(1);
                         }catch(InterruptedException e){
                             e.printStackTrace();
                         }
-                    }
+                    }*/
                     String reply=din.readUTF();
                     if (reply.matches("(.*?) hat sich gerade angemeldet")) {
                         if (!aktiveNutzer.contains(reply.replaceFirst(" hat sich gerade angemeldet", ""))){
@@ -121,7 +149,5 @@ public class ClientConnection extends Thread{
             }
         } catch (NullPointerException npe) {
         }
-
-
     }
 }
