@@ -67,7 +67,7 @@ public class ServerConnection extends Thread{
                     dout.writeUTF("Anmeldung erfolgreich");
                     sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
                     server.ServerStatus.append(nutzername+" hat sich gerade angemeldet\n");
-                    server.ActiveNutzer.append(nutzername);
+                    server.ActiveNutzer.append(nutzername+"\n");
 
                 } catch (ArrayIndexOutOfBoundsException aoe) {
                     dout.writeUTF("Zu viele Nutzer! Komm später wieder");
@@ -88,7 +88,7 @@ public class ServerConnection extends Thread{
                 server.getNutzerliste()[nutzerposition].setActive(true);
                 sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
                 server.ServerStatus.append(nutzername+" hat sich gerade angemeldet\n");
-                server.ActiveNutzer.append(nutzername);
+                server.ActiveNutzer.append(nutzername+"\n");
         }
             while(shouldRun){
                 String textIn=din.readUTF();
@@ -100,7 +100,7 @@ public class ServerConnection extends Thread{
         }catch(IOException e){
             sendStringToAllClients(nutzername+" hat den Server verlassen");
             server.ServerStatus.append(nutzername+" hat den Server verlassen\n");
-            server.ActiveNutzer.setText(server.ActiveNutzer.getText().replace(nutzername+"\n",""));
+            server.ActiveNutzer.setText(""+server.ActiveNutzer.getText().replace(nutzername+"\n",""));
             server.getNutzerliste()[nutzerposition].setActive(false);
         }
     }
