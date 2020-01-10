@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.company.ServerStatus">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="GridLayoutManager" row-count="3" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties>
+      <background color="-606787"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <component id="c5d02" class="javax.swing.JTextArea" binding="ActiveNutzer">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <minimum-size width="125" height="250"/>
+            <preferred-size width="125" height="250"/>
+            <maximum-size width="200" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <background color="-986896"/>
+          <editable value="false"/>
+          <enabled value="false"/>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="bde78" class="javax.swing.JTextArea" binding="ServerStatus">
+        <constraints>
+          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <minimum-size width="175" height="250"/>
+            <preferred-size width="175" height="250"/>
+          </grid>
+        </constraints>
+        <properties>
+          <background color="-986896"/>
+          <editable value="false"/>
+          <enabled value="false"/>
+        </properties>
+      </component>
+      <hspacer id="66ea9">
+        <constraints>
+          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <minimum-size width="5" height="5"/>
+            <preferred-size width="5" height="5"/>
+            <maximum-size width="5" height="5"/>
+          </grid>
+        </constraints>
+      </hspacer>
+      <hspacer id="5055a">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="10" height="10"/>
+          </grid>
+        </constraints>
+      </hspacer>
+      <hspacer id="aad8c">
+        <constraints>
+          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="10" height="10"/>
+          </grid>
+        </constraints>
+      </hspacer>
+      <vspacer id="8bc6">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="10" height="10"/>
+          </grid>
+        </constraints>
+      </vspacer>
+      <component id="d679a" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Aktive Nutzer:"/>
+        </properties>
+      </component>
+      <component id="429a0" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Server Status:"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

@@ -39,8 +39,44 @@ public class ServerConnection extends Thread{
         try{
             din=new DataInputStream(socket.getInputStream());
             dout=new DataOutputStream(socket.getOutputStream());
+            String line=din.readUTF();
+            nutzername=din.readUTF();
+            String password=din.readUTF();
+            if(line.equals("Registrieren")){
+                try {
+                    for (int k = 0; k < 100; k++) {
+                        if (server.getNutzerliste()[k].getUsername().equals(line)) {
+                            gefunden=true;
+                            dout.writeUTF("Nope");
+                            break;
+                        }
+                        nutzerposition=k;
+                    }
+                } catch (NullPointerException npe) {
+                    dout.writeUTF("Anmeldung erfolgreich!");
+                    try {
+                        try {
+                            for (int i = 0; i < 100; i++) {
+                                if (server.getNutzerliste()[i].isActive()) {
+                                    dout.writeUTF(server.getNutzerliste()[i].getUsername() + " hat sich gerade angemeldet");
+                                }
+                            }
+                        } catch (NullPointerException np) {
+                        }
+                        server.getNutzerliste()[nutzerposition] = new Spieler(nutzername, true);
+                        server.getNutzerliste()[nutzerposition].setPasswort(line);
+                        dout.writeUTF("Anmeldung erfolgreich");
+                        sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
+                        angemeldet = true;
+                    } catch (ArrayIndexOutOfBoundsException aoe) {
+                        dout.writeUTF("Zu viele Nutzer! Komm später wieder");
+                    }
+                } //WIR SIND HIER (REGISTRIERUNG; KEINE ANMELDUNG)
+            }
+            else{
 
-            dout.writeUTF("Bist du schon registriert?");
+            }
+            /*dout.writeUTF("Bist du schon registriert?");
             String line=din.readUTF();
             if (line.equals("ja") || line.equals("Ja")) {
                 dout.writeUTF("Gib deinen Nutzernamen ein.");
@@ -92,14 +128,14 @@ public class ServerConnection extends Thread{
             while (!angemeldet){
                 dout.writeUTF("Gib einen Nutzernamen ein.");
                 line=din.readUTF();
-                try {
+                try { //
                     for (int k = 0; k < 100; k++) {
                         if (server.getNutzerliste()[k].getUsername().equals(line)) {
                             gefunden=true;
                             break;
                         }
                         nutzerposition=k;
-                    }
+                    } //
                 } catch (NullPointerException npe) {
 
                 }
@@ -134,8 +170,8 @@ public class ServerConnection extends Thread{
                     } catch (ArrayIndexOutOfBoundsException aoe) {
                         dout.writeUTF("Zu viele Nutzer! Komm später wieder");
                     }
-                }//Bis hier Registrierung
-            }
+                }
+            }//Bis hier Registrierung*/
             while(shouldRun){
                 String textIn=din.readUTF();
                 sendStringToAllClients(nutzername+": "+textIn);

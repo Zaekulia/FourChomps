@@ -25,7 +25,6 @@ public class ClientConnection extends Thread{
     boolean shouldRun=true;
     public ClientConnection(Socket socket, Client client){
         s=socket;
-
     }
     public void sendStringToServer(String text){
         try{
