@@ -19,40 +19,86 @@ public class Chomp extends Spiel implements Protokollierbar {
         boolean unfaehigerUser = false;
         int eingabeZ = 0, eingabeS = 0;
         do {
-            try {
+
                 if (spiler.isMensch()) {
-                    this.getAbyss().showField();
-                    System.out.println("In welche Spalte möchtest du setzen? ");
-                    eingabeS = sc.nextInt();
-                    System.out.println("In welche Zeile möchtest du setzen? ");
-                    eingabeZ = sc.nextInt();
-                    if (this.getAbyss().getFeldgroesse()[eingabeZ - 1][eingabeS - 1] != 0) {
-                        System.out.println("Dieses Feld ist besetzt.");
-                        unfaehigerUser = true;
-                    }
-                    while (unfaehigerUser) {
-                        System.out.println("Wähle ein anderes Feld");
+                    try {
+                        this.getAbyss().showField();
                         System.out.println("In welche Spalte möchtest du setzen? ");
                         eingabeS = sc.nextInt();
                         System.out.println("In welche Zeile möchtest du setzen? ");
                         eingabeZ = sc.nextInt();
                         if (this.getAbyss().getFeldgroesse()[eingabeZ - 1][eingabeS - 1] != 0) {
                             System.out.println("Dieses Feld ist besetzt.");
+                            unfaehigerUser = true;
                         }
-                        else unfaehigerUser=false;
+                        while (unfaehigerUser) {
+                            System.out.println("Wähle ein anderes Feld");
+                            System.out.println("In welche Spalte möchtest du setzen? ");
+                            eingabeS = sc.nextInt();
+                            System.out.println("In welche Zeile möchtest du setzen? ");
+                            eingabeZ = sc.nextInt();
+                            if (this.getAbyss().getFeldgroesse()[eingabeZ - 1][eingabeS - 1] != 0) {
+                                System.out.println("Dieses Feld ist besetzt.");
+                            }
+                            else unfaehigerUser=false;
+                        }
+                    x = false;
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Dieses Feld gibt es nicht.");
+                        x=true;
                     }
                 }
+
                 else {
-                    do {
-                        eingabeZ = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse().length + 1);
-                        eingabeS = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse()[eingabeZ-1].length + 1);
-                    } while (this.getAbyss().getFeldgroesse()[eingabeZ - 1][eingabeS - 1] != 0);
+
+                    try {
+                        if (getAbyss().getFeldgroesse()[0][1] != 0) {
+                            if (getAbyss().getFeldgroesse()[1][0] != 0) {
+                                eingabeS = 1;
+                                eingabeZ = 1;
+                            } else {
+                                eingabeS=1;
+                                eingabeZ=2;
+                            }
+                        } else if (getAbyss().getFeldgroesse()[1][0] != 0) {
+                                eingabeS=2;
+                                eingabeZ=1;
+                        } else if ((getAbyss().getFeldgroesse()[1][1] == 0)&&(getAbyss().getFeldgroesse()[0][2]!=0)&&(getAbyss().getFeldgroesse().length==2||getAbyss().getFeldgroesse()[2][0]!=0)) {
+                            eingabeS=2;
+                            eingabeZ=2;
+                        } else if ((getAbyss().getFeldgroesse()[1][1] != 0) && (getAbyss().getFeldgroesse()[0][2] != 0) && (getAbyss().getFeldgroesse().length != 2 && getAbyss().getFeldgroesse()[2][0] == 0)) {
+                            eingabeS=1;
+                            eingabeZ=3;
+                        } else if ((getAbyss().getFeldgroesse()[1][1] != 0) &&(getAbyss().getFeldgroesse()[0][2] == 0) && (getAbyss().getFeldgroesse().length == 2 || getAbyss().getFeldgroesse()[2][0] != 0)) {
+                            eingabeS = 3;
+                            eingabeZ = 1;
+                        } else if ((getAbyss().getFeldgroesse()[1][1] != 0) &&(getAbyss().getFeldgroesse()[0][2] != 0) && (getAbyss().getFeldgroesse().length == 2 || getAbyss().getFeldgroesse()[2][0] != 0)) {
+                            eingabeS=2;
+                            eingabeZ=1;
+                        } else if ((getAbyss().getFeldgroesse().length == 2 || (getAbyss().getFeldgroesse()[0][2] != 0 && getAbyss().getFeldgroesse()[1][2] != 0)) && (getAbyss().getFeldgroesse()[2][1] != 0) && (getAbyss().getFeldgroesse()[3][0] != 0)) {
+                            eingabeS = 2;
+                            eingabeZ = 2;
+                        } else if ((getAbyss().getFeldgroesse().length == 3 || (getAbyss().getFeldgroesse()[0][3] != 0)) && (getAbyss().getFeldgroesse()[1][2] != 0) && (getAbyss().getFeldgroesse()[2][1] != 0) && (getAbyss().getFeldgroesse()[2][0] != 0)) {
+                            eingabeS = 2;
+                            eingabeZ = 2;
+                        } else if ((getAbyss().getFeldgroesse().length == 3 || (getAbyss().getFeldgroesse()[0][3] != 0)) && (getAbyss().getFeldgroesse()[1][2] != 0) && (getAbyss().getFeldgroesse()[2][1] != 0) && (getAbyss().getFeldgroesse()[3][0] != 0)) {
+                            eingabeS = 1;
+                            eingabeZ = 3;
+                        } else {
+                            do {
+                                eingabeZ = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse().length + 1);
+                                eingabeS = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse()[eingabeZ - 1].length + 1);
+                            } while (((eingabeS + eingabeZ) <= 4) || (this.getAbyss().getFeldgroesse()[eingabeZ - 1][eingabeS - 1] != 0));
+                        }
+                    } catch (ArrayIndexOutOfBoundsException aoe) {
+                        do {
+                            eingabeZ = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse().length + 1);
+                            eingabeS = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse()[eingabeZ - 1].length + 1);
+                        } while (((eingabeS + eingabeZ) <= 4) || (this.getAbyss().getFeldgroesse()[eingabeZ - 1][eingabeS - 1] != 0));
+                    }
+
                 }
-                x = false;
-            } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("Dieses Feld gibt es nicht.");
-                x=true;
-            }
+
         }while (x);
         this.ziehen(new Spielzug(eingabeZ, eingabeS));
                 if (eingabeS == 1 & eingabeZ == 1) {
