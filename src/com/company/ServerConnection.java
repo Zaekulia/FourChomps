@@ -39,65 +39,69 @@ public class ServerConnection extends Thread{
         try { //REGISTER
             din = new DataInputStream(socket.getInputStream());
             dout = new DataOutputStream(socket.getOutputStream());
-            String line = din.readUTF();
-            nutzername = din.readUTF();
-            String password = din.readUTF();
-            if (line.equals("Registrieren")) {
-                try {
-                    for (int k = 0; k < 100; k++) {
-                        if (server.getNutzerliste()[k].getUsername().equals(nutzername)) {
-                            gefunden = true;
-                            dout.writeUTF("Nope");
-                            break;
-                        }
-                        nutzerposition = k; //HIER
-                    }
-                } catch (NullPointerException npe) {
-                    dout.writeUTF("Anmeldung erfolgreich!");
+            while (!angemeldet) {
+                String line = din.readUTF();
+                nutzername = din.readUTF();
+                String password = din.readUTF();
+                if (line.equals("Registrieren")) {
                     try {
-                        for (int i = 0; i < 100; i++) {
-                            if (server.getNutzerliste()[i].isActive()) {
-                                dout.writeUTF(server.getNutzerliste()[i].getUsername() + " hat sich gerade angemeldet");
+                        for (int k = 0; k < 100; k++) {
+                            if (server.getNutzerliste()[k].getUsername().equals(nutzername)) {
+                                gefunden = true;
+                                dout.writeUTF("Nope");
+                                break;
                             }
+                            nutzerposition = k; //HIER
                         }
-                    } catch (NullPointerException np) {
-                    }
-                    server.getNutzerliste()[nutzerposition] = new Spieler(nutzername, true);
-                    server.getNutzerliste()[nutzerposition].setPasswort(password);
-                    dout.writeUTF("Anmeldung erfolgreich");
-                    sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
-                    server.ServerStatus.append(nutzername+" hat sich gerade angemeldet\n");
-                    server.ActiveNutzer.append(nutzername+"\n");
+                    } catch (NullPointerException npe) {
+                        dout.writeUTF("Anmeldung erfolgreich!");
+                        angemeldet=true;
+                        try {
+                            for (int i = 0; i < 100; i++) {
+                                if (server.getNutzerliste()[i].isActive()) {
+                                    dout.writeUTF(server.getNutzerliste()[i].getUsername() + " hat sich gerade angemeldet");
+                                }
+                            }
+                        } catch (NullPointerException np) {
+                        }
+                        server.getNutzerliste()[nutzerposition] = new Spieler(nutzername, true);
+                        server.getNutzerliste()[nutzerposition].setPasswort(password);
+                        dout.writeUTF("Anmeldung erfolgreich");
+                        sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
+                        server.ServerStatus.append(nutzername + " hat sich gerade angemeldet\n");
+                        server.ActiveNutzer.append(nutzername + "\n");
 
-                } catch (ArrayIndexOutOfBoundsException aoe) {
-                    dout.writeUTF("Zu viele Nutzer! Komm später wieder");
-                }
-            } else { //SIGN IN
-                try {
-                    for (int k = 0; k < 100; k++) {
-                        if (server.getNutzerliste()[k].getUsername().equals(nutzername) && server.getNutzerliste()[k].getPasswort().equals(password)) {
-                            gefunden = true;
-                            dout.writeUTF("Anmeldung erfolgreich!");
-                            break;
-                        }
-                        nutzerposition = k; //HIER
+                    } catch (ArrayIndexOutOfBoundsException aoe) {
+                        dout.writeUTF("Zu viele Nutzer! Komm später wieder");
                     }
-                }catch (NullPointerException ne){
-                    dout.writeUTF("Nope");
-                }
-                if (gefunden&&server.getNutzerliste()[nutzerposition].getPasswort().equals(password)) {
+                } else { //SIGN IN
                     try {
-                        for (int i = 0; i < 100; i++) {
-                            if (server.getNutzerliste()[i].isActive()) {
-                                dout.writeUTF(server.getNutzerliste()[i].getUsername() + " hat sich gerade angemeldet");
+                        for (int k = 0; k < 100; k++) {
+                            if (server.getNutzerliste()[k].getUsername().equals(nutzername) && server.getNutzerliste()[k].getPasswort().equals(password)) {
+                                gefunden = true;
+                                dout.writeUTF("Anmeldung erfolgreich!");
+                                angemeldet=true;
+                                break;
                             }
+                            nutzerposition = k; //HIER
                         }
-                    } catch (NullPointerException np) {
+                    } catch (NullPointerException ne) {
+                        dout.writeUTF("Nope");
                     }
-                    server.getNutzerliste()[nutzerposition].setActive(true);
-                    sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
-                    server.ServerStatus.append(nutzername+" hat sich gerade angemeldet\n");
-                    server.ActiveNutzer.append(nutzername+"\n");
+                    if (angemeldet) {
+                        try {
+                            for (int i = 0; i < 100; i++) {
+                                if (server.getNutzerliste()[i].isActive()) {
+                                    dout.writeUTF(server.getNutzerliste()[i].getUsername() + " hat sich gerade angemeldet");
+                                }
+                            }
+                        } catch (NullPointerException np) {
+                        }
+                        server.getNutzerliste()[nutzerposition].setActive(true);
+                        sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
+                        server.ServerStatus.append(nutzername + " hat sich gerade angemeldet\n");
+                        server.ActiveNutzer.append(nutzername + "\n");
+                    }
                 }
             }
             while(shouldRun){
