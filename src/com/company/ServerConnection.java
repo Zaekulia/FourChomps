@@ -85,11 +85,21 @@ public class ServerConnection extends Thread{
                 }catch (NullPointerException ne){
                     dout.writeUTF("Nope");
                 }
-                server.getNutzerliste()[nutzerposition].setActive(true);
-                sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
-                server.ServerStatus.append(nutzername+" hat sich gerade angemeldet\n");
-                server.ActiveNutzer.append(nutzername+"\n");
-        }
+                if (gefunden&&server.getNutzerliste()[nutzerposition].getPasswort().equals(password)) {
+                    try {
+                        for (int i = 0; i < 100; i++) {
+                            if (server.getNutzerliste()[i].isActive()) {
+                                dout.writeUTF(server.getNutzerliste()[i].getUsername() + " hat sich gerade angemeldet");
+                            }
+                        }
+                    } catch (NullPointerException np) {
+                    }
+                    server.getNutzerliste()[nutzerposition].setActive(true);
+                    sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
+                    server.ServerStatus.append(nutzername+" hat sich gerade angemeldet\n");
+                    server.ActiveNutzer.append(nutzername+"\n");
+                }
+            }
             while(shouldRun){
                 String textIn=din.readUTF();
                 sendStringToAllClients(nutzername+": "+textIn);
