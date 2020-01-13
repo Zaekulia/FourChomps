@@ -50,7 +50,7 @@ public class ServerConnection extends Thread{
                             dout.writeUTF("Nope");
                             break;
                         }
-                        nutzerposition = k+1;
+                        nutzerposition = k; //HIER
                     }
                 } catch (NullPointerException npe) {
                     dout.writeUTF("Anmeldung erfolgreich!");
@@ -66,7 +66,9 @@ public class ServerConnection extends Thread{
                     server.getNutzerliste()[nutzerposition].setPasswort(password);
                     dout.writeUTF("Anmeldung erfolgreich");
                     sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
-                    angemeldet = true;
+                    server.ServerStatus.append(nutzername+" hat sich gerade angemeldet\n");
+                    server.ActiveNutzer.append(nutzername+"\n");
+
                 } catch (ArrayIndexOutOfBoundsException aoe) {
                     dout.writeUTF("Zu viele Nutzer! Komm später wieder");
                 }
@@ -78,10 +80,10 @@ public class ServerConnection extends Thread{
                             dout.writeUTF("Anmeldung erfolgreich!");
                             break;
                         }
-                        nutzerposition = k+1;
+                        nutzerposition = k; //HIER
                     }
                 }catch (NullPointerException ne){
-                        dout.writeUTF("Nope");
+                    dout.writeUTF("Nope");
                 }
                 if (gefunden&&server.getNutzerliste()[nutzerposition].getPasswort().equals(password)) {
                     try {
@@ -94,8 +96,10 @@ public class ServerConnection extends Thread{
                     }
                     server.getNutzerliste()[nutzerposition].setActive(true);
                     sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
+                    server.ServerStatus.append(nutzername+" hat sich gerade angemeldet\n");
+                    server.ActiveNutzer.append(nutzername+"\n");
                 }
-        }
+            }
             while(shouldRun){
                 String textIn=din.readUTF();
                 sendStringToAllClients(nutzername+": "+textIn);
@@ -105,6 +109,8 @@ public class ServerConnection extends Thread{
             socket.close();
         }catch(IOException e){
             sendStringToAllClients(nutzername+" hat den Server verlassen");
+            server.ServerStatus.append(nutzername+" hat den Server verlassen\n");
+            server.ActiveNutzer.setText(""+server.ActiveNutzer.getText().replace(nutzername+"\n",""));
             server.getNutzerliste()[nutzerposition].setActive(false);
         }
     }
