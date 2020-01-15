@@ -54,7 +54,6 @@ public class Main {
                             y=x/2;
                         }while (x<4||x>20);
                         Chomp chomp = new Chomp(new Spieler("testa", true), new Spieler("testb", true), new ChompFeld(new int[y][x]));
-                        System.out.println(chomp.getAbyss().getFeldgroesse()[3].length);
                         chomp.durchlauf();
                         System.out.println("Möchtest noch einmal Spielen? (1 = Selbes Spiel; 2 = Anderes Spiel; Andere Zahl = Beenden)");
                         eingabe = sc.nextInt();
