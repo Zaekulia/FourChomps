@@ -7,7 +7,7 @@ public class ImageTest {
     private JPanel rootPanel;
     private JLabel JImage;
     ImageTest(){
-        Image img =new ImageIcon(this.getClass().getResource("/cb.png")).getImage();
+        Image img =new ImageIcon(this.getClass().getResource("/coco.png")).getImage();
         JImage.setIcon(new ImageIcon(img));
     }
 
