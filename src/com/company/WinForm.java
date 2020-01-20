@@ -12,4 +12,15 @@ public class WinForm {
     private JButton a5Button;
     private JButton a6Button;
     private JButton a7Button;
+    private JTextField textField1;
+    private JButton sendButton;
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("WinForm");
+        frame.setContentPane(new WinForm().rootPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+    }
 }
+
