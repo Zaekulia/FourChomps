@@ -10,7 +10,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <grid id="adce6" binding="WinPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="adce6" binding="winPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="4" row-span="3" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -49,7 +49,7 @@
                   <text value="1"/>
                 </properties>
               </component>
-              <grid id="da14b" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="da14b" binding="spalte11" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -59,11 +59,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="d5893" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="d5893" binding="spalte21" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -73,11 +74,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="391f6" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="391f6" binding="spalte31" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -87,11 +89,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="4c579" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="4c579" binding="spalte41" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -101,11 +104,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="5538c" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="5538c" binding="spalte51" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -115,11 +119,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="871c5" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="871c5" binding="spalte61" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -129,6 +134,7 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
@@ -143,11 +149,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="b13be" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="b13be" binding="spalte12" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -157,11 +164,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="3a1c8" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="3a1c8" binding="spalte22" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -171,11 +179,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="97874" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="97874" binding="spalte32" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -185,11 +194,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="4cd40" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="4cd40" binding="spalte42" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -199,11 +209,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="3c644" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="3c644" binding="spalte52" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -213,11 +224,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="8c81c" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="8c81c" binding="spalte62" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -227,6 +239,7 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
@@ -241,11 +254,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="2e7d7" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="2e7d7" binding="spalte13" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -255,11 +269,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="93f86" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="93f86" binding="spalte23" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -269,11 +284,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="9af50" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="9af50" binding="spalte33" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -283,11 +299,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="9188f" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="9188f" binding="spalte43" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -297,11 +314,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="c42da" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="c42da" binding="spalte53" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -311,11 +329,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="b8a81" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="b8a81" binding="spalte63" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -325,6 +344,7 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
@@ -339,11 +359,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="88b62" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="88b62" binding="spalte14" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -353,11 +374,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="76477" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="76477" binding="spalte24" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -367,11 +389,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="795b6" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="795b6" binding="spalte34" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -381,11 +404,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="eb3e1" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="eb3e1" binding="spalte44" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -395,11 +419,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="e7a0e" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="e7a0e" binding="spalte54" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -409,11 +434,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="e8b4f" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="e8b4f" binding="spalte64" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="4" column="5" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -423,6 +449,7 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
@@ -437,11 +464,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="b5d64" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="b5d64" binding="spalte15" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -451,11 +479,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="75cbf" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="75cbf" binding="spalte25" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -465,11 +494,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="8ff7f" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="8ff7f" binding="spalte35" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -479,11 +509,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="1bfb7" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="1bfb7" binding="spalte45" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -493,11 +524,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="856a7" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="856a7" binding="spalte55" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -507,11 +539,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="8cb86" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="8cb86" binding="spalte65" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="5" column="5" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -521,6 +554,7 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
@@ -535,11 +569,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="c0475" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="c0475" binding="spalte16" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -549,11 +584,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="d883c" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="d883c" binding="spalte26" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -563,11 +599,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="f81e9" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="f81e9" binding="spalte36" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -577,11 +614,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="55d74" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="55d74" binding="spalte46" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -591,11 +629,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="a790b" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="a790b" binding="spalte56" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="6" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -605,11 +644,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="87ddb" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="87ddb" binding="spalte66" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="6" column="5" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -619,6 +659,7 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
@@ -633,11 +674,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="73cdc" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="73cdc" binding="spalte17" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -647,11 +689,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="fba93" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="fba93" binding="spalte27" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -661,11 +704,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="dba51" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="dba51" binding="spalte37" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -675,11 +719,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="756b9" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="756b9" binding="spalte47" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="7" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -689,11 +734,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="d6881" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="d6881" binding="spalte57" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="7" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -703,11 +749,12 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
               </grid>
-              <grid id="a6f82" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="a6f82" binding="spalte67" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="2" left="2" bottom="2" right="2"/>
                 <constraints>
                   <grid row="7" column="5" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -717,6 +764,7 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
@@ -731,6 +779,7 @@
                 </constraints>
                 <properties>
                   <background color="-8340553"/>
+                  <visible value="false"/>
                 </properties>
                 <border type="bevel-lowered"/>
                 <children/>
@@ -743,6 +792,7 @@
                 </constraints>
                 <properties>
                   <text value="2"/>
+                  <visible value="true"/>
                 </properties>
               </component>
               <component id="f04f" class="javax.swing.JButton" binding="a3Button" default-binding="true">
@@ -753,6 +803,7 @@
                 </constraints>
                 <properties>
                   <text value="3"/>
+                  <visible value="true"/>
                 </properties>
               </component>
               <component id="e5d4d" class="javax.swing.JButton" binding="a4Button" default-binding="true">
@@ -763,6 +814,7 @@
                 </constraints>
                 <properties>
                   <text value="4"/>
+                  <visible value="true"/>
                 </properties>
               </component>
               <component id="3d4dd" class="javax.swing.JButton" binding="a5Button" default-binding="true">
@@ -773,6 +825,7 @@
                 </constraints>
                 <properties>
                   <text value="5"/>
+                  <visible value="true"/>
                 </properties>
               </component>
               <component id="fc93e" class="javax.swing.JButton" binding="a6Button" default-binding="true">
@@ -783,6 +836,7 @@
                 </constraints>
                 <properties>
                   <text value="6"/>
+                  <visible value="true"/>
                 </properties>
               </component>
               <component id="5c1e0" class="javax.swing.JButton" binding="a7Button" default-binding="true">
@@ -793,6 +847,7 @@
                 </constraints>
                 <properties>
                   <text value="7"/>
+                  <visible value="true"/>
                 </properties>
               </component>
             </children>
