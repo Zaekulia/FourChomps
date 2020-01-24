@@ -1,4 +1,6 @@
 package com.company;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.*;
@@ -7,25 +9,38 @@ import java.awt.*;
 public class Chomp extends Spiel implements Protokollierbar {
     private JPanel rootPanel;
     private JPanel feldPanel;
-    private Component[][] ChompOmp =new JButton[10][20];
+    private JButton[][] chompOmp =new JButton[10][20];
     boolean a;
     private boolean win=false;
     boolean x=true;
     public Chomp(Spieler alpha, Spieler beta, ChompFeld cf){
         Component[] test= feldPanel.getComponents();
         for (int i=0; i < 200; i++) {
-            ChompOmp[i/20][i%20]=test[i];
+            chompOmp[i/20][i%20]=(JButton) test[i];
         }
         JFrame frame = new JFrame("ChompForm");
         frame.setContentPane(rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+        for (int i = 0; i < cf.getFeldgroesse().length; i++) {
+            for (int j = 0; j < cf.getFeldgroesse()[i].length;j++) {
+                chompOmp[i][j].setVisible(true);
+            }
+        }
         frame.setVisible(true);
+        for (int i=0; i < 200; i++) {
+            chompOmp[i/20][i%20].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                }
+            });
+        }
         Scanner scanner=new Scanner(System.in);
         int y,x;
         this.setA(alpha);
         this.setB(beta);
         this.setAbyss(cf);
+
     }
     @Override
     public void zug(Spieler spiler) {
@@ -364,4 +379,7 @@ public class Chomp extends Spiel implements Protokollierbar {
     private JButton button198;
     private JButton button199;
     private JButton button200;
+    private JTextField textField1;
+    private JButton button201;
+    private JTextArea textArea1;
 }
