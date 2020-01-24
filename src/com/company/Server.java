@@ -17,6 +17,7 @@ public class Server {
     private boolean shouldRun=true;
 	private Spieler[] nutzerliste=new Spieler[100];
     ArrayList<ServerConnection> connections =new ArrayList<ServerConnection>();
+    ArrayList<GameConnection[]> matches=new ArrayList<GameConnection[]>();
     public Spieler[] getNutzerliste() {
         return nutzerliste;
     }
