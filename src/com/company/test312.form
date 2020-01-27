@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.company.ClientConnection">
-  <grid id="27dc6" binding="rootPanel" layout-manager="GridLayoutManager" row-count="4" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="rootPanel" layout-manager="GridLayoutManager" row-count="4" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="20" width="924" height="400"/>
     </constraints>
     <properties>
-      <background color="-5711112"/>
+      <background color="-6047540"/>
       <font name="EB Garamond 08"/>
       <preferredSize width="1000" height="1000"/>
     </properties>
@@ -19,8 +19,10 @@
           </grid>
         </constraints>
         <properties>
-          <background color="-1183240"/>
+          <background color="-4280108"/>
+          <caretColor color="-16579837"/>
           <editable value="false"/>
+          <foreground color="-10017441"/>
           <text value=""/>
         </properties>
       </component>
@@ -31,16 +33,8 @@
           </grid>
         </constraints>
         <properties>
-          <background color="-2629664"/>
-        </properties>
-      </component>
-      <component id="d066f" class="javax.swing.JButton" binding="sendButton" default-binding="true">
-        <constraints>
-          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <background color="-2629664"/>
-          <text value="Send"/>
+          <background color="-4280108"/>
+          <foreground color="-10017441"/>
         </properties>
       </component>
       <hspacer id="9b6f6">
@@ -75,7 +69,7 @@
       </hspacer>
       <hspacer id="32dea">
         <constraints>
-          <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+          <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="20" height="20"/>
           </grid>
         </constraints>
@@ -87,10 +81,44 @@
           </grid>
         </constraints>
         <properties>
-          <background color="-526090"/>
+          <background color="-4280108"/>
+          <disabledTextColor color="-10017441"/>
           <editable value="false"/>
           <enabled value="false"/>
+          <foreground color="-10017441"/>
           <opaque value="true"/>
+        </properties>
+      </component>
+      <grid id="1d945" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-10017441"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="3912a" class="javax.swing.JButton" binding="spielenButton">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-4280108"/>
+              <label value="Spielen"/>
+              <text value="Spielen"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <component id="d066f" class="javax.swing.JButton" binding="sendButton" default-binding="true">
+        <constraints>
+          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-4280108"/>
+          <foreground color="-10017441"/>
+          <text value="Send"/>
         </properties>
       </component>
     </children>
