@@ -44,6 +44,13 @@ public class Menue {
         chibis[3]=cinnamonButton;
         chibis[4]=mapleButton;
         chibis[5]=azukiButton;
+        String none=new String("none");
+        String someone=new String ("someone");
+        gegenSpieler.addItem(none);
+        gegenSpieler.addItem(someone);
+        for(i=0;i<chibis.length;i++){
+            chibis[i].setBackground(standard);
+        }
         chocolaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -101,13 +108,24 @@ public class Menue {
         vierGewinntButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                for(i=0;i<chibis.length;i++){
+                    if(!chibis[i].getBackground().equals(standard)&&gegenSpieler.getSelectedItem().equals(none)){
+                        System.out.println("klappt");
+                    }
+                    else System.out.println("nope");
+                }
 
             }
         });
         chompButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                for(i=0;i<chibis.length;i++){
+                    if(!chibis[i].getBackground().equals(standard)&&!gegenSpieler.getSelectedItem().equals(none)){
+                        System.out.println("klappt");
+                    }
+                    else System.out.println("nope");
+                }
             }
         });
     }
