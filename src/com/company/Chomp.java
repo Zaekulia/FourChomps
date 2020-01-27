@@ -11,12 +11,24 @@ public class Chomp extends Spiel implements Protokollierbar {
     private JPanel feldPanel;
     private JButton[][] chompOmp =new JButton[10][20];
     boolean a;
+    int m,n;
     private boolean win=false;
     boolean x=true;
-    public Chomp(Spieler alpha, Spieler beta, ChompFeld cf){
+    public Chomp(Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger){
+        a=anfänger;
+        Scanner scanner=new Scanner(System.in);
+        int y,x;
+        this.setA(alpha);
+        this.setB(beta);
+        this.setAbyss(cf);
         Component[] test= feldPanel.getComponents();
         for (int i=0; i < 200; i++) {
             chompOmp[i/20][i%20]=(JButton) test[i];
+        }
+        for (int i = 0; i < cf.getFeldgroesse().length;i++) {
+            for (int j = 0; j < cf.getFeldgroesse()[i].length; j++) {
+                chompOmp[i][j].setVisible(true);
+            }
         }
         JFrame frame = new JFrame("ChompForm");
         frame.setContentPane(rootPanel);
@@ -29,24 +41,29 @@ public class Chomp extends Spiel implements Protokollierbar {
         }
         frame.setVisible(true);
         for (int i=0; i < 200; i++) {
+            m=i/20;n=i%20;
             chompOmp[i/20][i%20].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
+                    if (anfänger) {
+                        zug(getA(), new Spielzug(m, n));
+                    } else {
+                        zug(getB(), new Spielzug(m, n));
+                    }
                 }
             });
+            if (!anfänger) {
+                chompOmp[i/20][i%20].setEnabled(false);
+            }
         }
-        Scanner scanner=new Scanner(System.in);
-        int y,x;
-        this.setA(alpha);
-        this.setB(beta);
-        this.setAbyss(cf);
+
 
     }
     @Override
-    public void zug(Spieler spiler) {
+    public void zug(Spieler spiler, Spielzug spielzug) {
         Scanner sc = new Scanner(System.in);
         boolean unfaehigerUser = false;
-        int eingabeZ = 0, eingabeS = 0;
+        /*int eingabeZ = 0, eingabeS = 0;
         do {
 
                 if (spiler.isMensch()) {
@@ -78,76 +95,77 @@ public class Chomp extends Spiel implements Protokollierbar {
                     }
                 }
 
-                else {
-
-                    try {
-                        if (getAbyss().getFeldgroesse()[0][1] != 0) {
-                            if (getAbyss().getFeldgroesse()[1][0] != 0) {
-                                eingabeS = 1;
-                                eingabeZ = 1;
-                            } else {
-                                eingabeS=1;
-                                eingabeZ=2;
-                            }
-                        } else if (getAbyss().getFeldgroesse()[1][0] != 0) {
-                                eingabeS=2;
-                                eingabeZ=1;
-                        } else if ((getAbyss().getFeldgroesse()[1][1] == 0)&&(getAbyss().getFeldgroesse()[0][2]!=0)&&(getAbyss().getFeldgroesse().length==2||getAbyss().getFeldgroesse()[2][0]!=0)) {
-                            eingabeS=2;
-                            eingabeZ=2;
-                        } else if ((getAbyss().getFeldgroesse()[1][1] != 0) && (getAbyss().getFeldgroesse()[0][2] != 0) && (getAbyss().getFeldgroesse().length != 2 && getAbyss().getFeldgroesse()[2][0] == 0)) {
-                            eingabeS=1;
-                            eingabeZ=3;
-                        } else if ((getAbyss().getFeldgroesse()[1][1] != 0) &&(getAbyss().getFeldgroesse()[0][2] == 0) && (getAbyss().getFeldgroesse().length == 2 || getAbyss().getFeldgroesse()[2][0] != 0)) {
-                            eingabeS = 3;
-                            eingabeZ = 1;
-                        } else if ((getAbyss().getFeldgroesse()[1][1] != 0) &&(getAbyss().getFeldgroesse()[0][2] != 0) && (getAbyss().getFeldgroesse().length == 2 || getAbyss().getFeldgroesse()[2][0] != 0)) {
-                            eingabeS=2;
-                            eingabeZ=1;
-                        } else if ((getAbyss().getFeldgroesse().length == 2 || (getAbyss().getFeldgroesse()[0][2] != 0 && getAbyss().getFeldgroesse()[1][2] != 0)) && (getAbyss().getFeldgroesse()[2][1] != 0) && (getAbyss().getFeldgroesse()[3][0] != 0)) {
-                            eingabeS = 2;
-                            eingabeZ = 2;
-                        } else if ((getAbyss().getFeldgroesse().length == 3 || (getAbyss().getFeldgroesse()[0][3] != 0)) && (getAbyss().getFeldgroesse()[1][2] != 0) && (getAbyss().getFeldgroesse()[2][1] != 0) && (getAbyss().getFeldgroesse()[2][0] != 0)) {
-                            eingabeS = 2;
-                            eingabeZ = 2;
-                        } else if ((getAbyss().getFeldgroesse().length == 3 || (getAbyss().getFeldgroesse()[0][3] != 0)) && (getAbyss().getFeldgroesse()[1][2] != 0) && (getAbyss().getFeldgroesse()[2][1] != 0) && (getAbyss().getFeldgroesse()[3][0] != 0)) {
-                            eingabeS = 1;
-                            eingabeZ = 3;
-                        } else {
-                            do {
-                                eingabeZ = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse().length + 1);
-                                eingabeS = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse()[eingabeZ - 1].length + 1);
-                            } while (((eingabeS + eingabeZ) <= 4) || (this.getAbyss().getFeldgroesse()[eingabeZ - 1][eingabeS - 1] != 0));
-                        }
-                    } catch (ArrayIndexOutOfBoundsException aoe) {
-                        do {
-                            eingabeZ = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse().length + 1);
-                            eingabeS = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse()[eingabeZ - 1].length + 1);
-                        } while (((eingabeS + eingabeZ) <= 4) || (this.getAbyss().getFeldgroesse()[eingabeZ - 1][eingabeS - 1] != 0));
+        }while (x);*/
+        if (!spiler.isMensch()) {
+            int eingabeS,eingabeZ;
+            try {
+                if (getAbyss().getFeldgroesse()[0][1] != 0) {
+                    if (getAbyss().getFeldgroesse()[1][0] != 0) {
+                        eingabeS = 1;
+                        eingabeZ = 1;
+                    } else {
+                        eingabeS=1;
+                        eingabeZ=2;
                     }
-
+                } else if (getAbyss().getFeldgroesse()[1][0] != 0) {
+                    eingabeS=2;
+                    eingabeZ=1;
+                } else if ((getAbyss().getFeldgroesse()[1][1] == 0)&&(getAbyss().getFeldgroesse()[0][2]!=0)&&(getAbyss().getFeldgroesse().length==2||getAbyss().getFeldgroesse()[2][0]!=0)) {
+                    eingabeS=2;
+                    eingabeZ=2;
+                } else if ((getAbyss().getFeldgroesse()[1][1] != 0) && (getAbyss().getFeldgroesse()[0][2] != 0) && (getAbyss().getFeldgroesse().length != 2 && getAbyss().getFeldgroesse()[2][0] == 0)) {
+                    eingabeS=1;
+                    eingabeZ=3;
+                } else if ((getAbyss().getFeldgroesse()[1][1] != 0) &&(getAbyss().getFeldgroesse()[0][2] == 0) && (getAbyss().getFeldgroesse().length == 2 || getAbyss().getFeldgroesse()[2][0] != 0)) {
+                    eingabeS = 3;
+                    eingabeZ = 1;
+                } else if ((getAbyss().getFeldgroesse()[1][1] != 0) &&(getAbyss().getFeldgroesse()[0][2] != 0) && (getAbyss().getFeldgroesse().length == 2 || getAbyss().getFeldgroesse()[2][0] != 0)) {
+                    eingabeS=2;
+                    eingabeZ=1;
+                } else if ((getAbyss().getFeldgroesse().length == 2 || (getAbyss().getFeldgroesse()[0][2] != 0 && getAbyss().getFeldgroesse()[1][2] != 0)) && (getAbyss().getFeldgroesse()[2][1] != 0) && (getAbyss().getFeldgroesse()[3][0] != 0)) {
+                    eingabeS = 2;
+                    eingabeZ = 2;
+                } else if ((getAbyss().getFeldgroesse().length == 3 || (getAbyss().getFeldgroesse()[0][3] != 0)) && (getAbyss().getFeldgroesse()[1][2] != 0) && (getAbyss().getFeldgroesse()[2][1] != 0) && (getAbyss().getFeldgroesse()[2][0] != 0)) {
+                    eingabeS = 2;
+                    eingabeZ = 2;
+                } else if ((getAbyss().getFeldgroesse().length == 3 || (getAbyss().getFeldgroesse()[0][3] != 0)) && (getAbyss().getFeldgroesse()[1][2] != 0) && (getAbyss().getFeldgroesse()[2][1] != 0) && (getAbyss().getFeldgroesse()[3][0] != 0)) {
+                    eingabeS = 1;
+                    eingabeZ = 3;
+                } else {
+                    do {
+                        eingabeZ = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse().length + 1);
+                        eingabeS = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse()[eingabeZ - 1].length + 1);
+                    } while (((eingabeS + eingabeZ) <= 4) || (this.getAbyss().getFeldgroesse()[eingabeZ - 1][eingabeS - 1] != 0));
                 }
-
-        }while (x);
-        this.ziehen(new Spielzug(eingabeZ, eingabeS));
-                if (eingabeS == 1 & eingabeZ == 1) {
+            } catch (ArrayIndexOutOfBoundsException aoe) {
+                do {
+                    eingabeZ = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse().length + 1);
+                    eingabeS = ThreadLocalRandom.current().nextInt(1, this.getAbyss().getFeldgroesse()[eingabeZ - 1].length + 1);
+                } while (((eingabeS + eingabeZ) <= 4) || (this.getAbyss().getFeldgroesse()[eingabeZ - 1][eingabeS - 1] != 0));
+            }
+            spielzug.spalte=eingabeS;spielzug.zeile=eingabeZ;
+        }
+        this.ziehen(spielzug);
+                if (spielzug.zeile == 1 & spielzug.spalte == 1) {
                     win = true;
                     return;
                 }
                 if (spiler == getA()) {
-                    for (int i = this.getAbyss().getFeldgroesse().length-1; i >= eingabeZ-1; i--) {
-                        int j = eingabeS-1;
+                    for (int i = this.getAbyss().getFeldgroesse().length-1; i >= spielzug.zeile-1; i--) {
+                        int j = spielzug.spalte-1;
                         while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
                             this.getAbyss().getFeldgroesse()[i][j] = 1;
+                            //Bild laden
                             j++;
                         }
                     }
                 }
                 if (spiler == getB()) {
-                    for (int i = this.getAbyss().getFeldgroesse().length-1; i >= eingabeZ-1; i--) {
-                        int j = eingabeS-1;
+                    for (int i = this.getAbyss().getFeldgroesse().length-1; i >= spielzug.zeile-1; i--) {
+                        int j = spielzug.spalte-1;
                         while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
                             this.getAbyss().getFeldgroesse()[i][j] = 2;
+                            //Bild laden
                             j++;
                         }
                     }
@@ -156,7 +174,7 @@ public class Chomp extends Spiel implements Protokollierbar {
 
     @Override
     public void durchlauf() {
-        while (!win){
+      /*  while (!win){
             zug(getA());
             if (win) {
                 System.out.println("Spieler B hat gewonnen!");
@@ -166,7 +184,7 @@ public class Chomp extends Spiel implements Protokollierbar {
             if (win) {
                 System.out.println("Spieler A hat gewonnen!");
             }
-        }
+        }*/
     }
 
     @Override

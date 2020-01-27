@@ -29,6 +29,6 @@ public abstract class Spiel {
         return abyss;
     }
 
-    public abstract void zug(Spieler spiler);
+    public abstract void zug(Spieler spiler, Spielzug spielzug);
     public abstract void durchlauf();
 }

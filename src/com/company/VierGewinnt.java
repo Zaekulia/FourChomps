@@ -12,7 +12,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
         this.setAbyss(new VierFeld());
     }
     @Override
-    public void zug(Spieler spiler) {
+    public void zug(Spieler spiler, Spielzug spielzug) {
         Scanner sc=new Scanner(System.in);
         int eingabe=0;
         boolean x=true;
@@ -85,11 +85,11 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
 
     @Override
     public void durchlauf() {
-        while (!win){
+        /*while (!win){
             zug(getA());
             if (win)break;
             zug(getB());
-        }
+        }*/
     }
 
     @Override
