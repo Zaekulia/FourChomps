@@ -33,6 +33,7 @@ public class ClientConnection extends Thread{
     boolean angemeldet;
     public ClientConnection(Socket socket, Client client){
         s=socket;
+        new SpielAnfrage(s).run();
         chatFrame = new JFrame("Four Chomps");
         chatFrame.setContentPane(this.rootPanel);
         chatFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,7 +72,9 @@ public class ClientConnection extends Thread{
         spielenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                //interaktion mit server erforderlich
+                Menue teest=new Menue(aktiveNutzer, s);
+                teest.start();
             }
         });
     }
