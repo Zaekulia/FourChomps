@@ -7,38 +7,30 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Chomp extends Spiel implements Protokollierbar {
+    private boolean shouldRun=true; //Glücksbringer
     private JPanel rootPanel;
     private JPanel feldPanel;
     private JButton[][] chompOmp =new JButton[10][20];
     boolean a;
     int m,n;
-    private boolean win=false;
-    boolean x=true;
     public Chomp(Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger){
         a=anfänger;
-        Scanner scanner=new Scanner(System.in);
-        int y,x;
         this.setA(alpha);
         this.setB(beta);
         this.setAbyss(cf);
-        Component[] test= feldPanel.getComponents();
+        Component[] comps= feldPanel.getComponents();
         for (int i=0; i < 200; i++) {
-            chompOmp[i/20][i%20]=(JButton) test[i];
+            chompOmp[i/20][i%20]=(JButton) comps[i];
         }
         for (int i = 0; i < cf.getFeldgroesse().length;i++) {
             for (int j = 0; j < cf.getFeldgroesse()[i].length; j++) {
                 chompOmp[i][j].setVisible(true);
             }
         }
-        JFrame frame = new JFrame("ChompForm");
+        JFrame frame = new JFrame("Chomps");
         frame.setContentPane(rootPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
-        for (int i = 0; i < cf.getFeldgroesse().length; i++) {
-            for (int j = 0; j < cf.getFeldgroesse()[i].length;j++) {
-                chompOmp[i][j].setVisible(true);
-            }
-        }
         frame.setVisible(true);
         for (int i=0; i < 200; i++) {
             m=i/20;n=i%20;
@@ -61,41 +53,6 @@ public class Chomp extends Spiel implements Protokollierbar {
     }
     @Override
     public void zug(Spieler spiler, Spielzug spielzug) {
-        Scanner sc = new Scanner(System.in);
-        boolean unfaehigerUser = false;
-        /*int eingabeZ = 0, eingabeS = 0;
-        do {
-
-                if (spiler.isMensch()) {
-                    try {
-                        this.getAbyss().showField();
-                        System.out.println("In welche Spalte möchtest du setzen? ");
-                        eingabeS = sc.nextInt();
-                        System.out.println("In welche Zeile möchtest du setzen? ");
-                        eingabeZ = sc.nextInt();
-                        if (this.getAbyss().getFeldgroesse()[eingabeZ - 1][eingabeS - 1] != 0) {
-                            System.out.println("Dieses Feld ist besetzt.");
-                            unfaehigerUser = true;
-                        }
-                        while (unfaehigerUser) {
-                            System.out.println("Wähle ein anderes Feld");
-                            System.out.println("In welche Spalte möchtest du setzen? ");
-                            eingabeS = sc.nextInt();
-                            System.out.println("In welche Zeile möchtest du setzen? ");
-                            eingabeZ = sc.nextInt();
-                            if (this.getAbyss().getFeldgroesse()[eingabeZ - 1][eingabeS - 1] != 0) {
-                                System.out.println("Dieses Feld ist besetzt.");
-                            }
-                            else unfaehigerUser=false;
-                        }
-                    x = false;
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        System.out.println("Dieses Feld gibt es nicht.");
-                        x=true;
-                    }
-                }
-
-        }while (x);*/
         if (!spiler.isMensch()) {
             int eingabeS,eingabeZ;
             try {
@@ -147,7 +104,7 @@ public class Chomp extends Spiel implements Protokollierbar {
         }
         this.ziehen(spielzug);
                 if (spielzug.zeile == 1 & spielzug.spalte == 1) {
-                    win = true;
+                    //Nachricht dass gewonnen
                     return;
                 }
                 if (spiler == getA()) {
@@ -174,17 +131,6 @@ public class Chomp extends Spiel implements Protokollierbar {
 
     @Override
     public void durchlauf() {
-      /*  while (!win){
-            zug(getA());
-            if (win) {
-                System.out.println("Spieler B hat gewonnen!");
-                break;
-            }
-            zug(this.getB());
-            if (win) {
-                System.out.println("Spieler A hat gewonnen!");
-            }
-        }*/
     }
 
     @Override
@@ -398,6 +344,6 @@ public class Chomp extends Spiel implements Protokollierbar {
     private JButton button199;
     private JButton button200;
     private JTextField textField1;
-    private JButton button201;
+    private JButton sendenButton;
     private JTextArea textArea1;
 }

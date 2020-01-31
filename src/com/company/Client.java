@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 public class Client {
+    private boolean shouldRun=true; //Glücksbringer
     ClientConnection cc;
     DataOutputStream dout;
     DataInputStream din;

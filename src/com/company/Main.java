@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         int eingabe;
         do {
@@ -90,5 +90,5 @@ public class Main {
                 System.out.println("Falsche Eingabe! Bitte wähle eins der verfügbaren Spiele.");
             }
         }while (true);
-    }
+    }*/
 }
