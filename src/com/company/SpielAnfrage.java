@@ -17,7 +17,7 @@ public class SpielAnfrage extends Thread{
     private ObjectInputStream oin;
     private  Spieler player;
     private  boolean spiel;
-    public SpielAnfrage(Socket s) {
+    public SpielAnfrage(Socket s) {  //HIER
         this.s=s;
         try {
             oin=new ObjectInputStream(s.getInputStream());
