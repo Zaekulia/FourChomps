@@ -15,6 +15,7 @@ public class Anmeldung {
         frame.setContentPane(new Anmeldung().rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+        frame.setResizable(false);
         frame.setVisible(true);
     }
 

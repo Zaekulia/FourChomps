@@ -1,6 +1,8 @@
 package com.company;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -17,7 +19,11 @@ public class ClientConnection extends Thread{
     protected JTextField chatField;
     protected JButton sendButton;
     protected JPanel rootPanel;
+    private JButton spielenButton;
     protected JFrame chatFrame;
+    protected Color highlight=new Color(187,187,187);
+    protected Color shadow=new Color(103,37,95);
+    protected Border border=BorderFactory.createEtchedBorder(highlight, shadow);
     ArrayList<String> aktiveNutzer=new ArrayList<>();
     Socket s;
     DataInputStream din;
@@ -32,6 +38,10 @@ public class ClientConnection extends Thread{
         chatFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         chatFrame.pack();
         chatFrame.setVisible(true);
+        userListArea.setBorder(border);
+        chatArea.setBorder(border);
+        //userListArea.setBorder();
+        //chatArea.createLineBorder()
         chatField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -56,6 +66,14 @@ public class ClientConnection extends Thread{
             public void actionPerformed(ActionEvent actionEvent) {
                 sendStringToServer(chatField.getText());
                 chatField.setText("");
+            }
+        });
+        spielenButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //interaktion mit server erforderlich
+                Menue teest=new Menue(aktiveNutzer, s);
+                teest.start();
             }
         });
     }
@@ -94,8 +112,13 @@ public class ClientConnection extends Thread{
                         aktiveNutzer.remove(reply.replaceFirst(" hat den Server verlassen",""));
                         showAktiveNutzer();
                     }
-                    System.out.println(reply);
-                    chatArea.append(reply+"\n");
+                    if (reply.matches("!Anfrage_VG_(.*?)")){
+
+                    }
+                    else if (reply.matches("!Anfrage_CH_(\\d*)_(.*?)")){ //d für feldgröße
+
+                    }
+                    else System.out.println(reply); chatArea.append(reply+"\n");
                 }catch (IOException e){
                     //e.printStackTrace();
                     shouldRun=false;

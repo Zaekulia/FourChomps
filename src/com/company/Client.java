@@ -33,6 +33,7 @@ public class Client {
             AnmeldungFrame.setContentPane(this.rootPanel); //
             AnmeldungFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //
             AnmeldungFrame.pack(); //
+            AnmeldungFrame.setResizable(false);
             AnmeldungFrame.setVisible(true); //
         }catch (UnknownHostException e){
             e.printStackTrace();
