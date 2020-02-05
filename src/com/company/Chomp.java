@@ -14,8 +14,7 @@ public class Chomp extends Spiel implements Protokollierbar {
     int m,n;
     private boolean win=false;
     boolean x=true;
-    public Chomp(Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger){
-        a=anfänger;
+    public Chomp(Spieler alpha, Spieler beta, ChompFeld cf){
         Scanner scanner=new Scanner(System.in);
         int y,x;
         this.setA(alpha);
@@ -42,7 +41,7 @@ public class Chomp extends Spiel implements Protokollierbar {
         frame.setVisible(true);
         for (int i=0; i < 200; i++) {
             m=i/20;n=i%20;
-            chompOmp[i/20][i%20].addActionListener(new ActionListener() {
+            /*chompOmp[i/20][i%20].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     if (anfänger) {
@@ -54,7 +53,7 @@ public class Chomp extends Spiel implements Protokollierbar {
             });
             if (!anfänger) {
                 chompOmp[i/20][i%20].setEnabled(false);
-            }
+            }*/
         }
 
 

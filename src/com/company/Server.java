@@ -12,7 +12,8 @@ public class Server {
     protected JPanel rootPanel;
     protected JTextArea ServerStatus;
     protected JFrame serverFrame;
-    ServerSocket ss;
+    private ServerSocket ss;
+    private ServerSocket sm;
     Scanner scanner=new Scanner(System.in);
     private boolean shouldRun=true;
 	private Spieler[] nutzerliste=new Spieler[100];
@@ -31,9 +32,11 @@ public class Server {
             Killer killer=new Killer(this);
             killer.start();
             ss=new ServerSocket(4999);
+            sm=new ServerSocket(5000);
             while(true){
                 Socket s=ss.accept();
-                ServerConnection sc=new ServerConnection (s, this);
+                Socket manager=sm.accept();
+                ServerConnection sc=new ServerConnection (s,manager, this);
                 sc.start();
                 connections.add(sc);
             }

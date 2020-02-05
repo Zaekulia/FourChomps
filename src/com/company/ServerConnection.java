@@ -7,12 +7,13 @@ import java.net.Socket;
 
 public class ServerConnection extends Thread{
     Socket socket;
+    private Socket manager;
     Server server;
     DataInputStream din;
     DataOutputStream dout;
     boolean shouldRun=true;
     String nutzername;
-    public ServerConnection(Socket socket, Server server){
+    public ServerConnection(Socket socket,Socket manager, Server server){
         super("ServerConnectionThread");
         this.socket=socket;
         this.server=server;
@@ -106,6 +107,10 @@ public class ServerConnection extends Thread{
             }
             while(shouldRun){
                 String textIn=din.readUTF();
+                if (textIn.matches("!Create_Gameconnection_(.*?)")) {
+                    //Matches Einträge einstellen
+                }
+
                 sendStringToAllClients(nutzername+": "+textIn);
             }
             din.close();

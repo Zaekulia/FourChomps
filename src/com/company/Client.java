@@ -14,6 +14,7 @@ public class Client {
     DataOutputStream dout;
     DataInputStream din;
     Socket s;
+    private Socket manager;
     protected JButton signInButton;
     protected JTextField username;
     protected JButton registerButton;
@@ -26,6 +27,7 @@ public class Client {
     public Client(){
         try{
             s=new Socket("localhost", 4999);
+            manager=new Socket("localhost",5000);
             din = new DataInputStream(s.getInputStream());
             dout=new DataOutputStream(s.getOutputStream());
             me=this;
@@ -56,7 +58,7 @@ public class Client {
                             AnmeldungFrame.setVisible(false);
                             //AnmeldungFrame.dispose();
                             //cc=new ClientConnection(s, me);
-                            cc=new ClientConnection(s, me);
+                            cc=new ClientConnection(s,manager, me);
                             cc.start();
                         }
                         else{
@@ -84,7 +86,7 @@ public class Client {
                             AnmeldungFrame.setVisible(false);
                             //AnmeldungFrame.dispose();
                             //cc=new ClientConnection(s, me);
-                            cc=new ClientConnection(s, me);
+                            cc=new ClientConnection(s,manager, me);
                             cc.start();
                         }
                         else{

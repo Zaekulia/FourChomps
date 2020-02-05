@@ -7,9 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -26,13 +24,17 @@ public class ClientConnection extends Thread{
     protected Border border=BorderFactory.createEtchedBorder(highlight, shadow);
     ArrayList<String> aktiveNutzer=new ArrayList<>();
     Socket s;
+    private Socket manager;
     DataInputStream din;
     DataOutputStream dout;
     DataInputStream dinput;
+    ObjectInputStream oin;
+    ObjectOutputStream yeet;
     boolean shouldRun=true;
     boolean angemeldet;
-    public ClientConnection(Socket socket, Client client){
+    public ClientConnection(Socket socket,Socket manager, Client client){
         s=socket;
+        this.manager=manager;
         chatFrame = new JFrame("Four Chomps");
         chatFrame.setContentPane(this.rootPanel);
         chatFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,6 +101,8 @@ public class ClientConnection extends Thread{
         try {
             din=new DataInputStream(s.getInputStream());
             dout=new DataOutputStream(s.getOutputStream());
+            oin=new ObjectInputStream(manager.getInputStream());
+            yeet=new ObjectOutputStream(manager.getOutputStream());
             while(shouldRun){
                 try{
                     String reply=din.readUTF();
@@ -112,12 +116,13 @@ public class ClientConnection extends Thread{
                         aktiveNutzer.remove(reply.replaceFirst(" hat den Server verlassen",""));
                         showAktiveNutzer();
                     }
-                    if (reply.matches("!Anfrage_VG_(.*?)")){
-
+                    /*if (reply.matches("!Anfrage_VG_(.*?)")){
+                        new SpielAnfrage(true,reply.replace("!Anfrage_VG_",""),0).run();
                     }
                     else if (reply.matches("!Anfrage_CH_(\\d*)_(.*?)")){ //d für feldgröße
-
-                    }
+                        String number=reply.replace("!Anfrage_CCH_","");
+                        new SpielAnfrage(false,reply.replace("!Anfrage_CH_(\\d*)",""),Integer.parseInt(number.replace("_(.*?)","")));
+                    }*/
                     else System.out.println(reply); chatArea.append(reply+"\n");
                 }catch (IOException e){
                     //e.printStackTrace();
