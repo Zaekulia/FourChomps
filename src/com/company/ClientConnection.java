@@ -33,7 +33,6 @@ public class ClientConnection extends Thread{
     boolean angemeldet;
     public ClientConnection(Socket socket, Client client){
         s=socket;
-        new SpielAnfrage(s).run();
         chatFrame = new JFrame("Four Chomps");
         chatFrame.setContentPane(this.rootPanel);
         chatFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -113,8 +112,13 @@ public class ClientConnection extends Thread{
                         aktiveNutzer.remove(reply.replaceFirst(" hat den Server verlassen",""));
                         showAktiveNutzer();
                     }
-                    System.out.println(reply);
-                    chatArea.append(reply+"\n");
+                    if (reply.matches("!Anfrage_VG_(.*?)")){
+
+                    }
+                    else if (reply.matches("!Anfrage_CH_(\\d*)_(.*?)")){ //d für feldgröße
+
+                    }
+                    else System.out.println(reply); chatArea.append(reply+"\n");
                 }catch (IOException e){
                     //e.printStackTrace();
                     shouldRun=false;
