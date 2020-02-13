@@ -36,7 +36,7 @@ public class Server {
             while(true){
                 Socket s=ss.accept();
                 Socket manager=sm.accept();
-                ServerConnection sc=new ServerConnection (s,manager, this);
+                ServerConnection sc=new ServerConnection (s,manager, this); //+manager
                 sc.start();
                 connections.add(sc);
             }

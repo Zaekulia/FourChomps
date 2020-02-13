@@ -18,7 +18,7 @@ public class FourForm {
     private JButton a7Button;
     private JTextArea textArea1;
     private JTextField textField1;
-    private JButton button8;
+    private JButton sendButton;
     private JLabel scale;
     private int i;
     private int lenght =winPanel.getComponents().length;

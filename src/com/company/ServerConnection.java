@@ -7,16 +7,17 @@ import java.net.Socket;
 
 public class ServerConnection extends Thread{
     Socket socket;
-    private Socket manager;
+    Socket manager;
     Server server;
     DataInputStream din;
     DataOutputStream dout;
     boolean shouldRun=true;
     String nutzername;
-    public ServerConnection(Socket socket,Socket manager, Server server){
+    public ServerConnection(Socket socket, Socket manager, Server server){ //+socket manager
         super("ServerConnectionThread");
         this.socket=socket;
         this.server=server;
+        this.manager=manager;
     }
     public void sendStringToClient(String text){
         try{
@@ -65,7 +66,7 @@ public class ServerConnection extends Thread{
                             }
                         } catch (NullPointerException np) {
                         }
-                        server.getNutzerliste()[nutzerposition] = new Spieler(nutzername, true);
+                        server.getNutzerliste()[nutzerposition] = new Spieler(nutzername, true, 0);
                         server.getNutzerliste()[nutzerposition].setPasswort(password);
                         dout.writeUTF("Anmeldung erfolgreich");
                         sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
@@ -107,11 +108,17 @@ public class ServerConnection extends Thread{
             }
             while(shouldRun){
                 String textIn=din.readUTF();
-                if (textIn.matches("!Create_Gameconnection_(.*?)")) {
+                if (textIn.matches("!Create_Gameconnection")) {
+                    int position = 0;
                     //Matches Einträge einstellen
-                }
 
-                sendStringToAllClients(nutzername+": "+textIn);
+                    GameConnection[] matchI = new GameConnection[2];
+                    matchI[0] = new GameConnection(manager, server, 0);
+                    //matchI[1] = new GameConnection(server.connections.get(position).manager, server, 1);
+                    server.matches.add(matchI);
+                } else {
+                    sendStringToAllClients(nutzername+": "+textIn); //HIER
+                }
             }
             din.close();
             dout.close();

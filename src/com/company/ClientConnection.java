@@ -23,18 +23,24 @@ public class ClientConnection extends Thread{
     protected Color shadow=new Color(103,37,95);
     protected Border border=BorderFactory.createEtchedBorder(highlight, shadow);
     ArrayList<String> aktiveNutzer=new ArrayList<>();
-    Socket s;
+    private String meinName;
+    private Socket s;
     private Socket manager;
-    DataInputStream din;
-    DataOutputStream dout;
-    DataInputStream dinput;
-    ObjectInputStream oin;
-    ObjectOutputStream yeet;
+    private DataInputStream din;
+    private DataOutputStream dout;
+    private DataInputStream dinput;
+    private ObjectInputStream oin;
+    private ObjectOutputStream yeet;
     boolean shouldRun=true;
-    boolean angemeldet;
-    public ClientConnection(Socket socket,Socket manager, Client client){
+    private Menue teest;
+    //boolean angemeldet;
+    private SpielAnfrage spielAnfrage;
+    public ClientConnection(Socket socket, Socket manager, String meinName, SpielAnfrage spielAnfrage){ //+socket manager
         s=socket;
+        this.spielAnfrage=spielAnfrage;
         this.manager=manager;
+        this.meinName=meinName;
+
         chatFrame = new JFrame("Four Chomps");
         chatFrame.setContentPane(this.rootPanel);
         chatFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,8 +80,13 @@ public class ClientConnection extends Thread{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //interaktion mit server erforderlich
-                Menue teest=new Menue(aktiveNutzer, s);
+                teest=new Menue(aktiveNutzer,socket, manager, meinName, spielAnfrage);//-manager
                 teest.start();
+                try {
+                    dout.writeUTF("!Create_Gameconnection");
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
     }
@@ -101,21 +112,29 @@ public class ClientConnection extends Thread{
         try {
             din=new DataInputStream(s.getInputStream());
             dout=new DataOutputStream(s.getOutputStream());
-            oin=new ObjectInputStream(manager.getInputStream());
-            yeet=new ObjectOutputStream(manager.getOutputStream());
             while(shouldRun){
                 try{
                     String reply=din.readUTF();
                     if (reply.matches("(.*?) hat sich gerade angemeldet")) {
                         if (!aktiveNutzer.contains(reply.replaceFirst(" hat sich gerade angemeldet", ""))){
                             aktiveNutzer.add(reply.replaceFirst(" hat sich gerade angemeldet", ""));
+                            if (teest != null) {
+                                teest.addName(reply.replaceFirst(" hat sich gerade angemeldet", ""));
+                            }
                         }
                         showAktiveNutzer();
                     }
                     if (reply.matches("(.*?) hat den Server verlassen")) {
-                        aktiveNutzer.remove(reply.replaceFirst(" hat den Server verlassen",""));
+                        aktiveNutzer.remove(reply.replaceFirst(" hat den Server verlassen", ""));
+                        if (teest != null) {
+                            teest.removeName(reply.replaceFirst(" hat den Server verlassen", ""));
+                        }
                         showAktiveNutzer();
                     }
+                    chatArea.append(reply+"\n");
+                    System.out.println(reply);
+
+
                     /*if (reply.matches("!Anfrage_VG_(.*?)")){
                         new SpielAnfrage(true,reply.replace("!Anfrage_VG_",""),0).run();
                     }
@@ -123,7 +142,7 @@ public class ClientConnection extends Thread{
                         String number=reply.replace("!Anfrage_CCH_","");
                         new SpielAnfrage(false,reply.replace("!Anfrage_CH_(\\d*)",""),Integer.parseInt(number.replace("_(.*?)","")));
                     }*/
-                    else System.out.println(reply); chatArea.append(reply+"\n");
+
                 }catch (IOException e){
                     //e.printStackTrace();
                     shouldRun=false;
