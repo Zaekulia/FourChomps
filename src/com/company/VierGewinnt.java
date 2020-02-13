@@ -5,7 +5,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class VierGewinnt extends Spiel implements Protokollierbar {
     private boolean win=false;
-    int sieg=0;
+    private int chibiZahl;
+    private int sieg=0;
     public VierGewinnt(Spieler alpha, Spieler beta){
         this.setA(alpha);
         this.setB(beta);

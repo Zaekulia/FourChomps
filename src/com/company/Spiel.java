@@ -1,9 +1,33 @@
 package com.company;
 
+import java.awt.*;
+
 public abstract class Spiel {
     private Spieler a;
     private Spieler b;
     private Spielfeld abyss;
+    private Image meinSpielstein;
+    private Image seinSpielstein;
+
+
+    public void setMeinSpielstein(Image meinSpielstein) {
+        this.meinSpielstein = meinSpielstein;
+    }
+
+    public void setSeinSpielstein(Image seinSpielstein) {
+        this.seinSpielstein = seinSpielstein;
+    }
+
+
+    public Image getMeinSpielstein() {
+        return meinSpielstein;
+    }
+
+    public Image getSeinSpielstein() {
+        return seinSpielstein;
+    }
+
+
 
     public void setA(Spieler a) {
         this.a = a;

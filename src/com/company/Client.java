@@ -24,6 +24,7 @@ public class Client {
     protected JFrame AnmeldungFrame;
     protected Client me;
 
+
     public Client(){
         try{
             s=new Socket("localhost", 4999);
@@ -37,6 +38,7 @@ public class Client {
             AnmeldungFrame.pack(); //
             AnmeldungFrame.setResizable(false);
             AnmeldungFrame.setVisible(true); //
+
         }catch (UnknownHostException e){
             e.printStackTrace();
         }catch (IOException e){
@@ -55,10 +57,13 @@ public class Client {
                         dout.writeUTF(password.getText());
                         String line=din.readUTF();
                         if(line.equals("Anmeldung erfolgreich!")){
+                            String meinName=username.getText();
                             AnmeldungFrame.setVisible(false);
                             //AnmeldungFrame.dispose();
                             //cc=new ClientConnection(s, me);
-                            cc=new ClientConnection(s,manager, me);
+                            SpielAnfrage spielAnfrage=new SpielAnfrage(manager);
+                            spielAnfrage.start();
+                            cc=new ClientConnection(s,manager, meinName, spielAnfrage); //+ manager
                             cc.start();
                         }
                         else{
@@ -83,11 +88,15 @@ public class Client {
                         dout.writeUTF(password.getText());
                         String line=din.readUTF();
                         if(line.equals("Anmeldung erfolgreich!")){
+                            String meinName=username.getText();
                             AnmeldungFrame.setVisible(false);
                             //AnmeldungFrame.dispose();
                             //cc=new ClientConnection(s, me);
-                            cc=new ClientConnection(s,manager, me);
+                            SpielAnfrage spielAnfrage=new SpielAnfrage(manager);
+                            spielAnfrage.start();
+                            cc=new ClientConnection(s,manager, meinName, spielAnfrage); //+manager
                             cc.start();
+
                         }
                         else{
                             Label1.setText("Der Name ist schon vergeben. Be more original. Dimwit.");
