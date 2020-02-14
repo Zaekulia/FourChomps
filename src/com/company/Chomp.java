@@ -21,6 +21,11 @@ public class Chomp extends Spiel implements Protokollierbar {
     public Chomp(Socket manager, Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger) throws IOException, ClassNotFoundException {
         oin=new ObjectInputStream(manager.getInputStream());
         yeet=new ObjectOutputStream(manager.getOutputStream());
+        JFrame frame = new JFrame("Chomps");
+        frame.setContentPane(rootPanel);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
         a=anfänger;
         this.setA(alpha);
         this.setB(beta);
@@ -34,11 +39,6 @@ public class Chomp extends Spiel implements Protokollierbar {
                 chompOmp[i][j].setVisible(true);
             }
         }
-        JFrame frame = new JFrame("Chomps");
-        frame.setContentPane(rootPanel);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
         Spieldaten sd=(Spieldaten)oin.readObject();
         //horche nach fehlenden Informationen, e.g. chibi vom gegner
         //ki verschieben

@@ -133,15 +133,28 @@ public class Menue extends Thread {
             }*/
         while (pressurePlate == 0) {
             //int toast=1;
+            System.out.println("while");
         }
         try {
             if (pressurePlate == 1) {
+                System.out.println("ich ruf den anwalt1");
+                spielAnfrage.plsWok();
+                System.out.println("Ich bin angekommen1");
                 spielAnfrage.spielStart(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, true, slider1.getValue(), selected));
             } else if (pressurePlate == 2) {
+                System.out.println("ich ruf den anwalt2");
+                spielAnfrage.plsWok();
+                System.out.println("Ich bin angekommen2");
                 spielAnfrage.spielStart(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, false, slider1.getValue(), selected));
             } else if (pressurePlate == 3) {
+                System.out.println("ich ruf den anwalt3");
+                spielAnfrage.plsWok();
+                System.out.println("Ich bin angekommen3");
                 new VierGewinnt(new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected));
             } else {
+                System.out.println("ich ruf den anwalt4");
+                spielAnfrage.plsWok();
+                System.out.println("Ich bin angekommen4");
                 new Chomp(manager, new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected), new ChompFeld(new int[slider1.getValue() / 2][slider1.getValue()]), false);
             }
         } catch (IOException e) {

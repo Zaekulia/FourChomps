@@ -150,6 +150,10 @@ public class SpielAnfrage extends Thread{
         new Chomp(manager, new Spieler(readyplayer1, true, figur1), new Spieler(readyplayer2, true, figur2), new ChompFeld(new int[feldSize/2][feldSize]), beginner);
     }
 
+    public void plsWok(){
+        System.out.println("I'm woking");
+    }
+
     public void initializeButtons() {
         chibis[0] = chocolaButton;
         chibis[1] = vanillaButton;
