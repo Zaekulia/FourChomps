@@ -6,13 +6,14 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ServerConnection extends Thread{
+    boolean shouldRun=true;
+    String nutzername;
     Socket socket;
     Socket manager;
     Server server;
     DataInputStream din;
     DataOutputStream dout;
-    boolean shouldRun=true;
-    String nutzername;
+
     public ServerConnection(Socket socket, Socket manager, Server server){ //+socket manager
         super("ServerConnectionThread");
         this.socket=socket;

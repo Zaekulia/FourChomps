@@ -12,18 +12,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientConnection extends Thread{
-    protected JTextArea userListArea;
-    protected JTextArea chatArea;
-    protected JTextField chatField;
-    protected JButton sendButton;
-    protected JPanel rootPanel;
-    private JButton spielenButton;
-    protected JFrame chatFrame;
+    boolean shouldRun=true;
+    //boolean angemeldet;
+    private String meinName;
     protected Color highlight=new Color(187,187,187);
     protected Color shadow=new Color(103,37,95);
     protected Border border=BorderFactory.createEtchedBorder(highlight, shadow);
     ArrayList<String> aktiveNutzer=new ArrayList<>();
-    private String meinName;
     private Socket s;
     private Socket manager;
     private DataInputStream din;
@@ -31,10 +26,9 @@ public class ClientConnection extends Thread{
     private DataInputStream dinput;
     private ObjectInputStream oin;
     private ObjectOutputStream yeet;
-    boolean shouldRun=true;
     private Menue teest;
-    //boolean angemeldet;
     private SpielAnfrage spielAnfrage;
+
     public ClientConnection(Socket socket, Socket manager, String meinName, SpielAnfrage spielAnfrage){ //+socket manager
         s=socket;
         this.spielAnfrage=spielAnfrage;
@@ -164,4 +158,12 @@ public class ClientConnection extends Thread{
         } catch (NullPointerException npe) {
         }
     }
+
+    protected JTextArea userListArea;
+    protected JTextArea chatArea;
+    protected JTextField chatField;
+    protected JButton sendButton;
+    protected JPanel rootPanel;
+    private JButton spielenButton;
+    protected JFrame chatFrame;
 }

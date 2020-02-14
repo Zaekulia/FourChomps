@@ -12,13 +12,12 @@ import java.awt.*;
 
 public class Chomp extends Spiel implements Protokollierbar {
     private boolean shouldRun=true; //Glücksbringer
-    private JPanel rootPanel;
-    private JPanel feldPanel;
-    private JButton[][] chompOmp =new JButton[10][20];
     boolean a;
     int m,n;
+    private JButton[][] chompOmp =new JButton[10][20];
     private ObjectInputStream oin;
     private ObjectOutputStream yeet;
+
     public Chomp(Socket manager, Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger) throws IOException, ClassNotFoundException {
         oin=new ObjectInputStream(manager.getInputStream());
         yeet=new ObjectOutputStream(manager.getOutputStream());
@@ -155,6 +154,9 @@ public class Chomp extends Spiel implements Protokollierbar {
     public Spielzug rueckzug() {
         return spielzuege.pop();
     }
+
+    private JPanel rootPanel;
+    private JPanel feldPanel;
     private JButton button1;
     private JButton button2;
     private JButton button3;

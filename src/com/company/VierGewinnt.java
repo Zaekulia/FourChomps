@@ -7,6 +7,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
     private boolean win=false;
     private int chibiZahl;
     private int sieg=0;
+
     public VierGewinnt(Spieler alpha, Spieler beta){
         this.setA(alpha);
         this.setB(beta);

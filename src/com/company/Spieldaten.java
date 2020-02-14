@@ -1,6 +1,14 @@
 package com.company;
 
 public class Spieldaten {
+    private boolean spiel;
+    private int feld;
+    private int chibiZahlGrau;
+    private String name;
+    private String herausgeforderter;
+    private String message;
+    private Spielzug sz;
+
     public Spieldaten(String herausgeforderter,String name, boolean spiel, int feld, int chibiZahlGrau) {
         this.chibiZahlGrau=chibiZahlGrau;
         this.name=name;
@@ -15,14 +23,13 @@ public class Spieldaten {
     public Spieldaten(Spielzug sz) {
         this.sz=sz;
     }
+
     public String getName() {
         return name;
     }
-
     public boolean isSpiel() {
         return spiel;
     }
-
     public int getFeld() {
         return feld;
     }
@@ -32,14 +39,7 @@ public class Spieldaten {
     public String getHerausgeforderter() {
         return herausgeforderter;
     }
-    private String name;
-    private String herausgeforderter;
-    private boolean spiel;
-    private int feld;
-    private int chibiZahlGrau;
     public int getChibiZahlGrau() {
         return chibiZahlGrau;
     }
-    private String message;
-    private Spielzug sz;
 }

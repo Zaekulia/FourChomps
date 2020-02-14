@@ -4,41 +4,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 
 public class SpielAnfrage extends Thread{
-    private JPanel rootPanel;
-    private JButton annehmenButton;
-    private JButton ablehnenButton;
-    private JLabel anfrageText;
-    private JButton chocolaButton;
-    private JButton vanillaButton;
-    private JButton coconutButton;
-    private JButton cinnamonButton;
-    private JButton mapleButton;
-    private JButton azukiButton;
-    private JPanel panelAlles;
-    private JLabel anzeigeLabel;
-    private  boolean spiel;
-    private String name;
+    private  int chibiZahlGrau;
+    private int i;
     private int d;
-    private Socket manager;
-    private ObjectInputStream oin;
-    private ObjectOutputStream yeet;
-    private Spieldaten sd;
+    private  boolean spiel;
+    private boolean warteschleife=false;
+    private String name;
     private Color standard=new Color(163,184,204);
     private Color choose=new Color(255,165,225);
     private JButton[] chibis=new JButton[6];
-    private int i;
+    private Socket manager;
+    private ObjectInputStream oin;
+    private ObjectOutputStream yeet;
     private Spieldaten reply;
-    private boolean warteschleife=false;
-    private  int chibiZahlGrau;
-    private JFrame frame;
+    private Spieldaten sd;
 
     public SpielAnfrage(Socket socket) {  //HIER
         manager=socket;
@@ -50,95 +34,20 @@ public class SpielAnfrage extends Thread{
 
     public void run(){
         try {
-        oin=new ObjectInputStream(manager.getInputStream());
+        oin=new ObjectInputStream(new BufferedInputStream(manager.getInputStream()));
         yeet=new ObjectOutputStream(manager.getOutputStream());
     } catch (IOException e) {
         e.printStackTrace();
     }
-
-        chibis[0] = chocolaButton;
-        chibis[1] = vanillaButton;
-        chibis[2] = coconutButton;
-        chibis[3] = cinnamonButton;
-        chibis[4] = mapleButton;
-        chibis[5] = azukiButton;
+        initializeButtons();
         while (true){
-            while (warteschleife) {
+            while (warteschleife) {  //maximal eine Anfrage gleichzeitig
             }
         for (i = 0; i < chibis.length; i++) {
             chibis[i].setBackground(standard);
         }
-        chocolaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                for (i = 0; i < chibis.length; i++) {
-                    chibis[i].setBackground(standard);
-                }
-                chocolaButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].disable();
-            }
-        });
-        vanillaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                for (i = 0; i < chibis.length; i++) {
-                    chibis[i].setBackground(standard);
-                }
-                vanillaButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].disable();
-            }
-        });
-        coconutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                for (i = 0; i < chibis.length; i++) {
-                    chibis[i].setBackground(standard);
-                }
-                coconutButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].disable();
-            }
-        });
-        cinnamonButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                for (i = 0; i < chibis.length; i++) {
-                    chibis[i].setBackground(standard);
-                }
-                cinnamonButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].disable();
-            }
-        });
-        mapleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                for (i = 0; i < chibis.length; i++) {
-                    chibis[i].setBackground(standard);
-                }
-                mapleButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].disable();
-            }
-        });
-        azukiButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                for (i = 0; i < chibis.length; i++) {
-                    chibis[i].setBackground(standard);
-                }
-                azukiButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].disable();
-            }
-        });
-
-
-
         try {
-            reply =(Spieldaten) oin.readObject();
+            reply =(Spieldaten) oin.readObject();  //wartet auf eine Anfrage
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -146,7 +55,7 @@ public class SpielAnfrage extends Thread{
         }
         chibiZahlGrau=reply.getChibiZahlGrau();
         chibis[chibiZahlGrau].setBackground(Color.GRAY);
-        chibis[chibiZahlGrau].disable();
+        chibis[chibiZahlGrau].setEnabled(false);            //vom Gegner gewählte Spielfigur
         annehmenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -172,7 +81,6 @@ public class SpielAnfrage extends Thread{
         ablehnenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 frame.setVisible(false);
                 try {
                     yeet.writeObject(new Spieldaten("Abgelehnt", i));
@@ -241,4 +149,92 @@ public class SpielAnfrage extends Thread{
     public void startChomp(String readyplayer1, String readyplayer2, int figur1, int figur2, int feldSize, boolean beginner) throws IOException, ClassNotFoundException {
         new Chomp(manager, new Spieler(readyplayer1, true, figur1), new Spieler(readyplayer2, true, figur2), new ChompFeld(new int[feldSize/2][feldSize]), beginner);
     }
+
+    public void initializeButtons() {
+        chibis[0] = chocolaButton;
+        chibis[1] = vanillaButton;
+        chibis[2] = coconutButton;
+        chibis[3] = cinnamonButton;
+        chibis[4] = mapleButton;
+        chibis[5] = azukiButton;
+        chocolaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (i = 0; i < chibis.length; i++) {
+                    chibis[i].setBackground(standard);
+                }
+                chocolaButton.setBackground(choose);
+                chibis[chibiZahlGrau].setBackground(Color.GRAY);
+                chibis[chibiZahlGrau].setEnabled(false);            //Warum machst du das hier und in jedem Listener?
+            }
+        });
+        vanillaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (i = 0; i < chibis.length; i++) {
+                    chibis[i].setBackground(standard);
+                }
+                vanillaButton.setBackground(choose);
+                chibis[chibiZahlGrau].setBackground(Color.GRAY);
+                chibis[chibiZahlGrau].setEnabled(false);
+            }
+        });
+        coconutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (i = 0; i < chibis.length; i++) {
+                    chibis[i].setBackground(standard);
+                }
+                coconutButton.setBackground(choose);
+                chibis[chibiZahlGrau].setBackground(Color.GRAY);
+                chibis[chibiZahlGrau].setEnabled(false);
+            }
+        });
+        cinnamonButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (i = 0; i < chibis.length; i++) {
+                    chibis[i].setBackground(standard);
+                }
+                cinnamonButton.setBackground(choose);
+                chibis[chibiZahlGrau].setBackground(Color.GRAY);
+                chibis[chibiZahlGrau].setEnabled(false);
+            }
+        });
+        mapleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (i = 0; i < chibis.length; i++) {
+                    chibis[i].setBackground(standard);
+                }
+                mapleButton.setBackground(choose);
+                chibis[chibiZahlGrau].setBackground(Color.GRAY);
+                chibis[chibiZahlGrau].setEnabled(false);
+            }
+        });
+        azukiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (i = 0; i < chibis.length; i++) {
+                    chibis[i].setBackground(standard);
+                }
+                azukiButton.setBackground(choose);
+                chibis[chibiZahlGrau].setBackground(Color.GRAY);
+                chibis[chibiZahlGrau].setEnabled(false);
+            }
+        });
+    }
+    private JPanel rootPanel;
+    private JButton annehmenButton;
+    private JButton ablehnenButton;
+    private JLabel anfrageText;
+    private JButton chocolaButton;
+    private JButton vanillaButton;
+    private JButton coconutButton;
+    private JButton cinnamonButton;
+    private JButton mapleButton;
+    private JButton azukiButton;
+    private JPanel panelAlles;
+    private JLabel anzeigeLabel;
+    private JFrame frame;
 }

@@ -8,14 +8,10 @@ import java.util.Scanner;
 import java.lang.*;
 
 public class Server {
-    protected JTextArea ActiveNutzer;
-    protected JPanel rootPanel;
-    protected JTextArea ServerStatus;
-    protected JFrame serverFrame;
+    private boolean shouldRun=true;
     private ServerSocket ss;
     private ServerSocket sm;
     Scanner scanner=new Scanner(System.in);
-    private boolean shouldRun=true;
 	private Spieler[] nutzerliste=new Spieler[100];
     ArrayList<ServerConnection> connections =new ArrayList<ServerConnection>();
     ArrayList<GameConnection[]> matches=new ArrayList<GameConnection[]>();
@@ -47,4 +43,9 @@ public class Server {
     public static void main(String[] args) {
         new Server();
     }
+
+    protected JTextArea ActiveNutzer;
+    protected JPanel rootPanel;
+    protected JTextArea ServerStatus;
+    protected JFrame serverFrame;
 }

@@ -11,19 +11,9 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 public class Client {
     ClientConnection cc;
+    Socket s;
     DataOutputStream dout;
     DataInputStream din;
-    Socket s;
-    private Socket manager;
-    protected JButton signInButton;
-    protected JTextField username;
-    protected JButton registerButton;
-    protected JTextField password;
-    protected JPanel rootPanel;
-    protected JLabel Label1;
-    protected JFrame AnmeldungFrame;
-    protected Client me;
-
 
     public Client(){
         try{
@@ -135,4 +125,14 @@ public class Client {
     public static void main (String[] args){
         new Client();
     }
+
+    private Socket manager;
+    protected JButton signInButton;
+    protected JTextField username;
+    protected JButton registerButton;
+    protected JTextField password;
+    protected JPanel rootPanel;
+    protected JLabel Label1;
+    protected JFrame AnmeldungFrame;
+    protected Client me;
 }
