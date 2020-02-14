@@ -64,6 +64,7 @@ public class Menue extends Thread {
                                 compFigur = 1;
                             }
                             pressurePlate=3;
+                            selected=i;
                             //new VierGewinnt(new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, i));
                         } else {
                             pressurePlate=1;
@@ -102,6 +103,7 @@ public class Menue extends Thread {
                                     compFigur = 1;
                                 }
                                 pressurePlate=42;
+                                selected=i;
                                 //new Chomp(manager, new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, i), new ChompFeld(new int[slider1.getValue() / 2][slider1.getValue()]), false);
                             } else {
                                 pressurePlate=2;
@@ -155,7 +157,8 @@ public class Menue extends Thread {
                 System.out.println("ich ruf den anwalt4");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen4");
-                new Chomp(manager, new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected), new ChompFeld(new int[slider1.getValue() / 2][slider1.getValue()]), false);
+                Chomp chompsky = new Chomp(manager, new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected), new ChompFeld(new int[slider1.getValue() / 2][slider1.getValue()]), false);
+                chompsky.start();
             }
         } catch (IOException e) {
             e.printStackTrace();
