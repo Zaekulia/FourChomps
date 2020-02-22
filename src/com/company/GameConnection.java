@@ -7,8 +7,15 @@ public class GameConnection extends Thread {
     int position;               //1 oder 0
     Socket manager;
     Server server;
-    ObjectInputStream oin;
-    ObjectOutputStream yeet;
+    DataInputStream din;
+    DataOutputStream yeet;
+    private String gegnerName="";
+    private String meinName="";
+    private boolean spielAuswahl=false;
+    private int feldGroessse=0;
+    private int spielfigur=0;
+    private int zugX=0;
+    private int zugY=0;
 
     public GameConnection(Socket manager, Server server, int position) {
         this.manager=manager;
@@ -23,40 +30,87 @@ public class GameConnection extends Thread {
             e.printStackTrace();
         }
     }
-    public void sendMessage(Object o) throws IOException {          //für Chat der eventuell doch gecanceled werden muss
-        for(int i=0; i<server.matches.size();i++){
-            if (server.matches.get(i)[position].equals(this)){
-                server.matches.get(i)[0].slave(o);
-                server.matches.get(i)[1].slave(o);
-            }
-        }
 
-    }
-    public void sendMessageToEnemy(Object o) throws IOException {
+    public void sendMessageToEnemy() throws IOException {
         for(int i=0; i<server.matches.size();i++){
             if (server.matches.get(i)[position].equals(this)){
+                System.out.println("found");
                 if (server.matches.get(position)[0].equals(this)) {         //kann durch position vereinfacht werden
-                    server.matches.get(position)[1].slave(o);
+                    server.matches.get(position)[1].slave(gegnerName, meinName, spielAuswahl, feldGroessse, spielfigur, zugX, zugY);
                 } else {
-                    server.matches.get(position)[0].slave(o);
+                    server.matches.get(position)[0].slave(gegnerName, meinName, spielAuswahl, feldGroessse, spielfigur, zugX, zugY);
                 }
             }
         }
     }
-    public void slave(Object o) throws IOException {
-        yeet.writeObject(o);
+    public void slave(String gegnerName, String meinName, boolean spielAuswahl, int feldGroessse, int spielfigur, int zugX, int zugY) throws IOException {
+        yeet.writeUTF(gegnerName);
+        yeet.writeUTF(meinName);
+        yeet.writeBoolean(spielAuswahl);
+        yeet.writeInt(feldGroessse);
+        yeet.writeInt(spielfigur);
+        yeet.writeInt(zugX);
+        yeet.writeInt(zugY);
     }
     public void run() {
         try {
-            oin=new ObjectInputStream(new BufferedInputStream(manager.getInputStream()));
-            yeet=new ObjectOutputStream(manager.getOutputStream());
+            din=new DataInputStream(new BufferedInputStream(manager.getInputStream()));
+            yeet=new DataOutputStream(manager.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("created");
         try {
+            /*gegnerName=din.readUTF(); //gegner name
+            meinName=din.readUTF(); //spieler name
+            spielAuswahl=din.readBoolean(); //spiel
+            feldGroessse=din.readInt(); // feldgröße
+            spielfigur=din.readInt(); // spielfigur
+            zugX=din.readInt(); // zug x
+            zugY=din.readInt(); // zug y
+            int gegnerPosition=0;
+            for (int i = 0; i < 100; i++) {
+                if (server.connections.get(i).nutzername.equals(gegnerName)) {
+                    gegnerPosition = i;
+                    break;
+                }
+            }
+            for(int i=0; i<server.matches.size();i++){
+                if (server.matches.get(i)[0].equals(this)){
+                    server.matches.get(i)[1]=new GameConnection(server.connections.get(gegnerPosition).manager,server,1);
+                }
+                //sendMessageToEnemy();
+            }
+            sendMessageToEnemy();*/
             while(true){
-                Spieldaten reply=(Spieldaten) oin.readObject();
-                if (reply.getHerausgeforderter() != null) {
+                gegnerName=din.readUTF();
+                meinName=din.readUTF();
+                spielAuswahl=din.readBoolean();
+                feldGroessse=din.readInt();
+                spielfigur=din.readInt();
+                zugX=din.readInt();
+                zugY=din.readInt();
+                System.out.println("got it");
+                int gegnerPosition=0;
+                for (int i = 0; i < 100; i++) {
+                    if (server.connections.get(i).nutzername.equals(gegnerName)) {
+                        gegnerPosition = i;
+                        break;
+                    }
+                }
+                for(int i=0; i<server.matches.size();i++){
+                    if (server.matches.get(i)[0].equals(this)){
+                        if (server.matches.get(i)[1] == null) {
+                            server.matches.get(i)[1]=new GameConnection(server.connections.get(gegnerPosition).manager,server,1);
+                            server.matches.get(i)[1].start();
+                        }
+                    }
+                    //sendMessageToEnemy();
+                }
+                sendMessageToEnemy();
+                System.out.println("sent to enemy");
+
+                /*if (reply.getHerausgeforderter() != null) {
                     int gegnerPosition=0;
                     for (int i = 0; i < 100; i++) {
                         if (server.connections.get(i).nutzername.equals(reply.getHerausgeforderter())) {
@@ -72,12 +126,12 @@ public class GameConnection extends Thread {
                     }
                 }// else if (reply.getMessage() != null) {
                  //   sendMessage(reply);
-                //}
+                ///
                 else {
                     sendMessageToEnemy(reply);
-                }
+                }}*/
             }
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

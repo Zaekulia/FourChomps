@@ -18,6 +18,9 @@ public class Chomp extends Spiel implements Protokollierbar {
     private ObjectInputStream oin;
     private ObjectOutputStream yeet;
     private Socket manager;
+    private Color standard = new Color(163, 184, 204);
+    private Color belegt=new Color(163, 184, 205);
+    private ActionListener nein;
 
     public Chomp(Socket manager, Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger) throws IOException, ClassNotFoundException {
         JFrame frame = new JFrame("Chomps");
@@ -153,6 +156,7 @@ public class Chomp extends Spiel implements Protokollierbar {
                 while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
                     this.getAbyss().getFeldgroesse()[i][j] = 1;
                     chompOmp[i][j].setIcon(new ImageIcon(getA().getSpielstein()));
+                    chompOmp[i][j].setEnabled(false);
                     //Bild laden
                     j++;
                 }
@@ -165,6 +169,7 @@ public class Chomp extends Spiel implements Protokollierbar {
                 while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
                     this.getAbyss().getFeldgroesse()[i][j] = 2;
                     chompOmp[i][j].setIcon(new ImageIcon(getB().getSpielstein()));
+                    chompOmp[i][j].setEnabled(false);
                     //Bild laden
                     j++;
                 }

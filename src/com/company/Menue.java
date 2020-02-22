@@ -13,17 +13,22 @@ public class Menue extends Thread {
     private int pressurePlate = 0; //spielauswahl
     private int compFigur=0; //computer spielfigur
     private String none = new String("<none>");
-    private String meinName;
     private Color standard = new Color(163, 184, 204);
     private Color choose = new Color(255, 165, 225);
     private Socket s;
     private Socket manager;
     private DataInputStream din;
-    private ObjectInputStream oin;
-    private ObjectOutputStream yeet;//
+    private  DataOutputStream yeet;
     private JButton[] chibis = new JButton[6];
     private SpielAnfrage spielAnfrage;
-
+    //datenübergabe:
+    private String meinName="";
+    private String gegnerName="";
+    private boolean spielAuswahl=false;
+    private int feldGroesse=0;
+    private int spielfigur=0;
+    private int zugX=0;
+    private int zugY=0;
 
     Menue(ArrayList<String> aktiveNutzer, Socket s, Socket manager, String meinName, SpielAnfrage spielAnfrage) {
         //spiel gegen comp läuft wenn nur outputstream HIER
@@ -46,7 +51,8 @@ public class Menue extends Thread {
     public void run() {
         try {
             din =new DataInputStream(manager.getInputStream());
-            yeet = new ObjectOutputStream(this.manager.getOutputStream());
+            yeet=new DataOutputStream(manager.getOutputStream());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,19 +74,6 @@ public class Menue extends Thread {
                         } else {
                             pressurePlate=1;
                             selected=i;
-                            /*try {
-                                spielAnfrage.spielStart(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, true, slider1.getValue(), i));
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            } catch (ClassNotFoundException ex) {
-                                ex.printStackTrace();
-                            }
-                            try {
-                                    yeet.writeObject(new Spieldaten((String) gegenSpieler.getSelectedItem(),meinName,true,slider1.getValue(), i));
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                }
-                                new VierGewinnt(new Spieler((String) gegenSpieler.getSelectedItem(), true, 0), new Spieler(meinName, true, i));*/
                         }
                         chompButton.setEnabled(false);
                         vierGewinntButton.setEnabled(false);
@@ -104,71 +97,95 @@ public class Menue extends Thread {
                                 }
                                 pressurePlate=42;
                                 selected=i;
-                                //new Chomp(manager, new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, i), new ChompFeld(new int[slider1.getValue() / 2][slider1.getValue()]), false);
                             } else {
                                 pressurePlate=2;
                                 selected=i;
-                                /*spielAnfrage.spielStart(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, false, slider1.getValue(), i));
-                                yeet.writeObject(new Spieldaten((String) gegenSpieler.getSelectedItem(),meinName,false,slider1.getValue(), i));
-                                new Chomp(manager, new Spieler((String) gegenSpieler.getSelectedItem(), true, 0), new Spieler(meinName, true, i), new ChompFeld(new int[slider1.getValue() / 2][slider1.getValue()]), false);*/
                             }
-                        //} catch (IOException | ClassNotFoundException ex) {
-                          //  ex.printStackTrace();
-                        //}
                             chompButton.setEnabled(false);
                             vierGewinntButton.setEnabled(false);
-                            //slider1.setEnabled(false);
                             break;
                     } else System.out.println("nope");
                 }
             }
         });
-        //String reply = null;
-           /* try {
-                reply = din.readUTF();
-                if (reply.matches("(.*?) hat sich gerade angemeldet")) {
-                    gegenSpieler.addItem(reply.replaceFirst(" hat sich gerade angemeldet", ""));
-                }
-                if (reply.matches("(.*?) hat den Server verlassen")) {
-                    gegenSpieler.removeItem(reply.replaceFirst(" hat den Server verlassen", ""));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
+
         while (pressurePlate == 0) {
             //int toast=1;
             System.out.println("while");
         }
-        /*try {
-            oin = new ObjectInputStream(manager.getInputStream());
-            yeet = new ObjectOutputStream(this.manager.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+
         try {
-            if (pressurePlate == 1) {
+            if (pressurePlate == 1) { //vier gewinnt online
                 System.out.println("ich ruf den anwalt1");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen1");
-                spielAnfrage.spielStart(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, true, slider1.getValue(), selected));
-            } else if (pressurePlate == 2) {
+                gegnerName=(String)gegenSpieler.getSelectedItem();
+                spielAuswahl=true;
+                feldGroesse=slider1.getValue();
+                spielfigur=selected;
+                yeet.writeUTF(gegnerName);
+                yeet.writeUTF(meinName);
+                yeet.writeBoolean(spielAuswahl);
+                yeet.writeInt(feldGroesse);
+                yeet.writeInt(spielfigur);
+                yeet.writeInt(zugX);
+                yeet.writeInt(zugY);
+                //HIER
+                String reply=din.readUTF(); // name wird zur antwort
+                din.readUTF(); //spieler name bleibt leer
+                din.readBoolean(); //spiel bleibt leer
+                din.readInt(); // feldgröße bleibt leer
+                int gegnerFigur=din.readInt(); // spielfigur des gegners
+                din.readInt(); // zug x bleibt leer
+                din.readInt(); //zug y bleibt leer
+                if(reply.equals("Akzeptiert")){
+                    VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur));
+                    four.start();
+                }else{
+                    anzeige.setText("Deine Anfrage wurde abgelehnt! Noob!");
+                    chompButton.setEnabled(true);
+                    vierGewinntButton.setEnabled(true);
+                }
+            } else if (pressurePlate == 2) { //chomp online
                 System.out.println("ich ruf den anwalt2");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen2");
-                //spielAnfrage.spielStart(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, false, slider1.getValue(), selected));
-                yeet.writeObject(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, false, slider1.getValue(), selected));
-                frame.setVisible(true);
-                //yeet.writeUTF("YES");
-                Spieldaten reply=(Spieldaten)oin.readObject();
-                if(reply.getMessage().equals("Abgelehnt")) {
-                    anzeige.setText("Deine Anfrage wurde abgelehnt.");
-                } //HIER WEITER
-            } else if (pressurePlate == 3) {
+                gegnerName=(String)gegenSpieler.getSelectedItem();
+                spielAuswahl=false;
+                feldGroesse=slider1.getValue();
+                spielfigur=selected;
+                //yeet.writeObject(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, false, slider1.getValue(), selected));
+                yeet.writeUTF(gegnerName);
+                yeet.writeUTF(meinName);
+                yeet.writeBoolean(spielAuswahl);
+                yeet.writeInt(feldGroesse);
+                yeet.writeInt(spielfigur);
+                yeet.writeInt(zugX);
+                yeet.writeInt(zugY);
+                System.out.println("sent");
+                //frame.setVisible(true);
+                //HIER
+                String reply=din.readUTF(); // name wird zur antwort
+                din.readUTF(); //spieler name bleibt leer
+                din.readBoolean(); //spiel bleibt leer
+                din.readInt(); // feldgröße bleibt leer
+                int gegnerFigur=din.readInt(); // spielfigur des gegners
+                din.readInt(); // zug x bleibt leer
+                din.readInt(); //zug y bleibt leer
+                if(reply.equals("Akzeptiert")){
+                    Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]), false);
+                    chompsky.start();
+                }else{
+                    anzeige.setText("Deine Anfrage wurde abgelehnt! Noob!");
+                    chompButton.setEnabled(true);
+                    vierGewinntButton.setEnabled(true);
+                }
+            } else if (pressurePlate == 3) { //vier gewinnt offline
                 System.out.println("ich ruf den anwalt3");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen3");
                 new VierGewinnt(new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected));
-            } else {
+            } else { // chomp offline
                 System.out.println("ich ruf den anwalt4");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen4");
@@ -277,11 +294,6 @@ public class Menue extends Thread {
     private JButton mapleButton;
     private JButton azukiButton;
     private JLabel anzeige;
-    /*public static void main(String[] args) {
-        Menue teest=new Menue();
-        teest.start();
-        int x=1;
-    }*/
 }
 
 // chibis alle auf nope, auswahl für spielstart überprüfen
