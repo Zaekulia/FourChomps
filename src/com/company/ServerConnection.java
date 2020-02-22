@@ -114,7 +114,7 @@ public class ServerConnection extends Thread{
                     //Matches Einträge einstellen
 
                     GameConnection[] matchI = new GameConnection[2];
-                    matchI[0] = new GameConnection(manager, server, 0);
+                    matchI[0] = new GameConnection(manager, this.server, 0);
                     //matchI[1] = new GameConnection(server.connections.get(position).manager, server, 1);
                     server.matches.add(matchI);
                 } else {

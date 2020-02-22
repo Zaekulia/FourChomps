@@ -4,10 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -22,22 +19,18 @@ public class Menue extends Thread {
     private Socket s;
     private Socket manager;
     private DataInputStream din;
+    private ObjectInputStream oin;
     private ObjectOutputStream yeet;//
     private JButton[] chibis = new JButton[6];
     private SpielAnfrage spielAnfrage;
 
 
-    Menue(ArrayList<String> aktiveNutzer, Socket s, Socket manager, String meinName, SpielAnfrage spielAnfrage) {//
+    Menue(ArrayList<String> aktiveNutzer, Socket s, Socket manager, String meinName, SpielAnfrage spielAnfrage) {
+        //spiel gegen comp läuft wenn nur outputstream HIER
         this.meinName = meinName;
         this.s = s;
         this.manager = manager;
         this.spielAnfrage = spielAnfrage;
-        try {
-            din = new DataInputStream(this.s.getInputStream());
-            yeet = new ObjectOutputStream(this.manager.getOutputStream());//
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         frame = new JFrame("Menue");
         frame.setContentPane(this.rootPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -51,6 +44,12 @@ public class Menue extends Thread {
     }
 
     public void run() {
+        try {
+            din =new DataInputStream(manager.getInputStream());
+            yeet = new ObjectOutputStream(this.manager.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         initializeButtons();
         vierGewinntButton.addActionListener(new ActionListener() {
             @Override
@@ -83,7 +82,8 @@ public class Menue extends Thread {
                                 }
                                 new VierGewinnt(new Spieler((String) gegenSpieler.getSelectedItem(), true, 0), new Spieler(meinName, true, i));*/
                         }
-                        frame.dispose();
+                        chompButton.setEnabled(false);
+                        vierGewinntButton.setEnabled(false);
                         break;
                     } else System.out.println("nope");
                 }
@@ -115,13 +115,15 @@ public class Menue extends Thread {
                         //} catch (IOException | ClassNotFoundException ex) {
                           //  ex.printStackTrace();
                         //}
-                            frame.dispose();
+                            chompButton.setEnabled(false);
+                            vierGewinntButton.setEnabled(false);
+                            //slider1.setEnabled(false);
                             break;
                     } else System.out.println("nope");
                 }
             }
         });
-        String reply = null;
+        //String reply = null;
            /* try {
                 reply = din.readUTF();
                 if (reply.matches("(.*?) hat sich gerade angemeldet")) {
@@ -137,6 +139,12 @@ public class Menue extends Thread {
             //int toast=1;
             System.out.println("while");
         }
+        /*try {
+            oin = new ObjectInputStream(manager.getInputStream());
+            yeet = new ObjectOutputStream(this.manager.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
         try {
             if (pressurePlate == 1) {
                 System.out.println("ich ruf den anwalt1");
@@ -147,7 +155,14 @@ public class Menue extends Thread {
                 System.out.println("ich ruf den anwalt2");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen2");
-                spielAnfrage.spielStart(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, false, slider1.getValue(), selected));
+                //spielAnfrage.spielStart(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, false, slider1.getValue(), selected));
+                yeet.writeObject(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, false, slider1.getValue(), selected));
+                frame.setVisible(true);
+                //yeet.writeUTF("YES");
+                Spieldaten reply=(Spieldaten)oin.readObject();
+                if(reply.getMessage().equals("Abgelehnt")) {
+                    anzeige.setText("Deine Anfrage wurde abgelehnt.");
+                } //HIER WEITER
             } else if (pressurePlate == 3) {
                 System.out.println("ich ruf den anwalt3");
                 spielAnfrage.plsWok();

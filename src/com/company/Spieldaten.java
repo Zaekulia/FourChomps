@@ -1,6 +1,8 @@
 package com.company;
 
-public class Spieldaten {
+import java.io.Serializable;
+
+public class Spieldaten implements Serializable {
     private boolean spiel;
     private int feld;
     private int chibiZahlGrau;

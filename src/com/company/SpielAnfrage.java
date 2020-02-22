@@ -17,6 +17,7 @@ public class SpielAnfrage extends Thread{
     private String name;
     private Color standard=new Color(163,184,204);
     private Color choose=new Color(255,165,225);
+    private Color disabled=new Color(160, 159, 157);
     private JButton[] chibis=new JButton[6];
     private Socket manager;
     private ObjectInputStream oin;
@@ -46,6 +47,7 @@ public class SpielAnfrage extends Thread{
         for (i = 0; i < chibis.length; i++) {
             chibis[i].setBackground(standard);
         }
+        chibis[2].setBackground(Color.GRAY);
         try {
             reply =(Spieldaten) oin.readObject();  //wartet auf eine Anfrage
         } catch (IOException e) {
@@ -54,7 +56,8 @@ public class SpielAnfrage extends Thread{
             e.printStackTrace();
         }
         chibiZahlGrau=reply.getChibiZahlGrau();
-        chibis[chibiZahlGrau].setBackground(Color.GRAY);
+
+        chibis[chibiZahlGrau].setBackground(disabled);
         chibis[chibiZahlGrau].setEnabled(false);            //vom Gegner gewählte Spielfigur
         annehmenButton.addActionListener(new ActionListener() {
             @Override
@@ -116,8 +119,8 @@ public class SpielAnfrage extends Thread{
     }
     //für herausforderer:
     public void spielStart(Spieldaten anfangsStats) throws IOException, ClassNotFoundException { //Anfangsdaten für Spielerstellung werden über GameConnection and anderen Spieler geschickt
-        frame.setVisible(true);
         yeet.writeObject(anfangsStats);
+        frame.setVisible(true);
         //yeet.writeUTF("YES");
         Spieldaten reply=(Spieldaten)oin.readObject();
         if(reply.getMessage().equals("Abgelehnt")){
