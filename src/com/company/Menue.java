@@ -125,12 +125,19 @@ public class Menue extends Thread {
                 feldGroesse=slider1.getValue();
                 spielfigur=selected;
                 yeet.writeUTF(gegnerName);
+                yeet.flush();
                 yeet.writeUTF(meinName);
+                yeet.flush();
                 yeet.writeBoolean(spielAuswahl);
+                yeet.flush();
                 yeet.writeInt(feldGroesse);
+                yeet.flush();
                 yeet.writeInt(spielfigur);
+                yeet.flush();
                 yeet.writeInt(zugX);
+                yeet.flush();
                 yeet.writeInt(zugY);
+                yeet.flush();
                 //HIER
                 String reply=din.readUTF(); // name wird zur antwort
                 din.readUTF(); //spieler name bleibt leer
@@ -140,7 +147,7 @@ public class Menue extends Thread {
                 din.readInt(); // zug x bleibt leer
                 din.readInt(); //zug y bleibt leer
                 if(reply.equals("Akzeptiert")){
-                    VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur));
+                    VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur),false);
                     four.start();
                 }else{
                     anzeige.setText("Deine Anfrage wurde abgelehnt! Noob!");
@@ -195,7 +202,8 @@ public class Menue extends Thread {
                 System.out.println("ich ruf den anwalt3");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen3");
-                new VierGewinnt(new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected));
+                VierGewinnt four=new VierGewinnt(new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected), false);
+                four.start();
             } else { // chomp offline
                 System.out.println("ich ruf den anwalt4");
                 spielAnfrage.plsWok();

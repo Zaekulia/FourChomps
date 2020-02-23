@@ -41,6 +41,7 @@ public class SpielAnfrage extends Thread{
     }
 
     public void run(){
+        while(true){
         try {
         din=new DataInputStream(new BufferedInputStream(manager.getInputStream()));
         yeet=new DataOutputStream(manager.getOutputStream());
@@ -48,7 +49,6 @@ public class SpielAnfrage extends Thread{
         e.printStackTrace();
     }
         initializeButtons();
-        while (true){
             while (warteschleife) {  //maximal eine Anfrage gleichzeitig
             }
         for (i = 0; i < chibis.length; i++) {
@@ -87,7 +87,7 @@ public class SpielAnfrage extends Thread{
                             //yeet.writeObject(new Spieldaten("Akzeptiert", i));
                             int stopp1=1;
                             if (spielAuswahl) {
-                               VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur));
+                               VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), true);
                                 four.start();
                             } else {
                                 Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]),true);

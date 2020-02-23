@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 public class FourForm {
     private JPanel rootPanel;
     private JPanel winPanel;
-    private JPanel chatPanel;
     private JButton a1Button;
     private JButton a2Button;
     private JButton a3Button;
@@ -16,9 +15,6 @@ public class FourForm {
     private JButton a5Button;
     private JButton a6Button;
     private JButton a7Button;
-    private JTextArea textArea1;
-    private JTextField textField1;
-    private JButton sendButton;
     private JLabel scale;
     private int i;
     private int lenght =winPanel.getComponents().length;
