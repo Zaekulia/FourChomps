@@ -18,15 +18,18 @@ public class Chomp extends Spiel implements Protokollierbar {
     private ObjectInputStream oin;
     private ObjectOutputStream yeet;
     private Socket manager;
+    private Color standard = new Color(163, 184, 204);
+    private Color belegt=new Color(163, 184, 205);
+    private ActionListener nein;
 
     public Chomp(Socket manager, Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger) throws IOException, ClassNotFoundException {
-        this.manager=manager;
         JFrame frame = new JFrame("Chomps");
         frame.setContentPane(rootPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         a=anfänger;
+        this.manager=manager;
         this.setA(alpha);
         this.setB(beta);
         this.setAbyss(cf);
@@ -40,42 +43,44 @@ public class Chomp extends Spiel implements Protokollierbar {
             }
         }
         if (getA().isMensch() && getB().isMensch()) {
-
-            try {
-                oin=new ObjectInputStream(this.manager.getInputStream());
-                yeet=new ObjectOutputStream(this.manager.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Spieldaten sd=(Spieldaten)oin.readObject();
+            Spieldaten sd = (Spieldaten) oin.readObject();
         }
-
         //horche nach fehlenden Informationen, e.g. chibi vom gegner
         //ki verschieben
         //disablen nach zug
         for (int i=0; i < 200; i++) {
             m=i/20;n=i%20;
+            Integer zei=new Integer(m);
+            Integer spal=new Integer(n);
             chompOmp[i/20][i%20].addActionListener(new ActionListener() {
-                Integer zei=new Integer(m);
-                Integer spal=new Integer(n);
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     if (anfänger) {
-                        zug(getA(), new Spielzug(zei.intValue(),spal.intValue()));
+                        zug(getA(), new Spielzug(zei.intValue()+1, spal.intValue()+1));
                     } else {
-                        zug(getB(), new Spielzug(zei.intValue(),spal.intValue()));
+                        zug(getB(), new Spielzug(zei.intValue()+1, spal.intValue()+1));
                     }
                 }
             });
-            if (!anfänger&&!getA().isMensch()) {
-                zug(getA(),new Spielzug(0,0));
+            if (!anfänger) {
                 //chompOmp[i/20][i%20].setEnabled(false);
+                //zug(getA(),new Spielzug(0,0));
             }
         }
-
-
-
+        if (!anfänger & !getA().isMensch()) {
+            //chompOmp[i/20][i%20].setEnabled(false);
+            zug(getA(),new Spielzug(0,0));
+        }
     }
+    public void run(){
+        try {
+            oin=new ObjectInputStream(manager.getInputStream());
+            yeet=new ObjectOutputStream(manager.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void zug(Spieler spiler, Spielzug spielzug) {
         if (!spiler.isMensch()) {
@@ -129,6 +134,19 @@ public class Chomp extends Spiel implements Protokollierbar {
         }
         this.ziehen(spielzug);
         if (spielzug.zeile == 1 & spielzug.spalte == 1) {
+            for (int i = this.getAbyss().getFeldgroesse().length-1; i >= spielzug.zeile-1; i--) {
+                int j = spielzug.spalte-1;
+                while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
+                    this.getAbyss().getFeldgroesse()[i][j] = 1;
+                    chompOmp[i][j].setIcon(new ImageIcon(spiler.getSpielstein()));
+                    //Bild laden
+                    j++;
+                }
+            }
+            for(int i=0; i<200; i++){
+                chompOmp[i/20][i%20].setEnabled(false);
+            }
+            anzeigeIstRaus.setText(spiler.getUsername()+" hat verloren!");
             //Nachricht dass gewonnen
             return;
         }
@@ -137,23 +155,29 @@ public class Chomp extends Spiel implements Protokollierbar {
                 int j = spielzug.spalte-1;
                 while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
                     this.getAbyss().getFeldgroesse()[i][j] = 1;
+                    chompOmp[i][j].setIcon(new ImageIcon(getA().getSpielstein()));
+                    chompOmp[i][j].setEnabled(false);
                     //Bild laden
                     j++;
                 }
             }
+            getAbyss().showField();
         }
         if (spiler == getB()) {
             for (int i = this.getAbyss().getFeldgroesse().length-1; i >= spielzug.zeile-1; i--) {
                 int j = spielzug.spalte-1;
                 while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
                     this.getAbyss().getFeldgroesse()[i][j] = 2;
+                    chompOmp[i][j].setIcon(new ImageIcon(getB().getSpielstein()));
+                    chompOmp[i][j].setEnabled(false);
                     //Bild laden
                     j++;
                 }
             }
-            if (!getA().isMensch()) {
-                zug(getA(),new Spielzug(0,0));
+            if(!getA().isMensch()){
+                zug(getA(), new Spielzug(0,0));
             }
+            getAbyss().showField();
         }
     }
 
@@ -373,7 +397,5 @@ public class Chomp extends Spiel implements Protokollierbar {
     private JButton button198;
     private JButton button199;
     private JButton button200;
-    private JTextField textField1;
-    private JButton Send;
-    private JTextArea textArea1;
+    private JLabel anzeigeIstRaus;
 }

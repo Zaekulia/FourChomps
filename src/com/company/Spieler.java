@@ -10,6 +10,10 @@ public class Spieler {
     private boolean cat=false;
     private Image spielstein;
 
+    public Image getSpielstein() {
+        return spielstein;
+    }
+
     public boolean isActive() {
         return active;
     }
@@ -51,8 +55,8 @@ public class Spieler {
         }else if (chibi == 5) {
             spielstein=azuki;
         }
+        int x=1;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }

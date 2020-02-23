@@ -2,13 +2,12 @@ package com.company;
 
 import java.awt.*;
 
-public abstract class Spiel {
+public abstract class Spiel extends Thread {
     private Spieler a;
     private Spieler b;
     private Spielfeld abyss;
     private Image meinSpielstein;
     private Image seinSpielstein;
-
 
     public void setMeinSpielstein(Image meinSpielstein) {
         this.meinSpielstein = meinSpielstein;

@@ -17,12 +17,21 @@ public class SpielAnfrage extends Thread{
     private String name;
     private Color standard=new Color(163,184,204);
     private Color choose=new Color(255,165,225);
+    private Color disabled=new Color(160, 159, 157);
     private JButton[] chibis=new JButton[6];
     private Socket manager;
-    private ObjectInputStream oin;
-    private ObjectOutputStream yeet;
+    private DataInputStream din;
+    private DataOutputStream yeet;
     private Spieldaten reply;
     private Spieldaten sd;
+    private String gegnerName;
+    private String meinName;
+    private boolean spielAuswahl;
+    private int feldGroesse;
+    private int spielfigur;
+    private int zugX;
+    private  int zugY;
+    private int pressurePlate;
 
     public SpielAnfrage(Socket socket) {  //HIER
         manager=socket;
@@ -34,8 +43,8 @@ public class SpielAnfrage extends Thread{
 
     public void run(){
         try {
-        oin=new ObjectInputStream(new BufferedInputStream(manager.getInputStream()));
-        yeet=new ObjectOutputStream(manager.getOutputStream());
+        din=new DataInputStream(new BufferedInputStream(manager.getInputStream()));
+        yeet=new DataOutputStream(manager.getOutputStream());
     } catch (IOException e) {
         e.printStackTrace();
     }
@@ -47,30 +56,43 @@ public class SpielAnfrage extends Thread{
             chibis[i].setBackground(standard);
         }
         try {
-            reply =(Spieldaten) oin.readObject();  //wartet auf eine Anfrage
+            gegnerName=din.readUTF(); //gegner name
+            meinName=din.readUTF(); //spieler name
+            spielAuswahl=din.readBoolean(); //spiel
+            feldGroesse=din.readInt(); // feldgröße
+            spielfigur=din.readInt(); // spielfigur
+            din.readInt(); // zug x bleibt leer
+            din.readInt(); //zug y bleibt leer
+            System.out.println("read it");
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
-        chibiZahlGrau=reply.getChibiZahlGrau();
-        chibis[chibiZahlGrau].setBackground(Color.GRAY);
-        chibis[chibiZahlGrau].setEnabled(false);            //vom Gegner gewählte Spielfigur
+        chibis[spielfigur].setBackground(disabled);
+        chibis[spielfigur].setEnabled(false);            //vom Gegner gewählte Spielfigur
         annehmenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // farbauswahl einfügen
                 for(i=0; i<chibis.length; i++) {
-                    if (!chibis[i].getBackground().equals(standard)) {
+                    if (!(chibis[i].getBackground().equals(standard)||chibis[i].getBackground().equals(disabled))) {
                         frame.setVisible(false);
                         try {
-                            yeet.writeObject(new Spieldaten("Akzeptiert", i));
-                            if (reply.isSpiel()) {
-                                //new VierGewinnt(new Spieler(reply.getHerausgeforderter(), true, i), new Spieler(sd.getName(), true, i));
+                            yeet.writeUTF("Akzeptiert");
+                            yeet.writeUTF(meinName);
+                            yeet.writeBoolean(spielAuswahl);
+                            yeet.writeInt(feldGroesse);
+                            yeet.writeInt(i);
+                            yeet.writeInt(zugX);
+                            yeet.writeInt(zugY);
+                            //yeet.writeObject(new Spieldaten("Akzeptiert", i));
+                            if (spielAuswahl) {
+                               VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur));
+                                four.start();
                             } else {
-                                //new Chomp(manager, new Spieler(reply.getHerausgeforderter(), true, i), new Spieler(reply.getName(), true, i), new ChompFeld(new int[reply.getFeld() / 2][reply.getFeld()]),true);
+                                Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]),true);
+                                chompsky.start();
                             }
-                        } catch (IOException ex) {
+                        } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();
                         }
                     }
@@ -83,17 +105,24 @@ public class SpielAnfrage extends Thread{
             public void actionPerformed(ActionEvent e) {
                 frame.setVisible(false);
                 try {
-                    yeet.writeObject(new Spieldaten("Abgelehnt", i));
+                    yeet.writeUTF("Abgelehnt");
+                    yeet.writeUTF(meinName);
+                    yeet.writeBoolean(spielAuswahl);
+                    yeet.writeInt(feldGroesse);
+                    yeet.writeInt(i);
+                    yeet.writeInt(zugX);
+                    yeet.writeInt(zugY);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
                 warteschleife=false;
             }
         });
-        if(reply.isSpiel()){
-            anfrageText.setText(" fordert dich zu Vier Gewinnt heraus!");
-        }
-        else anfrageText.setText(" fordert dich zu Chomp heraus!");
+
+            if(spielAuswahl){
+                anfrageText.setText(" fordert dich zu Vier Gewinnt heraus!");
+            }
+            else anfrageText.setText(" fordert dich zu Chomp heraus!");
 
         frame.setResizable(false);
         frame.setVisible(true);
@@ -115,9 +144,9 @@ public class SpielAnfrage extends Thread{
         }*/
     }
     //für herausforderer:
-    public void spielStart(Spieldaten anfangsStats) throws IOException, ClassNotFoundException { //Anfangsdaten für Spielerstellung werden über GameConnection and anderen Spieler geschickt
-        frame.setVisible(true);
+    /*public void spielStart(Spieldaten anfangsStats) throws IOException, ClassNotFoundException { //Anfangsdaten für Spielerstellung werden über GameConnection and anderen Spieler geschickt
         yeet.writeObject(anfangsStats);
+        frame.setVisible(true);
         //yeet.writeUTF("YES");
         Spieldaten reply=(Spieldaten)oin.readObject();
         if(reply.getMessage().equals("Abgelehnt")){
@@ -148,6 +177,10 @@ public class SpielAnfrage extends Thread{
     }
     public void startChomp(String readyplayer1, String readyplayer2, int figur1, int figur2, int feldSize, boolean beginner) throws IOException, ClassNotFoundException {
         new Chomp(manager, new Spieler(readyplayer1, true, figur1), new Spieler(readyplayer2, true, figur2), new ChompFeld(new int[feldSize/2][feldSize]), beginner);
+    }*/
+
+    public void plsWok(){
+        System.out.println("I'm woking");
     }
 
     public void initializeButtons() {
