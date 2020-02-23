@@ -27,13 +27,14 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
     private int lenght =winPanel.getComponents().length;
     int wide;
     int high;
+    private  SpielAnfrage spa;
     private JLabel[][]labelArray =new JLabel[6][7];
 
     Color leer= new Color(128,187,183);
     Color voll=new Color (128, 187, 182);
     Color test=new Color(70, 12, 12);
 
-    public VierGewinnt(Spieler alpha, Spieler beta, boolean anfänger){
+    public VierGewinnt(Spieler alpha, Spieler beta, boolean anfänger, SpielAnfrage spa){
         JFrame frame = new JFrame("FourForm");
         frame.setContentPane(rootPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,6 +43,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
         this.setA(alpha);
         this.setB(beta);
         this.setAbyss(new VierFeld());
+        this.spa=spa;
         //neu von
         Component[] myComps = winPanel.getComponents();
         // hier
@@ -187,6 +189,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         a5Button.setEnabled(false);
                         a6Button.setEnabled(false);
                         a7Button.setEnabled(false);
+                        spa.run(); //reanimiert spielanfrage
                         //System.out.println("Glückwunsch Spieler A! Du hast gewonnen!");
                     }
                     if (sieg==0)sieg=catEye(i,eingabe-1,1);
@@ -206,6 +209,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         a5Button.setEnabled(false);
                         a6Button.setEnabled(false);
                         a7Button.setEnabled(false);
+                        spa.run(); //reanimiert spielanfrage
                         //System.out.println("Glückwunsch Spieler B! Du hast gewonnen!");
                     }
                     int ce=catEye(i,eingabe-1,2);
@@ -230,6 +234,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         a5Button.setEnabled(false);
                         a6Button.setEnabled(false);
                         a7Button.setEnabled(false);
+                        spa.run(); //reanimiert spielanfrage
                     }
                 }
                 this.ziehen(new Spielzug(i,eingabe-1));

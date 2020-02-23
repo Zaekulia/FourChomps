@@ -21,14 +21,16 @@ public class Chomp extends Spiel implements Protokollierbar {
     private Color standard = new Color(163, 184, 204);
     private Color belegt=new Color(163, 184, 205);
     private ActionListener nein;
+    private  SpielAnfrage spa;
 
-    public Chomp(Socket manager, Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger) throws IOException, ClassNotFoundException {
+    public Chomp(Socket manager, Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger, SpielAnfrage spa) throws IOException, ClassNotFoundException {
         JFrame frame = new JFrame("Chomps");
         frame.setContentPane(rootPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         a=anfänger;
+        this.spa=spa;
         this.manager=manager;
         this.setA(alpha);
         this.setB(beta);
@@ -147,6 +149,7 @@ public class Chomp extends Spiel implements Protokollierbar {
                 chompOmp[i/20][i%20].setEnabled(false);
             }
             anzeigeIstRaus.setText(spiler.getUsername()+" hat verloren!");
+            spa.run(); //reanimiert spielanfrage
             //Nachricht dass gewonnen
             return;
         }

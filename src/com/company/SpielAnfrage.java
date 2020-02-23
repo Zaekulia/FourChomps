@@ -31,9 +31,13 @@ public class SpielAnfrage extends Thread{
     private int zugX;
     private  int zugY;
     private int pressurePlate;
+    private SpielAnfrage me;
+
+    protected   boolean spielAnfrageLäuft=true; //regelt interaktion spielanfrage / menue
 
     public SpielAnfrage(Socket socket) {  //HIER
         manager=socket;
+        me=this;
         frame = new JFrame("SpielAnfrage");
         frame.setContentPane(this.rootPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -41,7 +45,7 @@ public class SpielAnfrage extends Thread{
     }
 
     public void run(){
-        while(true){
+        //while(true){
         try {
         din=new DataInputStream(new BufferedInputStream(manager.getInputStream()));
         yeet=new DataOutputStream(manager.getOutputStream());
@@ -55,14 +59,19 @@ public class SpielAnfrage extends Thread{
             chibis[i].setBackground(standard);
         }
         try {
-            gegnerName=din.readUTF(); //gegner name
-            meinName=din.readUTF(); //spieler name
-            spielAuswahl=din.readBoolean(); //spiel
-            feldGroesse=din.readInt(); // feldgröße
-            spielfigur=din.readInt(); // spielfigur
-            din.readInt(); // zug x bleibt leer
-            din.readInt(); //zug y bleibt leer
-            System.out.println("read it");
+            while(din.available()==0) {
+                if(!spielAnfrageLäuft){
+                    return;                     //springt aus run method
+                }
+            }
+                gegnerName = din.readUTF(); //gegner name
+                meinName = din.readUTF(); //spieler name
+                spielAuswahl = din.readBoolean(); //spiel
+                feldGroesse = din.readInt(); // feldgröße
+                spielfigur = din.readInt(); // spielfigur
+                din.readInt(); // zug x bleibt leer
+                din.readInt(); //zug y bleibt leer
+                System.out.println("read it");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,12 +96,14 @@ public class SpielAnfrage extends Thread{
                             //yeet.writeObject(new Spieldaten("Akzeptiert", i));
                             int stopp1=1;
                             if (spielAuswahl) {
-                               VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), true);
+                               VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), true, me);
                                 four.start();
+
                             } else {
-                                Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]),true);
+                                Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]),true, me);
                                 int stopp2=1;
                                 chompsky.start();
+
                             }
                         } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();
@@ -129,7 +140,7 @@ public class SpielAnfrage extends Thread{
         frame.setResizable(false);
         frame.setVisible(true);
         warteschleife=true;
-        }
+        //}
 
     }
 

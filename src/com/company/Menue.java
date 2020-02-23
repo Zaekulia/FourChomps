@@ -31,11 +31,11 @@ public class Menue extends Thread {
     private int zugY=0;
 
     Menue(ArrayList<String> aktiveNutzer, Socket s, Socket manager, String meinName, SpielAnfrage spielAnfrage) {
-        //spiel gegen comp läuft wenn nur outputstream HIER
         this.meinName = meinName;
         this.s = s;
         this.manager = manager;
         this.spielAnfrage = spielAnfrage;
+        this.spielAnfrage.spielAnfrageLäuft=false; // killt spielanfrage
         frame = new JFrame("Menue");
         frame.setContentPane(this.rootPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -147,7 +147,7 @@ public class Menue extends Thread {
                 din.readInt(); // zug x bleibt leer
                 din.readInt(); //zug y bleibt leer
                 if(reply.equals("Akzeptiert")){
-                    VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur),false);
+                    VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur),false, spielAnfrage);
                     four.start();
                 }else{
                     anzeige.setText("Deine Anfrage wurde abgelehnt! Noob!");
@@ -190,7 +190,7 @@ public class Menue extends Thread {
                 din.readInt(); //zug y bleibt leer
                 int stopp5=1;
                 if(reply.equals("Akzeptiert")){
-                    Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]), false);
+                    Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]), false, spielAnfrage);
                     int stopp6=1;
                     chompsky.start();
                 }else{
@@ -202,15 +202,17 @@ public class Menue extends Thread {
                 System.out.println("ich ruf den anwalt3");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen3");
-                VierGewinnt four=new VierGewinnt(new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected), false);
+                VierGewinnt four=new VierGewinnt(new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected), false, spielAnfrage);
                 four.start();
             } else { // chomp offline
                 System.out.println("ich ruf den anwalt4");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen4");
-                Chomp chompsky = new Chomp(manager, new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected), new ChompFeld(new int[slider1.getValue() / 2][slider1.getValue()]), false);
+                Chomp chompsky = new Chomp(manager, new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected), new ChompFeld(new int[slider1.getValue() / 2][slider1.getValue()]), false, spielAnfrage);
                 chompsky.start();
             }
+            frame.dispose();
+            spielAnfrage.run(); //reanimiert spielanfrage
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -225,7 +227,6 @@ public class Menue extends Thread {
     public void removeName(String name) {
         gegenSpieler.removeItem(name);
     }
-
     public void initializeButtons() {
         chibis[0] = chocolaButton;
         chibis[1] = vanillaButton;
