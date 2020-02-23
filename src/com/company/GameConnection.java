@@ -35,27 +35,35 @@ public class GameConnection extends Thread {
         for(int i=0; i<server.matches.size();i++){
             if (server.matches.get(i)[position].equals(this)){
                 System.out.println("found");
-                if (server.matches.get(position)[0].equals(this)) {         //kann durch position vereinfacht werden
-                    server.matches.get(position)[1].slave(gegnerName, meinName, spielAuswahl, feldGroessse, spielfigur, zugX, zugY);
+                if (server.matches.get(i)[0].equals(this)) {         //kann durch position vereinfacht werden
+                    server.matches.get(i)[1].slave(gegnerName, meinName, spielAuswahl, feldGroessse, spielfigur, zugX, zugY);
                 } else {
-                    server.matches.get(position)[0].slave(gegnerName, meinName, spielAuswahl, feldGroessse, spielfigur, zugX, zugY);
+                    server.matches.get(i)[0].slave(gegnerName, meinName, spielAuswahl, feldGroessse, spielfigur, zugX, zugY);
                 }
             }
         }
     }
     public void slave(String gegnerName, String meinName, boolean spielAuswahl, int feldGroessse, int spielfigur, int zugX, int zugY) throws IOException {
         yeet.writeUTF(gegnerName);
+        yeet.flush();
         yeet.writeUTF(meinName);
+        yeet.flush();
         yeet.writeBoolean(spielAuswahl);
+        yeet.flush();
         yeet.writeInt(feldGroessse);
+        yeet.flush();
         yeet.writeInt(spielfigur);
+        yeet.flush();
         yeet.writeInt(zugX);
+        yeet.flush();
         yeet.writeInt(zugY);
+        yeet.flush();
     }
     public void run() {
         try {
             din=new DataInputStream(new BufferedInputStream(manager.getInputStream()));
             yeet=new DataOutputStream(manager.getOutputStream());
+            int stopp7=1;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -92,7 +100,7 @@ public class GameConnection extends Thread {
                 zugY=din.readInt();
                 System.out.println("got it");
                 int gegnerPosition=0;
-                for (int i = 0; i < 100; i++) {
+                for (int i = 0; i < server.connections.size(); i++) {
                     if (server.connections.get(i).nutzername.equals(gegnerName)) {
                         gegnerPosition = i;
                         break;
@@ -107,6 +115,7 @@ public class GameConnection extends Thread {
                     }
                     //sendMessageToEnemy();
                 }
+                this.sleep(100);
                 sendMessageToEnemy();
                 System.out.println("sent to enemy");
 
@@ -131,7 +140,7 @@ public class GameConnection extends Thread {
                     sendMessageToEnemy(reply);
                 }}*/
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

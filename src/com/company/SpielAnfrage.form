@@ -9,7 +9,7 @@
       <alignmentX value="0.0"/>
       <background color="-6516303"/>
       <minimumSize width="300" height="400"/>
-      <preferredSize width="350" height="400"/>
+      <preferredSize width="350" height="430"/>
     </properties>
     <border type="none"/>
     <children>

@@ -100,6 +100,7 @@ public class Menue extends Thread {
                             } else {
                                 pressurePlate=2;
                                 selected=i;
+                                int stopp3=1;
                             }
                             chompButton.setEnabled(false);
                             vierGewinntButton.setEnabled(false);
@@ -156,13 +157,21 @@ public class Menue extends Thread {
                 spielfigur=selected;
                 //yeet.writeObject(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, false, slider1.getValue(), selected));
                 yeet.writeUTF(gegnerName);
+                yeet.flush();
                 yeet.writeUTF(meinName);
+                yeet.flush();
                 yeet.writeBoolean(spielAuswahl);
+                yeet.flush();
                 yeet.writeInt(feldGroesse);
+                yeet.flush();
                 yeet.writeInt(spielfigur);
+                yeet.flush();
                 yeet.writeInt(zugX);
+                yeet.flush();
                 yeet.writeInt(zugY);
+                yeet.flush();
                 System.out.println("sent");
+                int stopp4=1;
                 //frame.setVisible(true);
                 //HIER
                 String reply=din.readUTF(); // name wird zur antwort
@@ -172,8 +181,10 @@ public class Menue extends Thread {
                 int gegnerFigur=din.readInt(); // spielfigur des gegners
                 din.readInt(); // zug x bleibt leer
                 din.readInt(); //zug y bleibt leer
+                int stopp5=1;
                 if(reply.equals("Akzeptiert")){
                     Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]), false);
+                    int stopp6=1;
                     chompsky.start();
                 }else{
                     anzeige.setText("Deine Anfrage wurde abgelehnt! Noob!");

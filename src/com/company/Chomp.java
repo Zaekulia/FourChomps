@@ -43,7 +43,7 @@ public class Chomp extends Spiel implements Protokollierbar {
             }
         }
         if (getA().isMensch() && getB().isMensch()) {
-            Spieldaten sd = (Spieldaten) oin.readObject();
+            //Spieldaten sd = (Spieldaten) oin.readObject();
         }
         //horche nach fehlenden Informationen, e.g. chibi vom gegner
         //ki verschieben

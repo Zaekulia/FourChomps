@@ -9,7 +9,6 @@ import java.net.Socket;
 
 
 public class SpielAnfrage extends Thread{
-    private  int chibiZahlGrau;
     private int i;
     private int d;
     private  boolean spiel;
@@ -68,7 +67,8 @@ public class SpielAnfrage extends Thread{
             e.printStackTrace();
         }
         chibis[spielfigur].setBackground(disabled);
-        chibis[spielfigur].setEnabled(false);            //vom Gegner gewählte Spielfigur
+        chibis[spielfigur].setEnabled(false); //vom Gegner gewählte Spielfigur
+            int stopp8=1;
         annehmenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,11 +85,13 @@ public class SpielAnfrage extends Thread{
                             yeet.writeInt(zugX);
                             yeet.writeInt(zugY);
                             //yeet.writeObject(new Spieldaten("Akzeptiert", i));
+                            int stopp1=1;
                             if (spielAuswahl) {
                                VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur));
                                 four.start();
                             } else {
                                 Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]),true);
+                                int stopp2=1;
                                 chompsky.start();
                             }
                         } catch (IOException | ClassNotFoundException ex) {
@@ -128,56 +130,8 @@ public class SpielAnfrage extends Thread{
         frame.setVisible(true);
         warteschleife=true;
         }
-        /*while (true) {
-            try {
-                reply=(Spieldaten) oin.readObject();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            if (sd.isSpiel()) {
 
-            } else {
-                new Chomp(new Spieler(sd.getHerausgeforderter(), true), new Spieler(sd.getName(), true), new ChompFeld(new int[sd.getFeld()/2][sd.getFeld()]));
-            }
-        }*/
     }
-    //für herausforderer:
-    /*public void spielStart(Spieldaten anfangsStats) throws IOException, ClassNotFoundException { //Anfangsdaten für Spielerstellung werden über GameConnection and anderen Spieler geschickt
-        yeet.writeObject(anfangsStats);
-        frame.setVisible(true);
-        //yeet.writeUTF("YES");
-        Spieldaten reply=(Spieldaten)oin.readObject();
-        if(reply.getMessage().equals("Abgelehnt")){
-           // frame = new JFrame("SpielAnfrage");
-            //frame.setContentPane(this.rootPanel);
-            //frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            panelAlles.setVisible(false);
-            anzeigeLabel.setText("Anfrage abgelehnt!");
-            ablehnenButton.setVisible(false);
-            //frame.pack();
-
-            while(true) {
-                if (annehmenButton.getModel().isPressed()) { //hier vllt fehler
-                    frame.dispose();
-                }
-            }
-        }
-        if(reply.getMessage().equals("Akzeptiert")){
-            if(anfangsStats.isSpiel()){
-                startVierGewinnt(anfangsStats.getHerausgeforderter(), anfangsStats.getName(), reply.getChibiZahlGrau(), anfangsStats.getChibiZahlGrau());
-            }else {
-                startChomp(anfangsStats.getHerausgeforderter(), anfangsStats.getName(), reply.getChibiZahlGrau(), anfangsStats.getChibiZahlGrau(), anfangsStats.getFeld(), false);
-            }
-        }
-    }
-    public void startVierGewinnt(String readyPlayer1, String readyPlayer2, int figur1, int figur2){
-        new VierGewinnt(new Spieler(readyPlayer1, true, figur1), new Spieler(readyPlayer2, true, figur2));
-    }
-    public void startChomp(String readyplayer1, String readyplayer2, int figur1, int figur2, int feldSize, boolean beginner) throws IOException, ClassNotFoundException {
-        new Chomp(manager, new Spieler(readyplayer1, true, figur1), new Spieler(readyplayer2, true, figur2), new ChompFeld(new int[feldSize/2][feldSize]), beginner);
-    }*/
 
     public void plsWok(){
         System.out.println("I'm woking");
@@ -197,8 +151,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 chocolaButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].setEnabled(false);            //Warum machst du das hier und in jedem Listener?
+                chibis[spielfigur].setBackground(disabled);
+                chibis[spielfigur].setEnabled(false);
             }
         });
         vanillaButton.addActionListener(new ActionListener() {
@@ -208,8 +162,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 vanillaButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].setEnabled(false);
+                chibis[spielfigur].setBackground(disabled);
+                chibis[spielfigur].setEnabled(false);
             }
         });
         coconutButton.addActionListener(new ActionListener() {
@@ -219,8 +173,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 coconutButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].setEnabled(false);
+                chibis[spielfigur].setBackground(disabled);
+                chibis[spielfigur].setEnabled(false);
             }
         });
         cinnamonButton.addActionListener(new ActionListener() {
@@ -230,8 +184,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 cinnamonButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].setEnabled(false);
+                chibis[spielfigur].setBackground(disabled);
+                chibis[spielfigur].setEnabled(false);
             }
         });
         mapleButton.addActionListener(new ActionListener() {
@@ -241,8 +195,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 mapleButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].setEnabled(false);
+                chibis[spielfigur].setBackground(disabled);
+                chibis[spielfigur].setEnabled(false);
             }
         });
         azukiButton.addActionListener(new ActionListener() {
@@ -252,8 +206,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 azukiButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].setEnabled(false);
+                chibis[spielfigur].setBackground(disabled);
+                chibis[spielfigur].setEnabled(false);
             }
         });
     }
