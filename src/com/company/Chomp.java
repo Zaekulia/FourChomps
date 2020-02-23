@@ -17,10 +17,15 @@ public class Chomp extends Spiel implements Protokollierbar {
     private JButton[][] chompOmp =new JButton[10][20];
     private ObjectInputStream oin;
     private ObjectOutputStream yeet;
+    private Socket manager;
 
     public Chomp(Socket manager, Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger) throws IOException, ClassNotFoundException {
-        oin=new ObjectInputStream(manager.getInputStream());
-        yeet=new ObjectOutputStream(manager.getOutputStream());
+        this.manager=manager;
+        JFrame frame = new JFrame("Chomps");
+        frame.setContentPane(rootPanel);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
         a=anfänger;
         this.setA(alpha);
         this.setB(beta);
@@ -34,29 +39,37 @@ public class Chomp extends Spiel implements Protokollierbar {
                 chompOmp[i][j].setVisible(true);
             }
         }
-        JFrame frame = new JFrame("Chomps");
-        frame.setContentPane(rootPanel);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-        Spieldaten sd=(Spieldaten)oin.readObject();
+        if (getA().isMensch() && getB().isMensch()) {
+
+            try {
+                oin=new ObjectInputStream(this.manager.getInputStream());
+                yeet=new ObjectOutputStream(this.manager.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Spieldaten sd=(Spieldaten)oin.readObject();
+        }
+
         //horche nach fehlenden Informationen, e.g. chibi vom gegner
         //ki verschieben
         //disablen nach zug
         for (int i=0; i < 200; i++) {
             m=i/20;n=i%20;
             chompOmp[i/20][i%20].addActionListener(new ActionListener() {
+                Integer zei=new Integer(m);
+                Integer spal=new Integer(n);
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     if (anfänger) {
-                        zug(getA(), new Spielzug(m, n));
+                        zug(getA(), new Spielzug(zei.intValue(),spal.intValue()));
                     } else {
-                        zug(getB(), new Spielzug(m, n));
+                        zug(getB(), new Spielzug(zei.intValue(),spal.intValue()));
                     }
                 }
             });
-            if (!anfänger) {
-                chompOmp[i/20][i%20].setEnabled(false);
+            if (!anfänger&&!getA().isMensch()) {
+                zug(getA(),new Spielzug(0,0));
+                //chompOmp[i/20][i%20].setEnabled(false);
             }
         }
 
@@ -137,6 +150,9 @@ public class Chomp extends Spiel implements Protokollierbar {
                     //Bild laden
                     j++;
                 }
+            }
+            if (!getA().isMensch()) {
+                zug(getA(),new Spielzug(0,0));
             }
         }
     }

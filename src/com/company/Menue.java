@@ -133,6 +133,7 @@ public class Menue extends Thread {
             }*/
         while (pressurePlate == 0) {
             //int toast=1;
+            System.out.println("while");
         }
         try {
             if (pressurePlate == 1) {
