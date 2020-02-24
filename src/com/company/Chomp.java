@@ -167,6 +167,7 @@ public class Chomp extends Spiel implements Protokollierbar {
                 while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
                     this.getAbyss().getFeldgroesse()[i][j] = 1;
                     chompOmp[i][j].setIcon(new ImageIcon(spiler.getSpielstein()));
+                    chompOmp[i][j].setDisabledIcon(new ImageIcon(spiler.getSpielstein()));
                     chompOmp[i][j].setEnabled(false);
                     //Bild laden
                     j++;
@@ -209,6 +210,7 @@ public class Chomp extends Spiel implements Protokollierbar {
                 while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
                     this.getAbyss().getFeldgroesse()[i][j] = 1;
                     chompOmp[i][j].setIcon(new ImageIcon(getA().getSpielstein()));
+                    chompOmp[i][j].setDisabledIcon(new ImageIcon(getA().getSpielstein()));
                     chompOmp[i][j].setEnabled(false);
                     //Bild laden
                     j++;
@@ -245,6 +247,7 @@ public class Chomp extends Spiel implements Protokollierbar {
                 while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
                     this.getAbyss().getFeldgroesse()[i][j] = 2;
                     chompOmp[i][j].setIcon(new ImageIcon(getB().getSpielstein()));
+                    chompOmp[i][j].setDisabledIcon(new ImageIcon(getB().getSpielstein()));
                     chompOmp[i][j].setEnabled(false);
                     //Bild laden
                     j++;
