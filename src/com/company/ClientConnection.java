@@ -12,13 +12,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientConnection extends Thread{
-    boolean shouldRun=true;
+    private boolean shouldRun=true;
     //boolean angemeldet;
     private String meinName;
     protected Color highlight=new Color(187,187,187);
     protected Color shadow=new Color(103,37,95);
     protected Border border=BorderFactory.createEtchedBorder(highlight, shadow);
-    ArrayList<String> aktiveNutzer=new ArrayList<>();
+    protected ArrayList<String> aktiveNutzer=new ArrayList<>();
     private Socket s;
     private Socket manager;
     private DataInputStream din;

@@ -148,7 +148,7 @@ public class Menue extends Thread {
                 din.readInt(); // zug x bleibt leer
                 din.readInt(); //zug y bleibt leer
                 if(reply.equals("Akzeptiert")){
-                    VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur),false, spielAnfrage);
+                    VierGewinnt four=new VierGewinnt(manager, new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur),false, spielAnfrage); // neu: manager
                     four.start();
                 }else{
                     anzeige.setText("Deine Anfrage wurde abgelehnt! Noob!");
@@ -203,7 +203,7 @@ public class Menue extends Thread {
                 System.out.println("ich ruf den anwalt3");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen3");
-                VierGewinnt four=new VierGewinnt(new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected), false, spielAnfrage);
+                VierGewinnt four=new VierGewinnt(manager, new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected), false, spielAnfrage); //neu: manager
                 four.start();
             } else { // chomp offline
                 System.out.println("ich ruf den anwalt4");

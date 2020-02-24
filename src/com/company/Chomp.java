@@ -9,8 +9,8 @@ import java.awt.*;
 
 public class Chomp extends Spiel implements Protokollierbar {
     private boolean shouldRun=true; //Glücksbringer
-    boolean anfänger;
-    int m,n;
+    private boolean anfänger;
+    private int m,n;
     private JButton[][] chompOmp =new JButton[10][20];
     private DataInputStream din;
     private DataOutputStream yeet;
@@ -19,7 +19,6 @@ public class Chomp extends Spiel implements Protokollierbar {
     private Color belegt=new Color(163, 184, 205);
     private ActionListener[][] aktionen=new ActionListener[10][20];
     private  SpielAnfrage spa;
-
 
     public Chomp(Socket manager, Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger, SpielAnfrage spa) throws IOException, ClassNotFoundException {
         JFrame frame = new JFrame("Chomps");
@@ -168,8 +167,7 @@ public class Chomp extends Spiel implements Protokollierbar {
                     this.getAbyss().getFeldgroesse()[i][j] = 1;
                     chompOmp[i][j].setIcon(new ImageIcon(spiler.getSpielstein()));
                     chompOmp[i][j].setDisabledIcon(new ImageIcon(spiler.getSpielstein()));
-                    chompOmp[i][j].setEnabled(false);
-                    //Bild laden
+                    chompOmp[i][j].setEnabled(false); //Bild laden
                     j++;
                 }
             }
@@ -197,11 +195,12 @@ public class Chomp extends Spiel implements Protokollierbar {
                     e.printStackTrace();
                 }
                 for (int i = 0; i < 200;i++) {
-                    chompOmp[i/20][i%20].setEnabled(false);
+                    if (getA().isMensch() && getB().isMensch()){
+                        chompOmp[i/20][i%20].setEnabled(false); //if anweisung neu
+                    }
                 }
             }
             spa.start(); //reanimiert spielanfrage (start statt run)
-            //Nachricht dass gewonnen
             return;
         }
         if (spiler == getA()) {
@@ -210,9 +209,8 @@ public class Chomp extends Spiel implements Protokollierbar {
                 while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
                     this.getAbyss().getFeldgroesse()[i][j] = 1;
                     chompOmp[i][j].setIcon(new ImageIcon(getA().getSpielstein()));
-                    chompOmp[i][j].setDisabledIcon(new ImageIcon(getA().getSpielstein()));
+                    chompOmp[i][j].setDisabledIcon(new ImageIcon(getA().getSpielstein())); //Bild laden
                     chompOmp[i][j].setEnabled(false);
-                    //Bild laden
                     j++;
                 }
             }
@@ -237,7 +235,9 @@ public class Chomp extends Spiel implements Protokollierbar {
                     e.printStackTrace();
                 }
                 for (int i = 0; i < 200;i++) {
-                    chompOmp[i/20][i%20].setEnabled(false);
+                    if (getA().isMensch() && getB().isMensch()){
+                        chompOmp[i/20][i%20].setEnabled(false); //if anweisung neu
+                    }
                 }
             }
         }
@@ -247,9 +247,8 @@ public class Chomp extends Spiel implements Protokollierbar {
                 while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
                     this.getAbyss().getFeldgroesse()[i][j] = 2;
                     chompOmp[i][j].setIcon(new ImageIcon(getB().getSpielstein()));
-                    chompOmp[i][j].setDisabledIcon(new ImageIcon(getB().getSpielstein()));
+                    chompOmp[i][j].setDisabledIcon(new ImageIcon(getB().getSpielstein())); //Bild laden
                     chompOmp[i][j].setEnabled(false);
-                    //Bild laden
                     j++;
                 }
             }
@@ -277,7 +276,9 @@ public class Chomp extends Spiel implements Protokollierbar {
                     e.printStackTrace();
                 }
                 for (int i = 0; i < 200;i++) {
-                    chompOmp[i/20][i%20].setEnabled(false);
+                    if (getA().isMensch() && getB().isMensch()){
+                        chompOmp[i/20][i%20].setEnabled(false); //if anweisung neu
+                    }
                 }
             }
         }

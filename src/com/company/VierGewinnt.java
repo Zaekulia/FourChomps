@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket; //neu
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -29,21 +33,24 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
     int high;
     private  SpielAnfrage spa;
     private JLabel[][]labelArray =new JLabel[6][7];
+    private Socket manager; //neu
+    private  DataInputStream din; //neu
+    private  DataOutputStream yeet; //neu
 
-    Color leer= new Color(128,187,183);
-    Color voll=new Color (128, 187, 182);
-    Color test=new Color(70, 12, 12);
+    private Color leer= new Color(128,187,183);
+    private Color voll=new Color (128, 187, 182);
 
-    public VierGewinnt(Spieler alpha, Spieler beta, boolean anfänger, SpielAnfrage spa){
+    public VierGewinnt(Socket manager, Spieler alpha, Spieler beta, boolean anfänger, SpielAnfrage spa){ //neu: Socket manager
         JFrame frame = new JFrame("FourForm");
         frame.setContentPane(rootPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         this.setA(alpha);
         this.setB(beta);
         this.setAbyss(new VierFeld());
         this.spa=spa;
+        this.manager=manager; //neu
         //neu von
         Component[] myComps = winPanel.getComponents();
         // hier
@@ -130,7 +137,14 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
     }
 
     public void run(){
-        if(!getA().isMensch()){
+        try {
+            din = new DataInputStream(manager.getInputStream()); //neu
+            yeet = new DataOutputStream(manager.getOutputStream()); //neu
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Spielzug spilzug = new Spielzug(0, 0);
+        if(!getA().isMensch()){ //& !anfänger ?
             zug(getA(), new Spielzug(0,0));
         }
     }
@@ -181,7 +195,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                     win=scan(i,eingabe-1,1);
                     if (win) {
                         this.getAbyss().showField();
-                        anzeige.setText("Glückwunsch Spieler A! Du hast gewonnen!");
+                        anzeige.setText("Glückwunsch "+getA().getUsername()+", du hast gewonnen!"); //neu hier
                         a1Button.setEnabled(false);
                         a2Button.setEnabled(false);
                         a3Button.setEnabled(false);
@@ -201,7 +215,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                     win=scan(i,eingabe-1,2);
                     if (win) {
                         this.getAbyss().showField();
-                        anzeige.setText("Glückwunsch Spieler B! Du hast gewonnen!");
+                        anzeige.setText("Glückwunsch "+getB().getUsername()+", du hast gewonnen!"); //neu hier
                         a1Button.setEnabled(false);
                         a2Button.setEnabled(false);
                         a3Button.setEnabled(false);
@@ -225,8 +239,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                             win=false;
                         }
                     }
-                    if (win){ anzeige.setText("Unentschieden! Keiner gewinnt.")
-                        ;//System.out.println("Unentschieden! Keiner gewinnt.");
+                    if (win){ anzeige.setText("Unentschieden! Keiner gewinnt.");//System.out.println("Unentschieden! Keiner gewinnt.");
                         a1Button.setEnabled(false);
                         a2Button.setEnabled(false);
                         a3Button.setEnabled(false);

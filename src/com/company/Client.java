@@ -10,10 +10,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 public class Client {
-    ClientConnection cc;
-    Socket s;
-    DataOutputStream dout;
-    DataInputStream din;
+    protected ClientConnection cc;
+    protected Socket s;
+    private DataOutputStream dout;
+    private DataInputStream din;
 
     public Client(){
         try{

@@ -18,6 +18,4 @@ public class Anmeldung {
         frame.setResizable(false);
         frame.setVisible(true);
     }
-
-
 }

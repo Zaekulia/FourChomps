@@ -11,10 +11,10 @@ public class Server {
     private boolean shouldRun=true;
     private ServerSocket ss;
     private ServerSocket sm;
-    Scanner scanner=new Scanner(System.in);
+    protected Scanner scanner=new Scanner(System.in);
 	private Spieler[] nutzerliste=new Spieler[100];
-    ArrayList<ServerConnection> connections =new ArrayList<ServerConnection>();
-    ArrayList<GameConnection[]> matches=new ArrayList<GameConnection[]>();
+    protected ArrayList<ServerConnection> connections =new ArrayList<ServerConnection>();
+    protected ArrayList<GameConnection[]> matches=new ArrayList<GameConnection[]>();
     public Spieler[] getNutzerliste() {
         return nutzerliste;
     }

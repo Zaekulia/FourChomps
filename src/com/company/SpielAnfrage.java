@@ -101,7 +101,7 @@ public class SpielAnfrage extends Thread{
                             //yeet.writeObject(new Spieldaten("Akzeptiert", i));
                             int stopp1=1;
                             if (spielAuswahl) {
-                               VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), true, me);
+                               VierGewinnt four=new VierGewinnt(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), true, me); //neu: manager
                                 four.start();
 
                             } else {
