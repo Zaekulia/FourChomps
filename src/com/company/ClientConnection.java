@@ -42,6 +42,7 @@ public class ClientConnection extends Thread{
         chatFrame.setVisible(true);
         userListArea.setBorder(border);
         chatArea.setBorder(border);
+        spielerName.setText(meinName);
         //userListArea.setBorder();
         //chatArea.createLineBorder()
         chatField.addKeyListener(new KeyListener() {

@@ -44,6 +44,7 @@ public class Menue extends Thread {
         for (int i = 0; i < aktiveNutzer.size(); i++) {
             gegenSpieler.addItem(aktiveNutzer.get(i));        //füllen mit Namen der aktiven Nutzer
         }
+        anzeige.setText(meinName+", wähle deine Spielfigur");
         frame.setVisible(true);
         frame.setResizable(false);
     }

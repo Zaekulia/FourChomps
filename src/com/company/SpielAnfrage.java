@@ -72,6 +72,11 @@ public class SpielAnfrage extends Thread{
                 din.readInt(); // zug x bleibt leer
                 din.readInt(); //zug y bleibt leer
                 System.out.println("read it");
+            if(spielAuswahl){
+                anzeigeLabel.setText(gegnerName+", du wirst von "+meinName+" zu Vier Gewinnt herausgefordert");
+            }else{
+                anzeigeLabel.setText(gegnerName+", du wirst von "+meinName+" zu Chomp herausgefordert");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,11 +136,6 @@ public class SpielAnfrage extends Thread{
                 warteschleife=false;
             }
         });
-
-            if(spielAuswahl){
-                anfrageText.setText(" fordert dich zu Vier Gewinnt heraus!");
-            }
-            else anfrageText.setText(" fordert dich zu Chomp heraus!");
 
         frame.setResizable(false);
         frame.setVisible(true);
