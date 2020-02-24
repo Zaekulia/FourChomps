@@ -201,7 +201,7 @@ public class Chomp extends Spiel implements Protokollierbar {
                     }
                 }
             }
-            spa.start(); //reanimiert spielanfrage (start statt run)
+            spa.start(); //reanimiert spielanfrage (start statt run)   //funktoniert offenbar auch nicht
             return;
         }
         if (spiler == getA()) {
