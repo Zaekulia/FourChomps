@@ -124,12 +124,19 @@ public class Menue extends Thread {
                 feldGroesse=slider1.getValue();
                 spielfigur=selected;
                 yeet.writeUTF(gegnerName);
+                yeet.flush();
                 yeet.writeUTF(meinName);
+                yeet.flush();
                 yeet.writeBoolean(spielAuswahl);
+                yeet.flush();
                 yeet.writeInt(feldGroesse);
+                yeet.flush();
                 yeet.writeInt(spielfigur);
+                yeet.flush();
                 yeet.writeInt(zugX);
+                yeet.flush();
                 yeet.writeInt(zugY);
+                yeet.flush();
                 //HIER
                 String reply=din.readUTF(); // name wird zur antwort
                 din.readUTF(); //spieler name bleibt leer
@@ -156,12 +163,19 @@ public class Menue extends Thread {
                 spielfigur=selected;
                 //yeet.writeObject(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, false, slider1.getValue(), selected));
                 yeet.writeUTF(gegnerName);
+                yeet.flush();
                 yeet.writeUTF(meinName);
+                yeet.flush();
                 yeet.writeBoolean(spielAuswahl);
+                yeet.flush();
                 yeet.writeInt(feldGroesse);
+                yeet.flush();
                 yeet.writeInt(spielfigur);
+                yeet.flush();
                 yeet.writeInt(zugX);
+                yeet.flush();
                 yeet.writeInt(zugY);
+                yeet.flush();
                 System.out.println("sent");
                 //frame.setVisible(true);
                 //HIER
@@ -173,6 +187,7 @@ public class Menue extends Thread {
                 din.readInt(); // zug x bleibt leer
                 din.readInt(); //zug y bleibt leer
                 if(reply.equals("Akzeptiert")){
+                    System.out.println("It`s time to duell");
                     Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]), false);
                     chompsky.start();
                 }else{

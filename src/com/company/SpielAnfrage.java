@@ -9,7 +9,6 @@ import java.net.Socket;
 
 
 public class SpielAnfrage extends Thread{
-    private  int chibiZahlGrau;
     private int i;
     private int d;
     private  boolean spiel;
@@ -32,6 +31,7 @@ public class SpielAnfrage extends Thread{
     private int zugX;
     private  int zugY;
     private int pressurePlate;
+    private SpielAnfrage me;
 
     public SpielAnfrage(Socket socket) {  //HIER
         manager=socket;
@@ -39,6 +39,7 @@ public class SpielAnfrage extends Thread{
         frame.setContentPane(this.rootPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
+        me=this;
     }
 
     public void run(){
@@ -49,7 +50,6 @@ public class SpielAnfrage extends Thread{
         e.printStackTrace();
     }
         initializeButtons();
-        while (true){
             while (warteschleife) {  //maximal eine Anfrage gleichzeitig
             }
         for (i = 0; i < chibis.length; i++) {
@@ -127,7 +127,6 @@ public class SpielAnfrage extends Thread{
         frame.setResizable(false);
         frame.setVisible(true);
         warteschleife=true;
-        }
         /*while (true) {
             try {
                 reply=(Spieldaten) oin.readObject();
@@ -197,8 +196,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 chocolaButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].setEnabled(false);            //Warum machst du das hier und in jedem Listener?
+                chibis[spielfigur].setBackground(Color.GRAY);
+                chibis[spielfigur].setEnabled(false);            //Warum machst du das hier und in jedem Listener?
             }
         });
         vanillaButton.addActionListener(new ActionListener() {
@@ -208,8 +207,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 vanillaButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].setEnabled(false);
+                chibis[spielfigur].setBackground(Color.GRAY);
+                chibis[spielfigur].setEnabled(false);
             }
         });
         coconutButton.addActionListener(new ActionListener() {
@@ -219,8 +218,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 coconutButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].setEnabled(false);
+                chibis[spielfigur].setBackground(Color.GRAY);
+                chibis[spielfigur].setEnabled(false);
             }
         });
         cinnamonButton.addActionListener(new ActionListener() {
@@ -230,8 +229,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 cinnamonButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].setEnabled(false);
+                chibis[spielfigur].setBackground(Color.GRAY);
+                chibis[spielfigur].setEnabled(false);
             }
         });
         mapleButton.addActionListener(new ActionListener() {
@@ -241,8 +240,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 mapleButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].setEnabled(false);
+                chibis[spielfigur].setBackground(Color.GRAY);
+                chibis[spielfigur].setEnabled(false);
             }
         });
         azukiButton.addActionListener(new ActionListener() {
@@ -252,8 +251,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 azukiButton.setBackground(choose);
-                chibis[chibiZahlGrau].setBackground(Color.GRAY);
-                chibis[chibiZahlGrau].setEnabled(false);
+                chibis[spielfigur].setBackground(Color.GRAY);
+                chibis[spielfigur].setEnabled(false);
             }
         });
     }

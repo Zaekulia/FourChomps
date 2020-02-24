@@ -17,8 +17,8 @@ public class Client {
 
     public Client(){
         try{
-            s=new Socket("localhost", 4999);
-            manager=new Socket("localhost",5000);
+            manager=new Socket("localhost", 4999);
+            s=new Socket("localhost",5000);
             din = new DataInputStream(s.getInputStream());
             dout=new DataOutputStream(s.getOutputStream());
             me=this;

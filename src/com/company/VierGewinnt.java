@@ -16,7 +16,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
     @Override
     public void zug(Spieler spiler, Spielzug spielzug) {
         Scanner sc=new Scanner(System.in);
-        int eingabe=0;
+        int eingabe=spielzug.spalte;
         boolean x=true;
         if (spiler.isMensch()){
             this.getAbyss().showField();

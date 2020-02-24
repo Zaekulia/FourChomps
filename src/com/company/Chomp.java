@@ -20,7 +20,7 @@ public class Chomp extends Spiel implements Protokollierbar {
     private Socket manager;
     private Color standard = new Color(163, 184, 204);
     private Color belegt=new Color(163, 184, 205);
-    private ActionListener nein;
+    private ActionListener[][] nein=new ActionListener[10][20];
 
     public Chomp(Socket manager, Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger) throws IOException, ClassNotFoundException {
         JFrame frame = new JFrame("Chomps");
@@ -43,7 +43,7 @@ public class Chomp extends Spiel implements Protokollierbar {
             }
         }
         if (getA().isMensch() && getB().isMensch()) {
-            Spieldaten sd = (Spieldaten) oin.readObject();
+            //Spieldaten sd = (Spieldaten) oin.readObject();
         }
         //horche nach fehlenden Informationen, e.g. chibi vom gegner
         //ki verschieben
@@ -52,7 +52,7 @@ public class Chomp extends Spiel implements Protokollierbar {
             m=i/20;n=i%20;
             Integer zei=new Integer(m);
             Integer spal=new Integer(n);
-            chompOmp[i/20][i%20].addActionListener(new ActionListener() {
+            nein[i/20][i%20]=new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     if (anfänger) {
@@ -61,7 +61,8 @@ public class Chomp extends Spiel implements Protokollierbar {
                         zug(getB(), new Spielzug(zei.intValue()+1, spal.intValue()+1));
                     }
                 }
-            });
+            };
+            chompOmp[i/20][i%20].addActionListener(nein[i/20][i%20]);
             if (!anfänger) {
                 //chompOmp[i/20][i%20].setEnabled(false);
                 //zug(getA(),new Spielzug(0,0));

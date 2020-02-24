@@ -27,8 +27,8 @@ public class Server {
         try{
             Killer killer=new Killer(this);
             killer.start();
-            ss=new ServerSocket(4999);
-            sm=new ServerSocket(5000);
+            sm=new ServerSocket(4999);
+            ss=new ServerSocket(5000);
             while(true){
                 Socket s=ss.accept();
                 Socket manager=sm.accept();
