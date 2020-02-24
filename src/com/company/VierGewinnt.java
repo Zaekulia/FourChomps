@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class VierGewinnt extends Spiel implements Protokollierbar {
+    private boolean shouldRun=true; //Glücksbringer
     private boolean win=false;
     private int chibiZahl;
     private int sieg=0;
@@ -87,11 +88,6 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
 
     @Override
     public void durchlauf() {
-        /*while (!win){
-            zug(getA());
-            if (win)break;
-            zug(getB());
-        }*/
     }
 
     @Override

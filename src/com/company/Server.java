@@ -8,11 +8,15 @@ import java.util.Scanner;
 import java.lang.*;
 
 public class Server {
-    private boolean shouldRun=true;
-    private ServerSocket ss;
-    private ServerSocket sm;
+    private boolean shouldRun=true; //Glücksbringer
+    protected JTextArea ActiveNutzer;
+    protected JPanel rootPanel;
+    protected JTextArea ServerStatus;
+    protected JFrame serverFrame;
+    ServerSocket ss;
     Scanner scanner=new Scanner(System.in);
 	private Spieler[] nutzerliste=new Spieler[100];
+    ArrayList<String> aktiveNutzer=new ArrayList<>();
     ArrayList<ServerConnection> connections =new ArrayList<ServerConnection>();
     ArrayList<GameConnection[]> matches=new ArrayList<GameConnection[]>();
     public Spieler[] getNutzerliste() {
@@ -27,12 +31,10 @@ public class Server {
         try{
             Killer killer=new Killer(this);
             killer.start();
-            sm=new ServerSocket(4999);
-            ss=new ServerSocket(5000);
+            ss=new ServerSocket(4999);
             while(true){
                 Socket s=ss.accept();
-                Socket manager=sm.accept();
-                ServerConnection sc=new ServerConnection (s,manager, this); //+manager
+                ServerConnection sc=new ServerConnection (s, this);
                 sc.start();
                 connections.add(sc);
             }
@@ -40,12 +42,17 @@ public class Server {
             //e.printStackTrace();
         }
     }
+    public void showAktiveNutzer() {
+        ActiveNutzer.setText("");
+        ActiveNutzer.append("Aktive Nutzer:\n");
+        try {
+            for (int i = 0; i < aktiveNutzer.size(); i++) {
+                ActiveNutzer.append("   "+aktiveNutzer.get(i)+"\n");
+            }
+        } catch (NullPointerException npe) {
+        }
+    }
     public static void main(String[] args) {
         new Server();
     }
-
-    protected JTextArea ActiveNutzer;
-    protected JPanel rootPanel;
-    protected JTextArea ServerStatus;
-    protected JFrame serverFrame;
 }

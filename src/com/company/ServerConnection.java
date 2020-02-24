@@ -6,19 +6,17 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ServerConnection extends Thread{
-    boolean shouldRun=true;
-    String nutzername;
+    boolean shouldRun=true;  //Glücksbringer
     Socket socket;
-    Socket manager;
     Server server;
     DataInputStream din;
     DataOutputStream dout;
 
-    public ServerConnection(Socket socket, Socket manager, Server server){ //+socket manager
+    String nutzername;
+    public ServerConnection(Socket socket, Server server){
         super("ServerConnectionThread");
         this.socket=socket;
         this.server=server;
-        this.manager=manager;
     }
     public void sendStringToClient(String text){
         try{
@@ -35,26 +33,23 @@ public class ServerConnection extends Thread{
         }
     }
     public void run(){
-        boolean uStpd=false;
-        boolean gefunden=false;
         boolean angemeldet=false;
         int nutzerposition=0;
-        try { //REGISTER
+        try(Socket s=this.socket) {
             din = new DataInputStream(socket.getInputStream());
             dout = new DataOutputStream(socket.getOutputStream());
             while (!angemeldet) {
                 String line = din.readUTF();
                 nutzername = din.readUTF();
                 String password = din.readUTF();
-                if (line.equals("Registrieren")) {
+                if (line.equals("Registrieren")) {//REGISTER
                     try {
                         for (int k = 0; k < 100; k++) {
                             if (server.getNutzerliste()[k].getUsername().equals(nutzername)) {
-                                gefunden = true;
                                 dout.writeUTF("Nope");
                                 break;
                             }
-                            nutzerposition = k; //HIER
+                            nutzerposition = k;
                         }
                     } catch (NullPointerException npe) {
                         dout.writeUTF("Anmeldung erfolgreich!");
@@ -67,12 +62,17 @@ public class ServerConnection extends Thread{
                             }
                         } catch (NullPointerException np) {
                         }
-                        server.getNutzerliste()[nutzerposition] = new Spieler(nutzername, true, 0);
+                        server.getNutzerliste()[nutzerposition] = new Spieler(nutzername, true);
                         server.getNutzerliste()[nutzerposition].setPasswort(password);
                         dout.writeUTF("Anmeldung erfolgreich");
                         sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
                         server.ServerStatus.append(nutzername + " hat sich gerade angemeldet\n");
-                        server.ActiveNutzer.append(nutzername + "\n");
+                        int i=0;
+                        while (i<server.aktiveNutzer.size()-1&&nutzername.length() > server.aktiveNutzer.get(i).length()) {
+                            i++;
+                        }
+                        server.aktiveNutzer.add(i,nutzername);
+                        server.showAktiveNutzer();
 
                     } catch (ArrayIndexOutOfBoundsException aoe) {
                         dout.writeUTF("Zu viele Nutzer! Komm später wieder");
@@ -81,12 +81,11 @@ public class ServerConnection extends Thread{
                     try {
                         for (int k = 0; k < 100; k++) {
                             if (server.getNutzerliste()[k].getUsername().equals(nutzername) && server.getNutzerliste()[k].getPasswort().equals(password)) {
-                                gefunden = true;
                                 dout.writeUTF("Anmeldung erfolgreich!");
                                 angemeldet=true;
                                 break;
                             }
-                            nutzerposition = k; //HIER
+                            nutzerposition = k;
                         }
                     } catch (NullPointerException ne) {
                         dout.writeUTF("Nope");
@@ -103,33 +102,26 @@ public class ServerConnection extends Thread{
                         server.getNutzerliste()[nutzerposition].setActive(true);
                         sendStringToAllClients(nutzername + " hat sich gerade angemeldet");
                         server.ServerStatus.append(nutzername + " hat sich gerade angemeldet\n");
-                        server.ActiveNutzer.append(nutzername + "\n");
+                        int i=0;
+                        while (i<server.aktiveNutzer.size()-1&&nutzername.length() > server.aktiveNutzer.get(i).length()) {
+                            i++;
+                        }
+                        server.aktiveNutzer.add(i,nutzername);
+                        server.showAktiveNutzer();
                     }
                 }
             }
-            while(shouldRun){
+            while(true){
                 String textIn=din.readUTF();
-                if (textIn.matches("!Create_Gameconnection")) {
-                    int position = 0;
-                    //Matches Einträge einstellen
-
-                    GameConnection[] matchI = new GameConnection[2];
-                    matchI[0] = new GameConnection(manager, this.server, 0);
-                    matchI[0].start();
-                    //matchI[1] = new GameConnection(server.connections.get(position).manager, server, 1);
-                    server.matches.add(matchI);
-                } else {
-                    sendStringToAllClients(nutzername+": "+textIn); //HIER
-                }
+                sendStringToAllClients(nutzername+": "+textIn);
             }
-            din.close();
-            dout.close();
-            socket.close();
         }catch(IOException e){
             sendStringToAllClients(nutzername+" hat den Server verlassen");
             server.ServerStatus.append(nutzername+" hat den Server verlassen\n");
-            server.ActiveNutzer.setText(""+server.ActiveNutzer.getText().replace(nutzername+"\n",""));
+            server.aktiveNutzer.remove(nutzername);
+            server.showAktiveNutzer();
             server.getNutzerliste()[nutzerposition].setActive(false);
         }
     }
+
 }
