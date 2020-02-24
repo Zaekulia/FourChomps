@@ -33,16 +33,19 @@ public class SpielAnfrage extends Thread{
     private int pressurePlate;
     private SpielAnfrage me;
 
+    protected   boolean spielAnfrageLäuft=true; //regelt interaktion spielanfrage / menue
+
     public SpielAnfrage(Socket socket) {  //HIER
         manager=socket;
+        me=this;
         frame = new JFrame("SpielAnfrage");
         frame.setContentPane(this.rootPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
-        me=this;
     }
 
     public void run(){
+        //while(true){
         try {
         din=new DataInputStream(new BufferedInputStream(manager.getInputStream()));
         yeet=new DataOutputStream(manager.getOutputStream());
@@ -56,19 +59,30 @@ public class SpielAnfrage extends Thread{
             chibis[i].setBackground(standard);
         }
         try {
-            gegnerName=din.readUTF(); //gegner name
-            meinName=din.readUTF(); //spieler name
-            spielAuswahl=din.readBoolean(); //spiel
-            feldGroesse=din.readInt(); // feldgröße
-            spielfigur=din.readInt(); // spielfigur
-            din.readInt(); // zug x bleibt leer
-            din.readInt(); //zug y bleibt leer
-            System.out.println("read it");
+            while(din.available()==0) {
+                if(!spielAnfrageLäuft){
+                    return;                     //springt aus run method
+                }
+            }
+                gegnerName = din.readUTF(); //gegner name
+                meinName = din.readUTF(); //spieler name
+                spielAuswahl = din.readBoolean(); //spiel
+                feldGroesse = din.readInt(); // feldgröße
+                spielfigur = din.readInt(); // spielfigur
+                din.readInt(); // zug x bleibt leer
+                din.readInt(); //zug y bleibt leer
+                System.out.println("read it");
+            if(spielAuswahl){
+                anzeigeLabel.setText(gegnerName+", du wirst von "+meinName+" zu Vier Gewinnt herausgefordert");
+            }else{
+                anzeigeLabel.setText(gegnerName+", du wirst von "+meinName+" zu Chomp herausgefordert");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         chibis[spielfigur].setBackground(disabled);
-        chibis[spielfigur].setEnabled(false);            //vom Gegner gewählte Spielfigur
+        chibis[spielfigur].setEnabled(false); //vom Gegner gewählte Spielfigur
+            int stopp8=1;
         annehmenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,12 +99,16 @@ public class SpielAnfrage extends Thread{
                             yeet.writeInt(zugX);
                             yeet.writeInt(zugY);
                             //yeet.writeObject(new Spieldaten("Akzeptiert", i));
+                            int stopp1=1;
                             if (spielAuswahl) {
-                               VierGewinnt four=new VierGewinnt(new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur));
+                               VierGewinnt four=new VierGewinnt(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), true, me); //neu: manager
                                 four.start();
+
                             } else {
-                                Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]),true);
+                                Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]),true, me);
+                                int stopp2=1;
                                 chompsky.start();
+
                             }
                         } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();
@@ -119,64 +137,12 @@ public class SpielAnfrage extends Thread{
             }
         });
 
-            if(spielAuswahl){
-                anfrageText.setText(" fordert dich zu Vier Gewinnt heraus!");
-            }
-            else anfrageText.setText(" fordert dich zu Chomp heraus!");
-
         frame.setResizable(false);
         frame.setVisible(true);
         warteschleife=true;
-        /*while (true) {
-            try {
-                reply=(Spieldaten) oin.readObject();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            if (sd.isSpiel()) {
+        //}
 
-            } else {
-                new Chomp(new Spieler(sd.getHerausgeforderter(), true), new Spieler(sd.getName(), true), new ChompFeld(new int[sd.getFeld()/2][sd.getFeld()]));
-            }
-        }*/
     }
-    //für herausforderer:
-    /*public void spielStart(Spieldaten anfangsStats) throws IOException, ClassNotFoundException { //Anfangsdaten für Spielerstellung werden über GameConnection and anderen Spieler geschickt
-        yeet.writeObject(anfangsStats);
-        frame.setVisible(true);
-        //yeet.writeUTF("YES");
-        Spieldaten reply=(Spieldaten)oin.readObject();
-        if(reply.getMessage().equals("Abgelehnt")){
-           // frame = new JFrame("SpielAnfrage");
-            //frame.setContentPane(this.rootPanel);
-            //frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            panelAlles.setVisible(false);
-            anzeigeLabel.setText("Anfrage abgelehnt!");
-            ablehnenButton.setVisible(false);
-            //frame.pack();
-
-            while(true) {
-                if (annehmenButton.getModel().isPressed()) { //hier vllt fehler
-                    frame.dispose();
-                }
-            }
-        }
-        if(reply.getMessage().equals("Akzeptiert")){
-            if(anfangsStats.isSpiel()){
-                startVierGewinnt(anfangsStats.getHerausgeforderter(), anfangsStats.getName(), reply.getChibiZahlGrau(), anfangsStats.getChibiZahlGrau());
-            }else {
-                startChomp(anfangsStats.getHerausgeforderter(), anfangsStats.getName(), reply.getChibiZahlGrau(), anfangsStats.getChibiZahlGrau(), anfangsStats.getFeld(), false);
-            }
-        }
-    }
-    public void startVierGewinnt(String readyPlayer1, String readyPlayer2, int figur1, int figur2){
-        new VierGewinnt(new Spieler(readyPlayer1, true, figur1), new Spieler(readyPlayer2, true, figur2));
-    }
-    public void startChomp(String readyplayer1, String readyplayer2, int figur1, int figur2, int feldSize, boolean beginner) throws IOException, ClassNotFoundException {
-        new Chomp(manager, new Spieler(readyplayer1, true, figur1), new Spieler(readyplayer2, true, figur2), new ChompFeld(new int[feldSize/2][feldSize]), beginner);
-    }*/
 
     public void plsWok(){
         System.out.println("I'm woking");
@@ -196,8 +162,8 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 chocolaButton.setBackground(choose);
-                chibis[spielfigur].setBackground(Color.GRAY);
-                chibis[spielfigur].setEnabled(false);            //Warum machst du das hier und in jedem Listener?
+                chibis[spielfigur].setBackground(disabled);
+                chibis[spielfigur].setEnabled(false);
             }
         });
         vanillaButton.addActionListener(new ActionListener() {
@@ -207,7 +173,7 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 vanillaButton.setBackground(choose);
-                chibis[spielfigur].setBackground(Color.GRAY);
+                chibis[spielfigur].setBackground(disabled);
                 chibis[spielfigur].setEnabled(false);
             }
         });
@@ -218,7 +184,7 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 coconutButton.setBackground(choose);
-                chibis[spielfigur].setBackground(Color.GRAY);
+                chibis[spielfigur].setBackground(disabled);
                 chibis[spielfigur].setEnabled(false);
             }
         });
@@ -229,7 +195,7 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 cinnamonButton.setBackground(choose);
-                chibis[spielfigur].setBackground(Color.GRAY);
+                chibis[spielfigur].setBackground(disabled);
                 chibis[spielfigur].setEnabled(false);
             }
         });
@@ -240,7 +206,7 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 mapleButton.setBackground(choose);
-                chibis[spielfigur].setBackground(Color.GRAY);
+                chibis[spielfigur].setBackground(disabled);
                 chibis[spielfigur].setEnabled(false);
             }
         });
@@ -251,7 +217,7 @@ public class SpielAnfrage extends Thread{
                     chibis[i].setBackground(standard);
                 }
                 azukiButton.setBackground(choose);
-                chibis[spielfigur].setBackground(Color.GRAY);
+                chibis[spielfigur].setBackground(disabled);
                 chibis[spielfigur].setEnabled(false);
             }
         });

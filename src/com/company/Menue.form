@@ -241,7 +241,7 @@
             <properties>
               <foreground color="-10017441"/>
               <horizontalAlignment value="0"/>
-              <text value="Wähle deine Spielfigur:"/>
+              <text value="wähle deine Spielfigur:"/>
             </properties>
           </component>
           <component id="46b81" class="javax.swing.JButton" binding="chocolaButton">

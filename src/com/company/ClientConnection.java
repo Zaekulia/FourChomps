@@ -12,13 +12,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientConnection extends Thread{
-    boolean shouldRun=true;
+    private boolean shouldRun=true;
     //boolean angemeldet;
     private String meinName;
     protected Color highlight=new Color(187,187,187);
     protected Color shadow=new Color(103,37,95);
     protected Border border=BorderFactory.createEtchedBorder(highlight, shadow);
-    ArrayList<String> aktiveNutzer=new ArrayList<>();
+    protected ArrayList<String> aktiveNutzer=new ArrayList<>();
     private Socket s;
     private Socket manager;
     private DataInputStream din;
@@ -42,6 +42,7 @@ public class ClientConnection extends Thread{
         chatFrame.setVisible(true);
         userListArea.setBorder(border);
         chatArea.setBorder(border);
+        spielerName.setText(meinName);
         //userListArea.setBorder();
         //chatArea.createLineBorder()
         chatField.addKeyListener(new KeyListener() {
@@ -165,5 +166,6 @@ public class ClientConnection extends Thread{
     protected JButton sendButton;
     protected JPanel rootPanel;
     private JButton spielenButton;
+    private JLabel spielerName;
     protected JFrame chatFrame;
 }

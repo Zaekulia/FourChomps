@@ -1,5 +1,14 @@
 package com.company;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket; //neu
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -8,18 +17,146 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
     private boolean win=false;
     private int chibiZahl;
     private int sieg=0;
+    private JPanel rootPanel;
+    private JPanel winPanel;
+    private JButton a1Button;
+    private JButton a2Button;
+    private JButton a3Button;
+    private JButton a4Button;
+    private JButton a5Button;
+    private JButton a6Button;
+    private JButton a7Button;
+    private JLabel anzeige;
+    private int i;
+    private int j;
+    private int lenght =winPanel.getComponents().length;
+    int wide;
+    int high;
+    private  SpielAnfrage spa;
+    private JLabel[][]labelArray =new JLabel[6][7];
+    private Socket manager; //neu
+    private  DataInputStream din; //neu
+    private  DataOutputStream yeet; //neu
 
-    public VierGewinnt(Spieler alpha, Spieler beta){
+    private Color leer= new Color(128,187,183);
+    private Color voll=new Color (128, 187, 182);
+
+    public VierGewinnt(Socket manager, Spieler alpha, Spieler beta, boolean anfänger, SpielAnfrage spa){ //neu: Socket manager
+        JFrame frame = new JFrame("FourForm");
+        frame.setContentPane(rootPanel);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
         this.setA(alpha);
         this.setB(beta);
         this.setAbyss(new VierFeld());
+        this.spa=spa;
+        this.manager=manager; //neu
+        //neu von
+        Component[] myComps = winPanel.getComponents();
+        // hier
+        for(i=0;i<myComps.length;i++){
+            labelArray[i/7][i%7]=(JLabel) myComps[i];
+        }
+        for(i=0;i<labelArray.length;i++){
+            for(j=0; j<labelArray[i].length; j++) {
+                labelArray[i][j].setBackground(leer);
+                labelArray[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+            }
+        }
+        //neu bis
+        a1Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(anfänger){
+                    zug(getA(),new Spielzug(0,1));
+                }else{
+                    zug(getB(),new Spielzug(0,1));
+                }
+            }
+        });
+        a2Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(anfänger){
+                    zug(getA(),new Spielzug(0,2));
+                }else{
+                    zug(getB(),new Spielzug(0,2));
+                }
+            }
+        });
+
+        a3Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(anfänger){
+                    zug(getA(),new Spielzug(0,3));
+                }else{
+                    zug(getB(),new Spielzug(0,3));
+                }
+            }
+        });
+        a4Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(anfänger){
+                    zug(getA(),new Spielzug(0,4));
+                }else{
+                    zug(getB(),new Spielzug(0,4));
+                }
+            }
+        });
+        a5Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(anfänger){
+                    zug(getA(),new Spielzug(0,5));
+                }else{
+                    zug(getB(),new Spielzug(0,5));
+                }
+            }
+        });
+        a6Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(anfänger){
+                    zug(getA(),new Spielzug(0,6));
+                }else{
+                    zug(getB(),new Spielzug(0,6));
+                }
+            }
+        });
+        a7Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(anfänger){
+                    zug(getA(),new Spielzug(0,7));
+                }else{
+                    zug(getB(),new Spielzug(0,7));
+                }
+            }
+        });
     }
+
+    public void run(){
+        try {
+            din = new DataInputStream(manager.getInputStream()); //neu
+            yeet = new DataOutputStream(manager.getOutputStream()); //neu
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Spielzug spilzug = new Spielzug(0, 0);
+        if(!getA().isMensch()){ //& !anfänger ?
+            zug(getA(), new Spielzug(0,0));
+        }
+    }
+
     @Override
     public void zug(Spieler spiler, Spielzug spielzug) {
         Scanner sc=new Scanner(System.in);
         int eingabe=spielzug.spalte;
         boolean x=true;
-        if (spiler.isMensch()){
+        /*if (spiler.isMensch()){
             this.getAbyss().showField();
             System.out.println("In welcher Spalte soll der Stein platziert werden? ");
             do {
@@ -37,8 +174,8 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                 eingabe=sc.nextInt();
             }
             if (eingabe==sieg)sieg=0;
-        }
-        else{
+        }*/
+        if(!spiler.isMensch()){
             if (getAbyss().getFeldgroesse()[5][3]==0)eingabe=4;
             else if (sieg!=0) {
                 eingabe=sieg;
@@ -54,22 +191,47 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
             if(this.getAbyss().getFeldgroesse()[i][eingabe-1]==0){
                 if (spiler == getA()) {
                     this.getAbyss().getFeldgroesse()[i][eingabe-1] = 1;
+                    //HIER
+                    labelArray[i][eingabe-1].setIcon(new ImageIcon(spiler.getSpielstein())); //lädt bilder
+                    labelArray[i][eingabe-1].setBackground(voll);
                     win=scan(i,eingabe-1,1);
                     if (win) {
                         this.getAbyss().showField();
-                        System.out.println("Glückwunsch Spieler A! Du hast gewonnen!");
+                        anzeige.setText("Glückwunsch "+getA().getUsername()+", du hast gewonnen!"); //neu hier
+                        a1Button.setEnabled(false);
+                        a2Button.setEnabled(false);
+                        a3Button.setEnabled(false);
+                        a4Button.setEnabled(false);
+                        a5Button.setEnabled(false);
+                        a6Button.setEnabled(false);
+                        a7Button.setEnabled(false);
+                        spa.run(); //reanimiert spielanfrage
+                        //System.out.println("Glückwunsch Spieler A! Du hast gewonnen!");
                     }
                     if (sieg==0)sieg=catEye(i,eingabe-1,1);
                 }
                 if (spiler == getB()) {
                     this.getAbyss().getFeldgroesse()[i][eingabe-1] = 2;
+                    labelArray[i][eingabe-1].setIcon(new ImageIcon(spiler.getSpielstein())); //lädt bilder
+                    labelArray[i][eingabe-1].setBackground(voll);
                     win=scan(i,eingabe-1,2);
                     if (win) {
                         this.getAbyss().showField();
-                        System.out.println("Glückwunsch Spieler B! Du hast gewonnen!");
+                        anzeige.setText("Glückwunsch "+getB().getUsername()+", du hast gewonnen!"); //neu hier
+                        a1Button.setEnabled(false);
+                        a2Button.setEnabled(false);
+                        a3Button.setEnabled(false);
+                        a4Button.setEnabled(false);
+                        a5Button.setEnabled(false);
+                        a6Button.setEnabled(false);
+                        a7Button.setEnabled(false);
+                        spa.run(); //reanimiert spielanfrage
                     }
                     int ce=catEye(i,eingabe-1,2);
                     if (ce!=0) sieg=ce;
+                    if(!getA().isMensch()){
+                        zug(getA(), new Spielzug(0,0));
+                    }
                 }
                 if (!win) {
                     win=true;
@@ -78,7 +240,16 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                             win=false;
                         }
                     }
-                    if (win)System.out.println("Unentschieden! Keiner gewinnt.");
+                    if (win){ anzeige.setText("Unentschieden! Keiner gewinnt.");
+                        a1Button.setEnabled(false);
+                        a2Button.setEnabled(false);
+                        a3Button.setEnabled(false);
+                        a4Button.setEnabled(false);
+                        a5Button.setEnabled(false);
+                        a6Button.setEnabled(false);
+                        a7Button.setEnabled(false);
+                        spa.run(); //reanimiert spielanfrage
+                    }
                 }
                 this.ziehen(new Spielzug(i,eingabe-1));
                 break;

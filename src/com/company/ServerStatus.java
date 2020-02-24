@@ -15,6 +15,4 @@ public class ServerStatus {
         frame.pack();
         frame.setVisible(true);
     }
-
-
 }

@@ -1,20 +1,34 @@
 package com.company;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Scanner;
+import java.io.*;
+import java.net.Socket;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.*;
 import java.awt.*;
 
 public class Chomp extends Spiel implements Protokollierbar {
     private boolean shouldRun=true; //Glücksbringer
-    private JPanel rootPanel;
-    private JPanel feldPanel;
+    private boolean anfänger;
+    private int m,n;
     private JButton[][] chompOmp =new JButton[10][20];
-    boolean a;
-    int m,n;
-    public Chomp(Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger){
-        a=anfänger;
+    private DataInputStream din;
+    private DataOutputStream yeet;
+    private Socket manager;
+    private Color standard = new Color(163, 184, 204);
+    private Color belegt=new Color(163, 184, 205);
+    private ActionListener[][] aktionen=new ActionListener[10][20];
+    private  SpielAnfrage spa;
+
+    public Chomp(Socket manager, Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger, SpielAnfrage spa) throws IOException, ClassNotFoundException {
+        JFrame frame = new JFrame("Chomps");
+        frame.setContentPane(rootPanel);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+        this.anfänger=anfänger;
+        this.spa=spa;
+        this.manager=manager;
         this.setA(alpha);
         this.setB(beta);
         this.setAbyss(cf);
@@ -25,34 +39,78 @@ public class Chomp extends Spiel implements Protokollierbar {
         for (int i = 0; i < cf.getFeldgroesse().length;i++) {
             for (int j = 0; j < cf.getFeldgroesse()[i].length; j++) {
                 chompOmp[i][j].setVisible(true);
+                chompOmp[i][j].setHorizontalAlignment(SwingConstants.CENTER);
             }
         }
-        JFrame frame = new JFrame("Chomps");
-        frame.setContentPane(rootPanel);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+        if (getA().isMensch() && getB().isMensch()) {
+            //Spieldaten sd = (Spieldaten) oin.readObject();
+        }
+        //horche nach fehlenden Informationen, e.g. chibi vom gegner
+        //ki verschieben
+        //disablen nach zug
         for (int i=0; i < 200; i++) {
             m=i/20;n=i%20;
-            chompOmp[i/20][i%20].addActionListener(new ActionListener() {
+            Integer zei=new Integer(m);
+            Integer spal=new Integer(n);
+            aktionen[i/20][i%20]=new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    if (anfänger) {
-                        zug(getA(), new Spielzug(m, n));
-                    } else {
-                        zug(getB(), new Spielzug(m, n));
+                    if (!chompOmp[zei.intValue()][spal.intValue()].getBackground().equals(belegt)) {
+                        if (anfänger) {
+                            zug(getA(), new Spielzug(zei.intValue()+1, spal.intValue()+1));
+                        } else {
+                            zug(getB(), new Spielzug(zei.intValue()+1, spal.intValue()+1));
+                        }
                     }
                 }
-            });
-            if (!anfänger) {
-                chompOmp[i/20][i%20].setEnabled(false);
-            }
+            };
+            chompOmp[i/20][i%20].addActionListener(aktionen[i/20][i%20]);
+            if (!anfänger & getA().isMensch()) {
+                //for (i = 0; i < 200;i++) {
+                        chompOmp[i/20][i%20].setEnabled(false);
+                }
+                //zug(getA(),new Spielzug(0,0));
+            //}
         }
-
-
+        if (!anfänger & !getA().isMensch()) {
+            //chompOmp[i/20][i%20].setEnabled(false);
+            zug(getA(),new Spielzug(0,0));
+        }
     }
+    public void run(){
+        try {
+            din = new DataInputStream(manager.getInputStream());
+            yeet = new DataOutputStream(manager.getOutputStream());
+            Spielzug spilzug = new Spielzug(0, 0);
+            while (true) {
+                din.readUTF(); //gegner name
+                din.readUTF(); //spieler name
+                din.readBoolean(); //spiel
+                din.readInt(); // feldgröße
+                din.readInt(); // spielfigur
+                spilzug.zeile = din.readInt(); // zug x
+                spilzug.spalte = din.readInt(); //zug y
+                if (anfänger) {
+                    zug(getB(), spilzug);
+                } else {
+                    zug(getA(), spilzug);
+                }
+                for (int i = 0; i < getAbyss().getFeldgroesse().length; i++) {
+                    for (int j = 0; j < getAbyss().getFeldgroesse()[i].length; j++) {
+                        if (getAbyss().getFeldgroesse()[i][j] == 0) {
+                            chompOmp[i][j].setEnabled(true);
+                            chompOmp[i][j].addActionListener(aktionen[i][j]);
+                        }
+                    }
+                }
+            } //ende while schleife
+            } catch(IOException e){
+                e.printStackTrace();
+            }
+    }
+
     @Override
-    public void zug(Spieler spiler, Spielzug spielzug) {
+    public void zug(Spieler spiler, Spielzug spielzug){
         if (!spiler.isMensch()) {
             int eingabeS,eingabeZ;
             try {
@@ -103,30 +161,128 @@ public class Chomp extends Spiel implements Protokollierbar {
             spielzug.spalte=eingabeS;spielzug.zeile=eingabeZ;
         }
         this.ziehen(spielzug);
-                if (spielzug.zeile == 1 & spielzug.spalte == 1) {
-                    //Nachricht dass gewonnen
-                    return;
+        if (spielzug.zeile == 1 & spielzug.spalte == 1) {
+            for (int i = this.getAbyss().getFeldgroesse().length-1; i >= spielzug.zeile-1; i--) {
+                int j = spielzug.spalte-1;
+                while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
+                    this.getAbyss().getFeldgroesse()[i][j] = 1;
+                    chompOmp[i][j].setIcon(new ImageIcon(spiler.getSpielstein()));
+                    chompOmp[i][j].setDisabledIcon(new ImageIcon(spiler.getSpielstein()));
+                    chompOmp[i][j].setEnabled(false); //Bild laden
+                    j++;
                 }
-                if (spiler == getA()) {
-                    for (int i = this.getAbyss().getFeldgroesse().length-1; i >= spielzug.zeile-1; i--) {
-                        int j = spielzug.spalte-1;
-                        while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
-                            this.getAbyss().getFeldgroesse()[i][j] = 1;
-                            //Bild laden
-                            j++;
-                        }
+            }
+           for(int i=0; i<200; i++){
+                chompOmp[i/20][i%20].setEnabled(false); //einer setzt oben links
+            }
+            anzeigeIstRaus.setText(spiler.getUsername()+" hat verloren!");
+            if((anfänger & spiler==getA())|(spiler==getB() & !anfänger)){ //HIER AUFGEHÖRT
+                try {
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeBoolean(true);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(spielzug.zeile);
+                    yeet.flush();
+                    yeet.writeInt(spielzug.spalte);
+                    yeet.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < 200;i++) {
+                    if (getA().isMensch() && getB().isMensch()){
+                        chompOmp[i/20][i%20].setEnabled(false); //if anweisung neu
                     }
                 }
-                if (spiler == getB()) {
-                    for (int i = this.getAbyss().getFeldgroesse().length-1; i >= spielzug.zeile-1; i--) {
-                        int j = spielzug.spalte-1;
-                        while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
-                            this.getAbyss().getFeldgroesse()[i][j] = 2;
-                            //Bild laden
-                            j++;
-                        }
+            }
+            spa.start(); //reanimiert spielanfrage (start statt run)
+            return;
+        }
+        if (spiler == getA()) {
+            for (int i = this.getAbyss().getFeldgroesse().length-1; i >= spielzug.zeile-1; i--) {
+                int j = spielzug.spalte-1;
+                while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
+                    this.getAbyss().getFeldgroesse()[i][j] = 1;
+                    chompOmp[i][j].setIcon(new ImageIcon(getA().getSpielstein()));
+                    chompOmp[i][j].setDisabledIcon(new ImageIcon(getA().getSpielstein())); //Bild laden
+                    chompOmp[i][j].setEnabled(false);
+                    j++;
+                }
+            }
+            getAbyss().showField();
+            if(anfänger){
+                try {
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeBoolean(true);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(spielzug.zeile);
+                    yeet.flush();
+                    yeet.writeInt(spielzug.spalte);
+                    yeet.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < 200;i++) {
+                    if (getA().isMensch() && getB().isMensch()){
+                        chompOmp[i/20][i%20].setEnabled(false); //if anweisung neu
                     }
                 }
+            }
+        }
+        if (spiler == getB()) {
+            for (int i = this.getAbyss().getFeldgroesse().length-1; i >= spielzug.zeile-1; i--) {
+                int j = spielzug.spalte-1;
+                while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
+                    this.getAbyss().getFeldgroesse()[i][j] = 2;
+                    chompOmp[i][j].setIcon(new ImageIcon(getB().getSpielstein()));
+                    chompOmp[i][j].setDisabledIcon(new ImageIcon(getB().getSpielstein())); //Bild laden
+                    chompOmp[i][j].setEnabled(false);
+                    j++;
+                }
+            }
+            if(!getA().isMensch()){
+                zug(getA(), new Spielzug(0,0));
+            }
+            getAbyss().showField();
+            if(!anfänger){
+                try {
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeBoolean(true);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(spielzug.zeile);
+                    yeet.flush();
+                    yeet.writeInt(spielzug.spalte);
+                    yeet.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < 200;i++) {
+                    if (getA().isMensch() && getB().isMensch()){
+                        chompOmp[i/20][i%20].setEnabled(false); //if anweisung neu
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -143,6 +299,8 @@ public class Chomp extends Spiel implements Protokollierbar {
         return spielzuege.pop();
     }
 
+    private JPanel rootPanel;
+    private JPanel feldPanel;
     private JButton button1;
     private JButton button2;
     private JButton button3;
@@ -343,7 +501,5 @@ public class Chomp extends Spiel implements Protokollierbar {
     private JButton button198;
     private JButton button199;
     private JButton button200;
-    private JTextField textField1;
-    private JButton sendenButton;
-    private JTextArea textArea1;
+    private JLabel anzeigeIstRaus;
 }

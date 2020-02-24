@@ -10,16 +10,15 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 public class Client {
-    private boolean shouldRun=true; //Glücksbringer
-    ClientConnection cc;
-    Socket s;
-    DataOutputStream dout;
-    DataInputStream din;
+    protected ClientConnection cc;
+    protected Socket s;
+    private DataOutputStream dout;
+    private DataInputStream din;
 
     public Client(){
         try{
-            manager=new Socket("localhost", 4999);
-            s=new Socket("localhost",5000);
+            s=new Socket("localhost", 4999);
+            manager=new Socket("localhost",5000);
             din = new DataInputStream(s.getInputStream());
             dout=new DataOutputStream(s.getOutputStream());
             me=this;

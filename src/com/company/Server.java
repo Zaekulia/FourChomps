@@ -8,17 +8,13 @@ import java.util.Scanner;
 import java.lang.*;
 
 public class Server {
-    private boolean shouldRun=true; //Glücksbringer
-    protected JTextArea ActiveNutzer;
-    protected JPanel rootPanel;
-    protected JTextArea ServerStatus;
-    protected JFrame serverFrame;
-    ServerSocket ss;
-    Scanner scanner=new Scanner(System.in);
+    private boolean shouldRun=true;
+    private ServerSocket ss;
+    private ServerSocket sm;
+    protected Scanner scanner=new Scanner(System.in);
 	private Spieler[] nutzerliste=new Spieler[100];
-    ArrayList<String> aktiveNutzer=new ArrayList<>();
-    ArrayList<ServerConnection> connections =new ArrayList<ServerConnection>();
-    ArrayList<GameConnection[]> matches=new ArrayList<GameConnection[]>();
+    protected ArrayList<ServerConnection> connections =new ArrayList<ServerConnection>();
+    protected ArrayList<GameConnection[]> matches=new ArrayList<GameConnection[]>();
     public Spieler[] getNutzerliste() {
         return nutzerliste;
     }
@@ -32,9 +28,11 @@ public class Server {
             Killer killer=new Killer(this);
             killer.start();
             ss=new ServerSocket(4999);
+            sm=new ServerSocket(5000);
             while(true){
                 Socket s=ss.accept();
-                ServerConnection sc=new ServerConnection (s, this);
+                Socket manager=sm.accept();
+                ServerConnection sc=new ServerConnection (s,manager, this); //+manager
                 sc.start();
                 connections.add(sc);
             }
@@ -42,17 +40,12 @@ public class Server {
             //e.printStackTrace();
         }
     }
-    public void showAktiveNutzer() {
-        ActiveNutzer.setText("");
-        ActiveNutzer.append("Aktive Nutzer:\n");
-        try {
-            for (int i = 0; i < aktiveNutzer.size(); i++) {
-                ActiveNutzer.append("   "+aktiveNutzer.get(i)+"\n");
-            }
-        } catch (NullPointerException npe) {
-        }
-    }
     public static void main(String[] args) {
         new Server();
     }
+
+    protected JTextArea ActiveNutzer;
+    protected JPanel rootPanel;
+    protected JTextArea ServerStatus;
+    protected JFrame serverFrame;
 }

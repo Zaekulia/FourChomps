@@ -18,7 +18,6 @@ public class GameConnection extends Thread {
     private int zugY=0;
 
     public GameConnection(Socket manager, Server server, int position) {
-        super("GameConnectionThread");
         this.manager=manager;
         this.server=server;
         this.position=position;
@@ -64,6 +63,7 @@ public class GameConnection extends Thread {
         try {
             din=new DataInputStream(new BufferedInputStream(manager.getInputStream()));
             yeet=new DataOutputStream(manager.getOutputStream());
+            int stopp7=1;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -100,7 +100,7 @@ public class GameConnection extends Thread {
                 zugY=din.readInt();
                 System.out.println("got it");
                 int gegnerPosition=0;
-                for (int i = 0; i <server.connections.size(); i++) {
+                for (int i = 0; i < server.connections.size(); i++) {
                     if (server.connections.get(i).nutzername.equals(gegnerName)) {
                         gegnerPosition = i;
                         break;
@@ -116,7 +116,6 @@ public class GameConnection extends Thread {
                     //sendMessageToEnemy();
                 }
                 this.sleep(100);
-                System.out.println("teszt");
                 sendMessageToEnemy();
                 System.out.println("sent to enemy");
 
