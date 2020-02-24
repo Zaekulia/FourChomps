@@ -60,6 +60,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
         for(i=0;i<labelArray.length;i++){
             for(j=0; j<labelArray[i].length; j++) {
                 labelArray[i][j].setBackground(leer);
+                labelArray[i][j].setHorizontalAlignment(SwingConstants.CENTER);
             }
         }
         //neu bis
@@ -224,7 +225,6 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         a6Button.setEnabled(false);
                         a7Button.setEnabled(false);
                         spa.run(); //reanimiert spielanfrage
-                        //System.out.println("Glückwunsch Spieler B! Du hast gewonnen!");
                     }
                     int ce=catEye(i,eingabe-1,2);
                     if (ce!=0) sieg=ce;
@@ -239,7 +239,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                             win=false;
                         }
                     }
-                    if (win){ anzeige.setText("Unentschieden! Keiner gewinnt.");//System.out.println("Unentschieden! Keiner gewinnt.");
+                    if (win){ anzeige.setText("Unentschieden! Keiner gewinnt.");
                         a1Button.setEnabled(false);
                         a2Button.setEnabled(false);
                         a3Button.setEnabled(false);

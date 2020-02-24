@@ -39,6 +39,7 @@ public class Chomp extends Spiel implements Protokollierbar {
         for (int i = 0; i < cf.getFeldgroesse().length;i++) {
             for (int j = 0; j < cf.getFeldgroesse()[i].length; j++) {
                 chompOmp[i][j].setVisible(true);
+                chompOmp[i][j].setHorizontalAlignment(SwingConstants.CENTER);
             }
         }
         if (getA().isMensch() && getB().isMensch()) {
