@@ -165,5 +165,6 @@ public class ClientConnection extends Thread{
     protected JButton sendButton;
     protected JPanel rootPanel;
     private JButton spielenButton;
+    private JLabel spielerName;
     protected JFrame chatFrame;
 }

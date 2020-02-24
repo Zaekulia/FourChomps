@@ -1,27 +1,25 @@
 package com.company;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.*;
 import java.awt.*;
 
 public class Chomp extends Spiel implements Protokollierbar {
     private boolean shouldRun=true; //Glücksbringer
-    boolean a;
+    boolean anfänger;
     int m,n;
     private JButton[][] chompOmp =new JButton[10][20];
-    private ObjectInputStream oin;
-    private ObjectOutputStream yeet;
+    private DataInputStream din;
+    private DataOutputStream yeet;
     private Socket manager;
     private Color standard = new Color(163, 184, 204);
     private Color belegt=new Color(163, 184, 205);
-    private ActionListener nein;
+    private ActionListener[][] aktionen=new ActionListener[10][20];
     private  SpielAnfrage spa;
+
 
     public Chomp(Socket manager, Spieler alpha, Spieler beta, ChompFeld cf, Boolean anfänger, SpielAnfrage spa) throws IOException, ClassNotFoundException {
         JFrame frame = new JFrame("Chomps");
@@ -29,7 +27,7 @@ public class Chomp extends Spiel implements Protokollierbar {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        a=anfänger;
+        this.anfänger=anfänger;
         this.spa=spa;
         this.manager=manager;
         this.setA(alpha);
@@ -54,20 +52,25 @@ public class Chomp extends Spiel implements Protokollierbar {
             m=i/20;n=i%20;
             Integer zei=new Integer(m);
             Integer spal=new Integer(n);
-            chompOmp[i/20][i%20].addActionListener(new ActionListener() {
+            aktionen[i/20][i%20]=new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    if (anfänger) {
-                        zug(getA(), new Spielzug(zei.intValue()+1, spal.intValue()+1));
-                    } else {
-                        zug(getB(), new Spielzug(zei.intValue()+1, spal.intValue()+1));
+                    if (!chompOmp[zei.intValue()][spal.intValue()].getBackground().equals(belegt)) {
+                        if (anfänger) {
+                            zug(getA(), new Spielzug(zei.intValue()+1, spal.intValue()+1));
+                        } else {
+                            zug(getB(), new Spielzug(zei.intValue()+1, spal.intValue()+1));
+                        }
                     }
                 }
-            });
-            if (!anfänger) {
-                //chompOmp[i/20][i%20].setEnabled(false);
+            };
+            chompOmp[i/20][i%20].addActionListener(aktionen[i/20][i%20]);
+            if (!anfänger & getA().isMensch()) {
+                //for (i = 0; i < 200;i++) {
+                        chompOmp[i/20][i%20].setEnabled(false);
+                }
                 //zug(getA(),new Spielzug(0,0));
-            }
+            //}
         }
         if (!anfänger & !getA().isMensch()) {
             //chompOmp[i/20][i%20].setEnabled(false);
@@ -76,15 +79,38 @@ public class Chomp extends Spiel implements Protokollierbar {
     }
     public void run(){
         try {
-            oin=new ObjectInputStream(manager.getInputStream());
-            yeet=new ObjectOutputStream(manager.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            din = new DataInputStream(manager.getInputStream());
+            yeet = new DataOutputStream(manager.getOutputStream());
+            Spielzug spilzug = new Spielzug(0, 0);
+            while (true) {
+                din.readUTF(); //gegner name
+                din.readUTF(); //spieler name
+                din.readBoolean(); //spiel
+                din.readInt(); // feldgröße
+                din.readInt(); // spielfigur
+                spilzug.zeile = din.readInt(); // zug x
+                spilzug.spalte = din.readInt(); //zug y
+                if (anfänger) {
+                    zug(getB(), spilzug);
+                } else {
+                    zug(getA(), spilzug);
+                }
+                for (int i = 0; i < getAbyss().getFeldgroesse().length; i++) {
+                    for (int j = 0; j < getAbyss().getFeldgroesse()[i].length; j++) {
+                        if (getAbyss().getFeldgroesse()[i][j] == 0) {
+                            chompOmp[i][j].setEnabled(true);
+                            chompOmp[i][j].addActionListener(aktionen[i][j]);
+                        }
+                    }
+                }
+            } //ende while schleife
+            } catch(IOException e){
+                e.printStackTrace();
+            }
     }
 
     @Override
-    public void zug(Spieler spiler, Spielzug spielzug) {
+    public void zug(Spieler spiler, Spielzug spielzug){
         if (!spiler.isMensch()) {
             int eingabeS,eingabeZ;
             try {
@@ -141,15 +167,39 @@ public class Chomp extends Spiel implements Protokollierbar {
                 while (j < this.getAbyss().getFeldgroesse()[i].length && this.getAbyss().getFeldgroesse()[i][j] == 0) {
                     this.getAbyss().getFeldgroesse()[i][j] = 1;
                     chompOmp[i][j].setIcon(new ImageIcon(spiler.getSpielstein()));
+                    chompOmp[i][j].setEnabled(false);
                     //Bild laden
                     j++;
                 }
             }
-            for(int i=0; i<200; i++){
-                chompOmp[i/20][i%20].setEnabled(false);
+           for(int i=0; i<200; i++){
+                chompOmp[i/20][i%20].setEnabled(false); //einer setzt oben links
             }
             anzeigeIstRaus.setText(spiler.getUsername()+" hat verloren!");
-            spa.run(); //reanimiert spielanfrage
+            if((anfänger & spiler==getA())|(spiler==getB() & !anfänger)){ //HIER AUFGEHÖRT
+                try {
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeBoolean(true);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(spielzug.zeile);
+                    yeet.flush();
+                    yeet.writeInt(spielzug.spalte);
+                    yeet.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < 200;i++) {
+                    chompOmp[i/20][i%20].setEnabled(false);
+                }
+            }
+            spa.start(); //reanimiert spielanfrage (start statt run)
             //Nachricht dass gewonnen
             return;
         }
@@ -165,6 +215,29 @@ public class Chomp extends Spiel implements Protokollierbar {
                 }
             }
             getAbyss().showField();
+            if(anfänger){
+                try {
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeBoolean(true);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(spielzug.zeile);
+                    yeet.flush();
+                    yeet.writeInt(spielzug.spalte);
+                    yeet.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < 200;i++) {
+                    chompOmp[i/20][i%20].setEnabled(false);
+                }
+            }
         }
         if (spiler == getB()) {
             for (int i = this.getAbyss().getFeldgroesse().length-1; i >= spielzug.zeile-1; i--) {
@@ -181,6 +254,29 @@ public class Chomp extends Spiel implements Protokollierbar {
                 zug(getA(), new Spielzug(0,0));
             }
             getAbyss().showField();
+            if(!anfänger){
+                try {
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeBoolean(true);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(spielzug.zeile);
+                    yeet.flush();
+                    yeet.writeInt(spielzug.spalte);
+                    yeet.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < 200;i++) {
+                    chompOmp[i/20][i%20].setEnabled(false);
+                }
+            }
         }
     }
 
