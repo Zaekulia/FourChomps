@@ -170,13 +170,16 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                 } else {
                     zug(getA(), spilzug);
                 }
-                a1Button.setEnabled(true);
-                a2Button.setEnabled(true);
-                a3Button.setEnabled(true);
-                a4Button.setEnabled(true);
-                a5Button.setEnabled(true);
-                a6Button.setEnabled(true);
-                a7Button.setEnabled(true);
+                if (!win) {
+                    a1Button.setEnabled(true);
+                    a2Button.setEnabled(true);
+                    a3Button.setEnabled(true);
+                    a4Button.setEnabled(true);
+                    a5Button.setEnabled(true);
+                    a6Button.setEnabled(true);
+                    a7Button.setEnabled(true);
+                }
+
             }
         } catch (IOException e) {
         e.printStackTrace();
@@ -237,7 +240,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         a5Button.setEnabled(false);
                         a6Button.setEnabled(false);
                         a7Button.setEnabled(false);
-                        spa.run(); //reanimiert spielanfrage //funktioniert offenbar doch nicht
+                        //spa.start(); //reanimiert spielanfrage //funktioniert offenbar doch nicht
                         //System.out.println("Glückwunsch Spieler A! Du hast gewonnen!");
                     }
                     if (!spiler.isMensch()&&sieg==0)sieg=catEye(i,eingabe-1,1);
@@ -284,7 +287,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         a5Button.setEnabled(false);
                         a6Button.setEnabled(false);
                         a7Button.setEnabled(false);
-                        spa.run(); //reanimiert spielanfrage
+                        //spa.start(); //reanimiert spielanfrage  //siehe oben
                     }
                     if (!spiler.isMensch()) {
                         int ce=catEye(i,eingabe-1,2);
@@ -337,7 +340,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         a5Button.setEnabled(false);
                         a6Button.setEnabled(false);
                         a7Button.setEnabled(false);
-                        spa.run(); //reanimiert spielanfrage
+                        //spa.start(); //reanimiert spielanfrage  //nicht, aber man kann einfach ne neue machen  //offensichtlich ist hier oben
                     }
                 }
                 this.ziehen(new Spielzug(i,eingabe-1));
