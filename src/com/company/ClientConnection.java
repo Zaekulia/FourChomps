@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class ClientConnection extends Thread{
     private boolean shouldRun=true;
-    //boolean angemeldet;
     private String meinName;
     protected Color highlight=new Color(187,187,187);
     protected Color shadow=new Color(103,37,95);
@@ -43,8 +42,6 @@ public class ClientConnection extends Thread{
         userListArea.setBorder(border);
         chatArea.setBorder(border);
         spielerName.setText(meinName);
-        //userListArea.setBorder();
-        //chatArea.createLineBorder()
         chatField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -129,17 +126,7 @@ public class ClientConnection extends Thread{
                     chatArea.append(reply+"\n");
                     System.out.println(reply);
 
-
-                    /*if (reply.matches("!Anfrage_VG_(.*?)")){
-                        new SpielAnfrage(true,reply.replace("!Anfrage_VG_",""),0).run();
-                    }
-                    else if (reply.matches("!Anfrage_CH_(\\d*)_(.*?)")){ //d für feldgröße
-                        String number=reply.replace("!Anfrage_CCH_","");
-                        new SpielAnfrage(false,reply.replace("!Anfrage_CH_(\\d*)",""),Integer.parseInt(number.replace("_(.*?)","")));
-                    }*/
-
                 }catch (IOException e){
-                    //e.printStackTrace();
                     shouldRun=false;
                     close();
                 }

@@ -199,7 +199,7 @@ public class Chomp extends Spiel implements Protokollierbar {
                 try {
                     yeet.writeUTF("");
                     yeet.flush();
-                    yeet.writeUTF("");
+                    yeet.writeUTF(spiler.getUsername());
                     yeet.flush();
                     yeet.writeBoolean(true);
                     yeet.flush();
@@ -239,7 +239,7 @@ public class Chomp extends Spiel implements Protokollierbar {
                 try {
                     yeet.writeUTF("");
                     yeet.flush();
-                    yeet.writeUTF("");
+                    yeet.writeUTF(spiler.getUsername());
                     yeet.flush();
                     yeet.writeBoolean(true);
                     yeet.flush();
@@ -292,6 +292,9 @@ public class Chomp extends Spiel implements Protokollierbar {
                     yeet.flush();
                     yeet.writeInt(spielzug.spalte);
                     yeet.flush();
+
+                    SpielAnfrage spa=new SpielAnfrage(manager); //startet thread von spielanfrage neu
+                    spa.start();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

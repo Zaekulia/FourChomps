@@ -88,6 +88,9 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                     yeet.flush();
                     yeet.writeInt(1);
                     yeet.flush();
+
+                    SpielAnfrage spa=new SpielAnfrage(manager); //startet thread von spielanfrage neu
+                    spa.start();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -228,25 +231,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
         Scanner sc=new Scanner(System.in);
         int eingabe=spielzug.spalte;
         boolean x=true;
-        /*if (spiler.isMensch()){
-            this.getAbyss().showField();
-            System.out.println("In welcher Spalte soll der Stein platziert werden? ");
-            do {
-                try {
-                    eingabe=sc.nextInt();
-                    if (this.getAbyss().getFeldgroesse()[0][eingabe-1]==0);
-                    x=false;
-                }catch (ArrayIndexOutOfBoundsException e){
-                    System.out.println("Diese Spalte gibt es nicht. Gib eine Spalte zwischen 1 und 7 ein.");
-                }
-            }while (x);
 
-            while (this.getAbyss().getFeldgroesse()[0][eingabe-1]!=0){
-                System.out.println("Diese Spalte ist voll. Wähle eine andere Spalte. ");
-                eingabe=sc.nextInt();
-            }
-            if (eingabe==sieg)sieg=0;
-        }*/
         if(!spiler.isMensch()){
             if (getAbyss().getFeldgroesse()[5][3]==0)eingabe=4;
             else if (sieg!=0) {
@@ -285,7 +270,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         try {
                             yeet.writeUTF("");
                             yeet.flush();
-                            yeet.writeUTF("");
+                            yeet.writeUTF(spiler.getUsername());
                             yeet.flush();
                             yeet.writeBoolean(true);
                             yeet.flush();
@@ -338,7 +323,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         try {
                             yeet.writeUTF("");
                             yeet.flush();
-                            yeet.writeUTF("");
+                            yeet.writeUTF(spiler.getUsername());
                             yeet.flush();
                             yeet.writeBoolean(true);
                             yeet.flush();

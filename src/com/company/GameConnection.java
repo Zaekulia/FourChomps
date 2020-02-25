@@ -63,6 +63,16 @@ public class GameConnection extends Thread {
         try {
             while(true){
                 gegnerName=din.readUTF();
+                if(gegnerName.equals("RageQuit")){
+                    for(int i=0; i<server.matches.size();i++) {
+                        server.matchesList.setText(server.matchesList.getText().replace(meinName+ ", " + server.matches.get(i)[1-position].meinName + ": Chomp\n", ""));
+                    }
+                }
+                if(gegnerName.equals("QuitRage")){
+                    for(int i=0; i<server.matches.size();i++) {
+                        server.matchesList.setText(server.matchesList.getText().replace(meinName+", "+server.matches.get(i)[1-position].meinName+": Vier Gewinnt\n", ""));
+                    }
+                }
                 meinName=din.readUTF();
                 spielAuswahl=din.readBoolean();
                 feldGroessse=din.readInt();
@@ -82,16 +92,7 @@ public class GameConnection extends Thread {
                         }
                     }
                 }
-                if(gegnerName.equals("RageQuit")){
-                    for(int i=0; i<server.matches.size();i++) {
-                        server.matchesList.setText(server.matchesList.getText().replace(meinName + ", " + server.matches.get(i)[1-position].meinName + ": Chomp\n", ""));
-                    }
-                }
-                if(gegnerName.equals("QuitRage")){
-                    for(int i=0; i<server.matches.size();i++) {
-                        server.matchesList.setText(server.matchesList.getText().replace(meinName+", "+server.matches.get(i)[1-position].meinName+": Vier Gewinnt\n", ""));
-                    }
-                }
+
                 for (int i = 0; i < server.connections.size(); i++) {
                     if (server.connections.get(i).nutzername.equals(gegnerName)) {
                         gegnerPosition = i;

@@ -127,6 +127,9 @@ public class SpielAnfrage extends Thread{
                     yeet.writeInt(i);
                     yeet.writeInt(zugX);
                     yeet.writeInt(zugY);
+
+                    SpielAnfrage spa=new SpielAnfrage(manager);
+                    spa.start();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

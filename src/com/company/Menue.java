@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -44,7 +46,14 @@ public class Menue extends Thread {
         for (int i = 0; i < aktiveNutzer.size(); i++) {
             gegenSpieler.addItem(aktiveNutzer.get(i));        //füllen mit Namen der aktiven Nutzer
         }
-        anzeige.setText(meinName+", wähle deine Spielfigur");
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                SpielAnfrage spa=new SpielAnfrage(manager);
+                spa.start();
+            }
+        });
+        anzeige.setText(meinName + ", wähle deine Spielfigur");
         frame.setVisible(true);
         frame.setResizable(false);
     }
