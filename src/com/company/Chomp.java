@@ -1,6 +1,8 @@
 package com.company;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.ThreadLocalRandom;
@@ -42,12 +44,32 @@ public class Chomp extends Spiel implements Protokollierbar {
                 chompOmp[i][j].setHorizontalAlignment(SwingConstants.CENTER);
             }
         }
-        if (getA().isMensch() && getB().isMensch()) {
-            //Spieldaten sd = (Spieldaten) oin.readObject();
-        }
-        //horche nach fehlenden Informationen, e.g. chibi vom gegner
-        //ki verschieben
-        //disablen nach zug
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    yeet.writeUTF("RageQuit");
+                    yeet.flush();
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeBoolean(true);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(1);
+                    yeet.flush();
+                    yeet.writeInt(1);
+                    yeet.flush();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+
         for (int i=0; i < 200; i++) {
             m=i/20;n=i%20;
             Integer zei=new Integer(m);
@@ -69,11 +91,8 @@ public class Chomp extends Spiel implements Protokollierbar {
                 //for (i = 0; i < 200;i++) {
                         chompOmp[i/20][i%20].setEnabled(false);
                 }
-                //zug(getA(),new Spielzug(0,0));
-            //}
         }
         if (!anfänger & !getA().isMensch()) {
-            //chompOmp[i/20][i%20].setEnabled(false);
             zug(getA(),new Spielzug(0,0));
         }
     }

@@ -37,7 +37,6 @@ public class Server {
                 connections.add(sc);
             }
         }catch (IOException e){
-            //e.printStackTrace();
         }
     }
     public static void main(String[] args) {
@@ -47,5 +46,6 @@ public class Server {
     protected JTextArea ActiveNutzer;
     protected JPanel rootPanel;
     protected JTextArea ServerStatus;
+    protected JTextArea matchesList;
     protected JFrame serverFrame;
 }

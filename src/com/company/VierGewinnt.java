@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -67,6 +69,32 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
             }
         }
         //neu bis
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    yeet.writeUTF("QuitRage");
+                    yeet.flush();
+                    yeet.writeUTF("");
+                    yeet.flush();
+                    yeet.writeBoolean(true);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(0);
+                    yeet.flush();
+                    yeet.writeInt(1);
+                    yeet.flush();
+                    yeet.writeInt(1);
+                    yeet.flush();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+
         a1Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -158,7 +186,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                 zug(getA(), new Spielzug(0,0));
             }
             while (true) {
-                din.readUTF(); //gegner name
+                String update=din.readUTF(); //falls jemand das spiel verlässt
                 din.readUTF(); //spieler name
                 din.readBoolean(); //spiel
                 din.readInt(); // feldgröße
@@ -170,6 +198,16 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                 } else {
                     zug(getA(), spilzug);
                 }
+                if(update.equals("QuitRage")){
+                    a1Button.setEnabled(false);
+                    a2Button.setEnabled(false);
+                    a3Button.setEnabled(false);
+                    a4Button.setEnabled(false);
+                    a5Button.setEnabled(false);
+                    a6Button.setEnabled(false);
+                    a7Button.setEnabled(false);
+                    anzeige.setText("Dein Gegner hat das Spiel verlassen.");
+                }
                 if (!win) {
                     a1Button.setEnabled(true);
                     a2Button.setEnabled(true);
@@ -179,7 +217,6 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                     a6Button.setEnabled(true);
                     a7Button.setEnabled(true);
                 }
-
             }
         } catch (IOException e) {
         e.printStackTrace();

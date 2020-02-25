@@ -17,7 +17,6 @@ public abstract class Spiel extends Thread {
         this.seinSpielstein = seinSpielstein;
     }
 
-
     public Image getMeinSpielstein() {
         return meinSpielstein;
     }
@@ -25,8 +24,6 @@ public abstract class Spiel extends Thread {
     public Image getSeinSpielstein() {
         return seinSpielstein;
     }
-
-
 
     public void setA(Spieler a) {
         this.a = a;

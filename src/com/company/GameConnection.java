@@ -22,14 +22,6 @@ public class GameConnection extends Thread {
         this.server=server;
         this.position=position;
     }
-    public void sendStringToClient(String text){        //ungenutzt da Nachrichtenobjekt
-        try{
-            yeet.writeUTF(text);
-            yeet.flush();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
 
     public void sendMessageToEnemy() throws IOException {
         for(int i=0; i<server.matches.size();i++){
@@ -69,27 +61,6 @@ public class GameConnection extends Thread {
         }
         System.out.println("created");
         try {
-            /*gegnerName=din.readUTF(); //gegner name
-            meinName=din.readUTF(); //spieler name
-            spielAuswahl=din.readBoolean(); //spiel
-            feldGroessse=din.readInt(); // feldgröße
-            spielfigur=din.readInt(); // spielfigur
-            zugX=din.readInt(); // zug x
-            zugY=din.readInt(); // zug y
-            int gegnerPosition=0;
-            for (int i = 0; i < 100; i++) {
-                if (server.connections.get(i).nutzername.equals(gegnerName)) {
-                    gegnerPosition = i;
-                    break;
-                }
-            }
-            for(int i=0; i<server.matches.size();i++){
-                if (server.matches.get(i)[0].equals(this)){
-                    server.matches.get(i)[1]=new GameConnection(server.connections.get(gegnerPosition).manager,server,1);
-                }
-                //sendMessageToEnemy();
-            }
-            sendMessageToEnemy();*/
             while(true){
                 gegnerName=din.readUTF();
                 meinName=din.readUTF();
@@ -100,6 +71,27 @@ public class GameConnection extends Thread {
                 zugY=din.readInt();
                 System.out.println("got it");
                 int gegnerPosition=0;
+                if(gegnerName.equals("Akzeptiert")){                        //udated spielverlauf in server
+                    for(int i=0; i<server.matches.size();i++){
+                        if (server.matches.get(i)[1].equals(this)){
+                            if(spielAuswahl){
+                                server.matchesList.append(meinName+", "+server.matches.get(i)[0].meinName+": Vier Gewinnt\n");
+                            }else{
+                                server.matchesList.append(meinName+", "+server.matches.get(i)[0].meinName+": Chomp\n");
+                            }
+                        }
+                    }
+                }
+                if(gegnerName.equals("RageQuit")){
+                    for(int i=0; i<server.matches.size();i++) {
+                        server.matchesList.setText(server.matchesList.getText().replace(meinName + ", " + server.matches.get(i)[1-position].meinName + ": Chomp\n", ""));
+                    }
+                }
+                if(gegnerName.equals("QuitRage")){
+                    for(int i=0; i<server.matches.size();i++) {
+                        server.matchesList.setText(server.matchesList.getText().replace(meinName+", "+server.matches.get(i)[1-position].meinName+": Vier Gewinnt\n", ""));
+                    }
+                }
                 for (int i = 0; i < server.connections.size(); i++) {
                     if (server.connections.get(i).nutzername.equals(gegnerName)) {
                         gegnerPosition = i;
@@ -113,40 +105,13 @@ public class GameConnection extends Thread {
                             server.matches.get(i)[1].start();
                         }
                     }
-                    //sendMessageToEnemy();
                 }
                 this.sleep(100);
                 sendMessageToEnemy();
                 System.out.println("sent to enemy");
-
-                /*if (reply.getHerausgeforderter() != null) {
-                    int gegnerPosition=0;
-                    for (int i = 0; i < 100; i++) {
-                        if (server.connections.get(i).nutzername.equals(reply.getHerausgeforderter())) {
-                            gegnerPosition = i;
-                            break;
-                        }
-                    }
-                    for(int i=0; i<server.matches.size();i++){
-                        if (server.matches.get(i)[0].equals(this)){
-                            server.matches.get(i)[1]=new GameConnection(server.connections.get(gegnerPosition).manager,server,1);
-                        }
-                        sendMessageToEnemy(reply);
-                    }
-                }// else if (reply.getMessage() != null) {
-                 //   sendMessage(reply);
-                ///
-                else {
-                    sendMessageToEnemy(reply);
-                }}*/
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
-} /*for (int i = 0; i < 100; i++) {
-        if (server.connections.get(i).nutzername.equals(textIn.replace("!Create_Gameconnection_", ""))) {
-        position = i;
-        break;
-        }
-        }*/
+}

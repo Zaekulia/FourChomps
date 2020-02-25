@@ -92,21 +92,18 @@ public class SpielAnfrage extends Thread{
                         frame.setVisible(false);
                         try {
                             yeet.writeUTF("Akzeptiert");
-                            yeet.writeUTF(meinName);
+                            yeet.writeUTF(gegnerName);
                             yeet.writeBoolean(spielAuswahl);
                             yeet.writeInt(feldGroesse);
                             yeet.writeInt(i);
                             yeet.writeInt(zugX);
                             yeet.writeInt(zugY);
-                            //yeet.writeObject(new Spieldaten("Akzeptiert", i));
-                            int stopp1=1;
                             if (spielAuswahl) {
                                VierGewinnt four=new VierGewinnt(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), true, me); //neu: manager
                                 four.start();
 
                             } else {
                                 Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]),true, me);
-                                int stopp2=1;
                                 chompsky.start();
 
                             }
