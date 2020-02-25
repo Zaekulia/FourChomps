@@ -13,7 +13,9 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class VierGewinnt extends Spiel implements Protokollierbar {
+    private boolean shouldRun=true; //Glücksbringer
     private boolean win=false;
+    private boolean anfänger;
     private int chibiZahl;
     private int sieg=0;
     private JPanel rootPanel;
@@ -48,6 +50,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
         frame.setVisible(true);
         this.setA(alpha);
         this.setB(beta);
+        this.anfänger=anfänger;
         this.setAbyss(new VierFeld());
         this.spa=spa;
         this.manager=manager; //neu
@@ -135,19 +138,52 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                 }
             }
         });
+        if (!anfänger&&getA().isMensch()) {
+            a1Button.setEnabled(false);
+            a2Button.setEnabled(false);
+            a3Button.setEnabled(false);
+            a4Button.setEnabled(false);
+            a5Button.setEnabled(false);
+            a6Button.setEnabled(false);
+            a7Button.setEnabled(false);
+        }
     }
 
     public void run(){
         try {
             din = new DataInputStream(manager.getInputStream()); //neu
             yeet = new DataOutputStream(manager.getOutputStream()); //neu
+            Spielzug spilzug = new Spielzug(0, 0);
+            if(!getA().isMensch()){ //& !anfänger ?     // Com-Spieler ist immer anfänger
+                zug(getA(), new Spielzug(0,0));
+            }
+            while (true) {
+                din.readUTF(); //gegner name
+                din.readUTF(); //spieler name
+                din.readBoolean(); //spiel
+                din.readInt(); // feldgröße
+                din.readInt(); // spielfigur
+                spilzug.zeile = din.readInt(); // zug x
+                spilzug.spalte = din.readInt(); //zug y
+                if (anfänger) {
+                    zug(getB(), spilzug);
+                } else {
+                    zug(getA(), spilzug);
+                }
+                if (!win) {
+                    a1Button.setEnabled(true);
+                    a2Button.setEnabled(true);
+                    a3Button.setEnabled(true);
+                    a4Button.setEnabled(true);
+                    a5Button.setEnabled(true);
+                    a6Button.setEnabled(true);
+                    a7Button.setEnabled(true);
+                }
+
+            }
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Spielzug spilzug = new Spielzug(0, 0);
-        if(!getA().isMensch()){ //& !anfänger ?
-            zug(getA(), new Spielzug(0,0));
-        }
+        e.printStackTrace();
+    }
     }
 
     @Override
@@ -204,10 +240,37 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         a5Button.setEnabled(false);
                         a6Button.setEnabled(false);
                         a7Button.setEnabled(false);
-                        spa.run(); //reanimiert spielanfrage
+                        //spa.start(); //reanimiert spielanfrage //funktioniert offenbar doch nicht
                         //System.out.println("Glückwunsch Spieler A! Du hast gewonnen!");
                     }
-                    if (sieg==0)sieg=catEye(i,eingabe-1,1);
+                    if (!spiler.isMensch()&&sieg==0)sieg=catEye(i,eingabe-1,1);
+                    if(anfänger&&getA().isMensch()) {
+                        try {
+                            yeet.writeUTF("");
+                            yeet.flush();
+                            yeet.writeUTF("");
+                            yeet.flush();
+                            yeet.writeBoolean(true);
+                            yeet.flush();
+                            yeet.writeInt(0);
+                            yeet.flush();
+                            yeet.writeInt(0);
+                            yeet.flush();
+                            yeet.writeInt(spielzug.zeile);
+                            yeet.flush();
+                            yeet.writeInt(spielzug.spalte);
+                            yeet.flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        a1Button.setEnabled(false);
+                        a2Button.setEnabled(false);
+                        a3Button.setEnabled(false);
+                        a4Button.setEnabled(false);
+                        a5Button.setEnabled(false);
+                        a6Button.setEnabled(false);
+                        a7Button.setEnabled(false);
+                    }
                 }
                 if (spiler == getB()) {
                     this.getAbyss().getFeldgroesse()[i][eingabe-1] = 2;
@@ -224,12 +287,42 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         a5Button.setEnabled(false);
                         a6Button.setEnabled(false);
                         a7Button.setEnabled(false);
-                        spa.run(); //reanimiert spielanfrage
+                        //spa.start(); //reanimiert spielanfrage  //siehe oben
                     }
-                    int ce=catEye(i,eingabe-1,2);
-                    if (ce!=0) sieg=ce;
+                    if (!spiler.isMensch()) {
+                        int ce=catEye(i,eingabe-1,2);
+                        if (ce!=0) sieg=ce;
+
+                    }
                     if(!getA().isMensch()){
                         zug(getA(), new Spielzug(0,0));
+                    }
+                    if (!anfänger && getA().isMensch()) {
+                        try {
+                            yeet.writeUTF("");
+                            yeet.flush();
+                            yeet.writeUTF("");
+                            yeet.flush();
+                            yeet.writeBoolean(true);
+                            yeet.flush();
+                            yeet.writeInt(0);
+                            yeet.flush();
+                            yeet.writeInt(0);
+                            yeet.flush();
+                            yeet.writeInt(spielzug.zeile);
+                            yeet.flush();
+                            yeet.writeInt(spielzug.spalte);
+                            yeet.flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        a1Button.setEnabled(false);
+                        a2Button.setEnabled(false);
+                        a3Button.setEnabled(false);
+                        a4Button.setEnabled(false);
+                        a5Button.setEnabled(false);
+                        a6Button.setEnabled(false);
+                        a7Button.setEnabled(false);
                     }
                 }
                 if (!win) {
@@ -247,7 +340,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         a5Button.setEnabled(false);
                         a6Button.setEnabled(false);
                         a7Button.setEnabled(false);
-                        spa.run(); //reanimiert spielanfrage
+                        //spa.start(); //reanimiert spielanfrage  //nicht, aber man kann einfach ne neue machen  //offensichtlich ist hier oben
                     }
                 }
                 this.ziehen(new Spielzug(i,eingabe-1));
@@ -258,11 +351,6 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
 
     @Override
     public void durchlauf() {
-        /*while (!win){
-            zug(getA());
-            if (win)break;
-            zug(getB());
-        }*/
     }
 
     @Override
