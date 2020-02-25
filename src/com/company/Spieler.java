@@ -7,7 +7,7 @@ public class Spieler {
     private String username;
     private String passwort;
     private boolean mensch;
-    private boolean cat=false;
+    private boolean cat = false;
     private Image spielstein;
 
     public Image getSpielstein() {
@@ -23,18 +23,21 @@ public class Spieler {
     }
 
     private boolean active = true;
+
     public void setCat(boolean cat) {
         this.cat = cat;
     }
+
     public boolean isCat() {
         return cat;
     }
 
-    public Spieler(String name, boolean mnsch, int spielfigur){
-        username=name;
-        mensch=mnsch;
+    public Spieler(String name, boolean mnsch, int spielfigur) {
+        username = name;
+        mensch = mnsch;
         this.setSpielstein(spielfigur);
     }
+
     public void setSpielstein(int chibi) {
         Image chocola = new ImageIcon(this.getClass().getResource("/chocolaDone.png")).getImage();
         Image vanilla = new ImageIcon(this.getClass().getResource("/vanillaDone.png")).getImage();
@@ -43,20 +46,21 @@ public class Spieler {
         Image maple = new ImageIcon(this.getClass().getResource("/mapleDone.png")).getImage();
         Image azuki = new ImageIcon(this.getClass().getResource("/azukiDone.png")).getImage();
         if (chibi == 0) {
-            spielstein=chocola;
-        }else if (chibi == 1) {
-            spielstein=vanilla;
-        }else if (chibi == 2) {
-            spielstein=coconut;
-        }else if (chibi == 3) {
-            spielstein=cinnamon;
-        }else if (chibi == 4) {
-            spielstein=maple;
-        }else if (chibi == 5) {
-            spielstein=azuki;
+            spielstein = chocola;
+        } else if (chibi == 1) {
+            spielstein = vanilla;
+        } else if (chibi == 2) {
+            spielstein = coconut;
+        } else if (chibi == 3) {
+            spielstein = cinnamon;
+        } else if (chibi == 4) {
+            spielstein = maple;
+        } else if (chibi == 5) {
+            spielstein = azuki;
         }
-        int x=1;
+        int x = 1;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -73,7 +77,7 @@ public class Spieler {
         return mensch;
     }
 
-   public String getPasswort() {
+    public String getPasswort() {
         return passwort;
     }
 

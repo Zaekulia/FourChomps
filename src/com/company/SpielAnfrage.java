@@ -8,16 +8,16 @@ import java.io.*;
 import java.net.Socket;
 
 
-public class SpielAnfrage extends Thread{
+public class SpielAnfrage extends Thread {
     private int i;
     private int d;
-    private  boolean spiel;
-    private boolean warteschleife=false;
+    private boolean spiel;
+    private boolean warteschleife = false;
     private String name;
-    private Color standard=new Color(163,184,204);
-    private Color choose=new Color(255,165,225);
-    private Color disabled=new Color(160, 159, 157);
-    private JButton[] chibis=new JButton[6];
+    private Color standard = new Color(163, 184, 204);
+    private Color choose = new Color(255, 165, 225);
+    private Color disabled = new Color(160, 159, 157);
+    private JButton[] chibis = new JButton[6];
     private Socket manager;
     private DataInputStream din;
     private DataOutputStream yeet;
@@ -29,66 +29,65 @@ public class SpielAnfrage extends Thread{
     private int feldGroesse;
     private int spielfigur;
     private int zugX;
-    private  int zugY;
+    private int zugY;
     private int pressurePlate;
     private SpielAnfrage me;
 
-    protected   boolean spielAnfrageLäuft=true; //regelt interaktion spielanfrage / menue
+    protected boolean spielAnfrageLäuft = true; //regelt interaktion spielanfrage / menue
 
-    public SpielAnfrage(Socket socket) {  //HIER
-        manager=socket;
-        me=this;
+    public SpielAnfrage(Socket socket) {
+        manager = socket;
+        me = this;
         frame = new JFrame("SpielAnfrage");
         frame.setContentPane(this.rootPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
     }
 
-    public void run(){
-        //while(true){
+    public void run() {
         try {
-        din=new DataInputStream(new BufferedInputStream(manager.getInputStream()));
-        yeet=new DataOutputStream(manager.getOutputStream());
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+            din = new DataInputStream(new BufferedInputStream(manager.getInputStream()));
+            yeet = new DataOutputStream(manager.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         initializeButtons();
-            while (warteschleife) {  //maximal eine Anfrage gleichzeitig
-            }
+        while (warteschleife) {  //maximal eine Anfrage gleichzeitig
+        }
         for (i = 0; i < chibis.length; i++) {
             chibis[i].setBackground(standard);
         }
         try {
-            while(din.available()==0) {
-                if(!spielAnfrageLäuft){
+            while (din.available() == 0) {
+                if (!spielAnfrageLäuft) {
                     return;                     //springt aus run method
                 }
             }
-                gegnerName = din.readUTF(); //gegner name
-                meinName = din.readUTF(); //spieler name
-                spielAuswahl = din.readBoolean(); //spiel
-                feldGroesse = din.readInt(); // feldgröße
-                spielfigur = din.readInt(); // spielfigur
-                din.readInt(); // zug x bleibt leer
-                din.readInt(); //zug y bleibt leer
-                System.out.println("read it");
-            if(spielAuswahl){
-                anzeigeLabel.setText(gegnerName+", du wirst von "+meinName+" zu Vier Gewinnt herausgefordert");
-            }else{
-                anzeigeLabel.setText(gegnerName+", du wirst von "+meinName+" zu Chomp herausgefordert");
+            gegnerName = din.readUTF(); //gegner name
+            meinName = din.readUTF(); //spieler name
+            spielAuswahl = din.readBoolean(); //spiel
+            feldGroesse = din.readInt(); // feldgröße
+            spielfigur = din.readInt(); // spielfigur
+            din.readInt(); // zug x bleibt leer
+            din.readInt(); //zug y bleibt leer
+            System.out.println("read it");
+            if (spielAuswahl) {
+                anzeigeLabel.setText(gegnerName + ", du wirst von " + meinName + " zu Vier Gewinnt herausgefordert");
+            } else {
+                anzeigeLabel.setText(gegnerName + ", du wirst von " + meinName + " zu Chomp herausgefordert");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         chibis[spielfigur].setBackground(disabled);
         chibis[spielfigur].setEnabled(false); //vom Gegner gewählte Spielfigur
-            int stopp8=1;
+
         annehmenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // farbauswahl einfügen
-                for(i=0; i<chibis.length; i++) {
-                    if (!(chibis[i].getBackground().equals(standard)||chibis[i].getBackground().equals(disabled))) {
+                for (i = 0; i < chibis.length; i++) {
+                    if (!(chibis[i].getBackground().equals(standard) || chibis[i].getBackground().equals(disabled))) {
                         frame.setVisible(false);
                         try {
                             yeet.writeUTF("Akzeptiert");
@@ -99,20 +98,18 @@ public class SpielAnfrage extends Thread{
                             yeet.writeInt(zugX);
                             yeet.writeInt(zugY);
                             if (spielAuswahl) {
-                               VierGewinnt four=new VierGewinnt(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), true, me); //neu: manager
+                                VierGewinnt four = new VierGewinnt(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), true, me); //neu: manager
                                 four.start();
-
                             } else {
-                                Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]),true, me);
+                                Chomp chompsky = new Chomp(manager, new Spieler(gegnerName, true, i), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]), true, me);
                                 chompsky.start();
-
                             }
                         } catch (IOException | ClassNotFoundException ex) {
                             ex.printStackTrace();
                         }
                     }
                 }
-                warteschleife=false;
+                warteschleife = false;
             }
         });
         ablehnenButton.addActionListener(new ActionListener() {
@@ -128,23 +125,21 @@ public class SpielAnfrage extends Thread{
                     yeet.writeInt(zugX);
                     yeet.writeInt(zugY);
 
-                    SpielAnfrage spa=new SpielAnfrage(manager);
+                    SpielAnfrage spa = new SpielAnfrage(manager);
                     spa.start();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                warteschleife=false;
+                warteschleife = false;
             }
         });
 
         frame.setResizable(false);
         frame.setVisible(true);
-        warteschleife=true;
-        //}
-
+        warteschleife = true;
     }
 
-    public void plsWok(){
+    public void plsWok() {
         System.out.println("I'm woking");
     }
 
@@ -222,6 +217,7 @@ public class SpielAnfrage extends Thread{
             }
         });
     }
+
     private JPanel rootPanel;
     private JButton annehmenButton;
     private JButton ablehnenButton;

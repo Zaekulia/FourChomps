@@ -13,31 +13,31 @@ import java.util.ArrayList;
 public class Menue extends Thread {
     private int selected;
     private int pressurePlate = 0; //spielauswahl
-    private int compFigur=0; //computer spielfigur
+    private int compFigur = 0; //computer spielfigur
     private String none = new String("<none>");
     private Color standard = new Color(163, 184, 204);
     private Color choose = new Color(255, 165, 225);
     private Socket s;
     private Socket manager;
     private DataInputStream din;
-    private  DataOutputStream yeet;
+    private DataOutputStream yeet;
     private JButton[] chibis = new JButton[6];
     private SpielAnfrage spielAnfrage;
     //datenübergabe:
-    private String meinName="";
-    private String gegnerName="";
-    private boolean spielAuswahl=false;
-    private int feldGroesse=0;
-    private int spielfigur=0;
-    private int zugX=0;
-    private int zugY=0;
+    private String meinName = "";
+    private String gegnerName = "";
+    private boolean spielAuswahl = false;
+    private int feldGroesse = 0;
+    private int spielfigur = 0;
+    private int zugX = 0;
+    private int zugY = 0;
 
     Menue(ArrayList<String> aktiveNutzer, Socket s, Socket manager, String meinName, SpielAnfrage spielAnfrage) {
         this.meinName = meinName;
         this.s = s;
         this.manager = manager;
         this.spielAnfrage = spielAnfrage;
-        this.spielAnfrage.spielAnfrageLäuft=false; // killt spielanfrage
+        this.spielAnfrage.spielAnfrageLäuft = false; // killt spielanfrage
         frame = new JFrame("Menue");
         frame.setContentPane(this.rootPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -49,7 +49,7 @@ public class Menue extends Thread {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                SpielAnfrage spa=new SpielAnfrage(manager);
+                SpielAnfrage spa = new SpielAnfrage(manager);
                 spa.start();
             }
         });
@@ -60,8 +60,8 @@ public class Menue extends Thread {
 
     public void run() {
         try {
-            din =new DataInputStream(manager.getInputStream());
-            yeet=new DataOutputStream(manager.getOutputStream());
+            din = new DataInputStream(manager.getInputStream());
+            yeet = new DataOutputStream(manager.getOutputStream());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,12 +78,11 @@ public class Menue extends Thread {
                             if (i == 0) {
                                 compFigur = 1;
                             }
-                            pressurePlate=3;
-                            selected=i;
-                            //new VierGewinnt(new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, i));
+                            pressurePlate = 3;
+                            selected = i;
                         } else {
-                            pressurePlate=1;
-                            selected=i;
+                            pressurePlate = 1;
+                            selected = i;
                         }
                         chompButton.setEnabled(false);
                         vierGewinntButton.setEnabled(false);
@@ -99,29 +98,25 @@ public class Menue extends Thread {
                 for (int i = 0; i < chibis.length; i++) {
                     if (!chibis[i].getBackground().equals(standard) && !gegenSpieler.getSelectedItem().equals(none)) {
                         anzeige.setText("Anzeige ist raus!");
-                        //frame.setVisible(false);
-                       // try {
-                            if (gegenSpieler.getSelectedItem().equals(meinName)) {
-                                if (i == 0) {
-                                    compFigur = 1;
-                                }
-                                pressurePlate=42;
-                                selected=i;
-                            } else {
-                                pressurePlate=2;
-                                selected=i;
-                                int stopp3=1;
+                        if (gegenSpieler.getSelectedItem().equals(meinName)) {
+                            if (i == 0) {
+                                compFigur = 1;
                             }
-                            chompButton.setEnabled(false);
-                            vierGewinntButton.setEnabled(false);
-                            break;
+                            pressurePlate = 42;
+                            selected = i;
+                        } else {
+                            pressurePlate = 2;
+                            selected = i;
+                        }
+                        chompButton.setEnabled(false);
+                        vierGewinntButton.setEnabled(false);
+                        break;
                     } else System.out.println("nope");
                 }
             }
         });
 
         while (pressurePlate == 0) {
-            //int toast=1;
             System.out.println("while");
         }
 
@@ -130,10 +125,10 @@ public class Menue extends Thread {
                 System.out.println("ich ruf den anwalt1");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen1");
-                gegnerName=(String)gegenSpieler.getSelectedItem();
-                spielAuswahl=true;
-                feldGroesse=slider1.getValue();
-                spielfigur=selected;
+                gegnerName = (String) gegenSpieler.getSelectedItem();
+                spielAuswahl = true;
+                feldGroesse = slider1.getValue();
+                spielfigur = selected;
                 yeet.writeUTF(gegnerName);
                 yeet.flush();
                 yeet.writeUTF(meinName);
@@ -148,18 +143,18 @@ public class Menue extends Thread {
                 yeet.flush();
                 yeet.writeInt(zugY);
                 yeet.flush();
-                //HIER
-                String reply=din.readUTF(); // name wird zur antwort
+
+                String reply = din.readUTF(); // name wird zur antwort
                 din.readUTF(); //spieler name bleibt leer
                 din.readBoolean(); //spiel bleibt leer
                 din.readInt(); // feldgröße bleibt leer
-                int gegnerFigur=din.readInt(); // spielfigur des gegners
+                int gegnerFigur = din.readInt(); // spielfigur des gegners
                 din.readInt(); // zug x bleibt leer
                 din.readInt(); //zug y bleibt leer
-                if(reply.equals("Akzeptiert")){
-                    VierGewinnt four=new VierGewinnt(manager, new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur),false, spielAnfrage); // neu: manager
+                if (reply.equals("Akzeptiert")) {
+                    VierGewinnt four = new VierGewinnt(manager, new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur), false, spielAnfrage); // neu: manager
                     four.start();
-                }else{
+                } else {
                     anzeige.setText("Deine Anfrage wurde abgelehnt! Noob!");
                     chompButton.setEnabled(true);
                     vierGewinntButton.setEnabled(true);
@@ -168,11 +163,10 @@ public class Menue extends Thread {
                 System.out.println("ich ruf den anwalt2");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen2");
-                gegnerName=(String)gegenSpieler.getSelectedItem();
-                spielAuswahl=false;
-                feldGroesse=slider1.getValue();
-                spielfigur=selected;
-                //yeet.writeObject(new Spieldaten((String) gegenSpieler.getSelectedItem(), meinName, false, slider1.getValue(), selected));
+                gegnerName = (String) gegenSpieler.getSelectedItem();
+                spielAuswahl = false;
+                feldGroesse = slider1.getValue();
+                spielfigur = selected;
                 yeet.writeUTF(gegnerName);
                 yeet.flush();
                 yeet.writeUTF(meinName);
@@ -188,22 +182,18 @@ public class Menue extends Thread {
                 yeet.writeInt(zugY);
                 yeet.flush();
                 System.out.println("sent");
-                int stopp4=1;
-                //frame.setVisible(true);
-                //HIER
-                String reply=din.readUTF(); // name wird zur antwort
+
+                String reply = din.readUTF(); // name wird zur antwort
                 din.readUTF(); //spieler name bleibt leer
                 din.readBoolean(); //spiel bleibt leer
                 din.readInt(); // feldgröße bleibt leer
-                int gegnerFigur=din.readInt(); // spielfigur des gegners
+                int gegnerFigur = din.readInt(); // spielfigur des gegners
                 din.readInt(); // zug x bleibt leer
                 din.readInt(); //zug y bleibt leer
-                int stopp5=1;
-                if(reply.equals("Akzeptiert")){
-                    Chomp chompsky=new Chomp(manager, new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]), false, spielAnfrage);
-                    int stopp6=1;
+                if (reply.equals("Akzeptiert")) {
+                    Chomp chompsky = new Chomp(manager, new Spieler(gegnerName, true, gegnerFigur), new Spieler(meinName, true, spielfigur), new ChompFeld(new int[feldGroesse / 2][feldGroesse]), false, spielAnfrage);
                     chompsky.start();
-                }else{
+                } else {
                     anzeige.setText("Deine Anfrage wurde abgelehnt! Noob!");
                     chompButton.setEnabled(true);
                     vierGewinntButton.setEnabled(true);
@@ -212,7 +202,7 @@ public class Menue extends Thread {
                 System.out.println("ich ruf den anwalt3");
                 spielAnfrage.plsWok();
                 System.out.println("Ich bin angekommen3");
-                VierGewinnt four=new VierGewinnt(manager, new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected), false, spielAnfrage); //neu: manager
+                VierGewinnt four = new VierGewinnt(manager, new Spieler("KittyBotAnnihilator", false, compFigur), new Spieler(meinName, true, selected), false, spielAnfrage); //neu: manager
                 four.start();
             } else { // chomp offline
                 System.out.println("ich ruf den anwalt4");
@@ -237,6 +227,7 @@ public class Menue extends Thread {
     public void removeName(String name) {
         gegenSpieler.removeItem(name);
     }
+
     public void initializeButtons() {
         chibis[0] = chocolaButton;
         chibis[1] = vanillaButton;
@@ -302,6 +293,7 @@ public class Menue extends Thread {
             }
         });
     }
+
     private JFrame frame;
     private JPanel rootPanel;
     private JPanel spieler;
@@ -325,5 +317,3 @@ public class Menue extends Thread {
     private JButton azukiButton;
     private JLabel anzeige;
 }
-
-// chibis alle auf nope, auswahl für spielstart überprüfen

@@ -50,5 +50,6 @@ public abstract class Spiel extends Thread {
     }
 
     public abstract void zug(Spieler spiler, Spielzug spielzug);
+
     public abstract void durchlauf();
 }

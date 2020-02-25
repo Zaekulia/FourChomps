@@ -11,13 +11,13 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ClientConnection extends Thread{
-    private boolean shouldRun=true;
+public class ClientConnection extends Thread {
+    private boolean shouldRun = true;
     private String meinName;
-    protected Color highlight=new Color(187,187,187);
-    protected Color shadow=new Color(103,37,95);
-    protected Border border=BorderFactory.createEtchedBorder(highlight, shadow);
-    protected ArrayList<String> aktiveNutzer=new ArrayList<>();
+    protected Color highlight = new Color(187, 187, 187);
+    protected Color shadow = new Color(103, 37, 95);
+    protected Border border = BorderFactory.createEtchedBorder(highlight, shadow);
+    protected ArrayList<String> aktiveNutzer = new ArrayList<>();
     private Socket s;
     private Socket manager;
     private DataInputStream din;
@@ -28,11 +28,11 @@ public class ClientConnection extends Thread{
     private Menue teest;
     private SpielAnfrage spielAnfrage;
 
-    public ClientConnection(Socket socket, Socket manager, String meinName, SpielAnfrage spielAnfrage){ //+socket manager
-        s=socket;
-        this.spielAnfrage=spielAnfrage;
-        this.manager=manager;
-        this.meinName=meinName;
+    public ClientConnection(Socket socket, Socket manager, String meinName, SpielAnfrage spielAnfrage) {
+        s = socket;
+        this.spielAnfrage = spielAnfrage;
+        this.manager = manager;
+        this.meinName = meinName;
 
         chatFrame = new JFrame("Four Chomps");
         chatFrame.setContentPane(this.rootPanel);
@@ -72,7 +72,7 @@ public class ClientConnection extends Thread{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //interaktion mit server erforderlich
-                teest=new Menue(aktiveNutzer,socket, manager, meinName, spielAnfrage);//-manager
+                teest = new Menue(aktiveNutzer, socket, manager, meinName, spielAnfrage);//-manager
                 teest.start();
                 try {
                     dout.writeUTF("!Create_Gameconnection");
@@ -82,33 +82,36 @@ public class ClientConnection extends Thread{
             }
         });
     }
-    public void sendStringToServer(String text){
-        try{
+
+    public void sendStringToServer(String text) {
+        try {
             dout.writeUTF(text);
             dout.flush();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             close();
         }
     }
-    public void close(){
-        try{
+
+    public void close() {
+        try {
             din.close();
             dout.close();
             s.close();
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void run(){
+
+    public void run() {
         try {
-            din=new DataInputStream(s.getInputStream());
-            dout=new DataOutputStream(s.getOutputStream());
-            while(shouldRun){
-                try{
-                    String reply=din.readUTF();
+            din = new DataInputStream(s.getInputStream());
+            dout = new DataOutputStream(s.getOutputStream());
+            while (shouldRun) {
+                try {
+                    String reply = din.readUTF();
                     if (reply.matches("(.*?) hat sich gerade angemeldet")) {
-                        if (!aktiveNutzer.contains(reply.replaceFirst(" hat sich gerade angemeldet", ""))){
+                        if (!aktiveNutzer.contains(reply.replaceFirst(" hat sich gerade angemeldet", ""))) {
                             aktiveNutzer.add(reply.replaceFirst(" hat sich gerade angemeldet", ""));
                             if (teest != null) {
                                 teest.addName(reply.replaceFirst(" hat sich gerade angemeldet", ""));
@@ -123,11 +126,11 @@ public class ClientConnection extends Thread{
                         }
                         showAktiveNutzer();
                     }
-                    chatArea.append(reply+"\n");
+                    chatArea.append(reply + "\n");
                     System.out.println(reply);
 
-                }catch (IOException e){
-                    shouldRun=false;
+                } catch (IOException e) {
+                    shouldRun = false;
                     close();
                 }
             }
@@ -136,12 +139,13 @@ public class ClientConnection extends Thread{
             close();
         }
     }
+
     public void showAktiveNutzer() {
         userListArea.setText("");
         userListArea.append("Aktive Nutzer:\n");
         try {
             for (int i = 0; i < aktiveNutzer.size(); i++) {
-                userListArea.append("   "+aktiveNutzer.get(i)+"\n");
+                userListArea.append("   " + aktiveNutzer.get(i) + "\n");
             }
         } catch (NullPointerException npe) {
         }

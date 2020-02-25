@@ -2,8 +2,9 @@ package com.company;
 
 public class Killer extends Thread {
     Server server;
+
     public Killer(Server s) {
-        this.server=s;
+        this.server = s;
     }
 
     @Override
