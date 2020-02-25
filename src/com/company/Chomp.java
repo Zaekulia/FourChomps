@@ -102,13 +102,16 @@ public class Chomp extends Spiel implements Protokollierbar {
             yeet = new DataOutputStream(manager.getOutputStream());
             Spielzug spilzug = new Spielzug(0, 0);
             while (true) {
-                din.readUTF(); //gegner name
+                String update=din.readUTF(); //falls gegner spiel verlässt
                 din.readUTF(); //spieler name
                 din.readBoolean(); //spiel
                 din.readInt(); // feldgröße
                 din.readInt(); // spielfigur
                 spilzug.zeile = din.readInt(); // zug x
                 spilzug.spalte = din.readInt(); //zug y
+                if(update.equals("RageQuit")){ //HIER
+                    anzeigeIstRaus.setText("Dein Gegner hat das Spiel verlassen!");
+                }
                 if (anfänger) {
                     zug(getB(), spilzug);
                 } else {
